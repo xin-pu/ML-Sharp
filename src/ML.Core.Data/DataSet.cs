@@ -1,9 +1,12 @@
 ﻿using System;
+using NumSharp;
 
 namespace ML.Core.Data
 {
     public abstract class DataSet
     {
+        public Tuple<NDArray, NDArray> Data { set; get; }
+
         public Tuple<DataSet, DataSet> Split()
         {
             return new Tuple<DataSet, DataSet>(this, this);
