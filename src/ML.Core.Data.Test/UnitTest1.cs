@@ -1,14 +1,12 @@
-using System;
 using Xunit;
 
-namespace ML.UnitTest
+namespace ML.Core.Data.Test
 {
     public class UnitTest1
     {
         [Fact]
         public void Test1()
         {
-
         }
     }
 }

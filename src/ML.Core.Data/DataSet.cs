@@ -17,7 +17,10 @@ namespace ML.Core.Data
             return this;
         }
 
-        public static DataSet LoadFromTxtFile(string filename)
+        public static DataSet LoadFromTxtFile(
+            string filename,
+            HeadType headType = HeadType.NoHeader,
+            string split = ",")
         {
             return new ClassifyDataSet();
         }
@@ -29,5 +32,11 @@ namespace ML.Core.Data
 
     public class RegressDataSet : DataSet
     {
+    }
+
+    public enum HeadType
+    {
+        HasHeader,
+        NoHeader
     }
 }
