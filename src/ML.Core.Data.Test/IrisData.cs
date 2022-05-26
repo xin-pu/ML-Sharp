@@ -1,7 +1,9 @@
+using System;
 using MathNet.Numerics.Random;
 
 namespace ML.Core.Data.Test
 {
+    [Serializable]
     public class IrisData
     {
         [LoadColumn(0)] public double Label;

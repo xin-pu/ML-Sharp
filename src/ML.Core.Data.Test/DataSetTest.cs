@@ -1,15 +1,16 @@
 using System.Collections.Generic;
 using System.Linq;
+using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace ML.Core.Data.Test
 {
-    public class TextLoader
+    public class DataSetTest
     {
         private readonly ITestOutputHelper _testOutputHelper;
 
-        public TextLoader(ITestOutputHelper testOutputHelper)
+        public DataSetTest(ITestOutputHelper testOutputHelper)
         {
             _testOutputHelper = testOutputHelper;
         }
@@ -32,7 +33,7 @@ namespace ML.Core.Data.Test
         [Fact]
         public void DataSetCreate()
         {
-            var dataset = GetIrisDataSet(10);
+            var dataset = GetIrisDataSet(1);
             print(dataset);
         }
 
@@ -48,9 +49,29 @@ namespace ML.Core.Data.Test
         [Fact]
         public void DataSetOrder()
         {
-            var dataset = GetIrisDataSet(10);
+            var dataset = GetIrisDataSet(5);
             var orderDataSet = dataset.Orderby(c => c.SepalLength);
             print(orderDataSet);
+        }
+
+        [Fact]
+        public void DataSetShuffle()
+        {
+            var dataset = GetIrisDataSet(10);
+            var shuffleDataSet = dataset.Shuffle();
+            print(dataset);
+            print(shuffleDataSet);
+        }
+
+
+        [Fact]
+        public void DataSetClone()
+        {
+            var dataset = GetIrisDataSet(1);
+            var cloneDataSet = dataset.Clone();
+            cloneDataSet.Should().NotBe(dataset);
+            print(dataset);
+            print(cloneDataSet);
         }
     }
 }
