@@ -102,5 +102,14 @@ namespace ML.Core.Data.Test
             var dataset = TextLoader.LoadDataSet<IrisData>(path, splitChar: '\t');
             print(dataset);
         }
+
+
+        [Fact]
+        public void DataSetLoadTest2()
+        {
+            var path = Path.Combine(dataFolder, "iris-train.txt");
+            var dataset = TextLoader.LoadDataSet<IrisData2>(path, splitChar: '\t');
+            print(dataset);
+        }
     }
 }

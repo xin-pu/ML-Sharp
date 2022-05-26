@@ -37,7 +37,7 @@ namespace ML.Core.Data.Loader
             return new DataSet<T>(datas);
         }
 
-        private static Dictionary<FieldInfo, int> GetFieldDict(Type type)
+        private static Dictionary<FieldInfo, Range> GetFieldDict(Type type)
         {
             var fieldInfo = type.GetFields()
                 .Where(a => a.CustomAttributes
@@ -45,35 +45,35 @@ namespace ML.Core.Data.Loader
                 .ToList();
             var dict = fieldInfo.ToDictionary(
                 f => f,
-                f =>
-                {
-                    var aa = f.GetCustomAttribute<LoadColumnAttribute>();
-                    return aa.ColumnIndex;
-                });
+                f => f.GetCustomAttribute<LoadColumnAttribute>().Range);
             return dict;
         }
 
-        private static T GetData<T>(Dictionary<FieldInfo, int> dict, string[] array)
+        private static T GetData<T>(Dictionary<FieldInfo, Range> dict, string[] array)
         {
             var obj = Activator.CreateInstance(typeof(T));
             dict.ToList().ForEach(p =>
             {
                 var fieldInfo = p.Key;
-                var strValue = array[p.Value];
+                var range = p.Value;
                 var type = fieldInfo.FieldType;
 
-                if (type == typeof(string))
-                    fieldInfo.SetValue(obj, strValue);
-                else if (type == typeof(int))
-                    fieldInfo.SetValue(obj, int.Parse(strValue));
-                else if (type == typeof(long))
-                    fieldInfo.SetValue(obj, long.Parse(strValue));
-                else if (type == typeof(double))
-                    fieldInfo.SetValue(obj, double.Parse(strValue));
-                else if (type == typeof(float)) fieldInfo.SetValue(obj, float.Parse(strValue));
-                else if (type == typeof(byte)) fieldInfo.SetValue(obj, byte.Parse(strValue));
-                else
-                    fieldInfo.SetValue(obj, null);
+                if (range.Min == range.Max)
+                {
+                    var field = Convert.ChangeType(array[range.Min], type);
+                    fieldInfo.SetValue(obj, field);
+                }
+                else if (type.IsArray && range.Max >= range.Min)
+                {
+                    var len = range.Max - range.Min + 1;
+                    var arr = Activator.CreateInstance(type, len);
+                    Enumerable.Range(0, len).ToList().ForEach(i =>
+                    {
+                        var field = Convert.ChangeType(array[range.Min + i], type.GetElementType()!);
+                        type.GetMethod("Set")?.Invoke(arr, new[] {i, field});
+                    });
+                    fieldInfo.SetValue(obj, arr);
+                }
             });
 
             return (T) obj;

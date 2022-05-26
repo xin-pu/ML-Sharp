@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using MathNet.Numerics.Random;
 using ML.Core.Data.Loader;
 
@@ -40,6 +41,22 @@ namespace ML.Core.Data.Test
                 SepalLength = randomSource.NextDouble() * 4,
                 SepalWidth = randomSource.NextDouble() * 4
             };
+        }
+    }
+
+    [Serializable]
+    public class IrisData2
+    {
+        [LoadColumn(0)] public double Label;
+
+        [LoadColumn(2, 3)] public double[] PetalLength;
+
+
+        public override string ToString()
+        {
+            return
+                $"Label:{Label}\t" +
+                $"PetalLength:{string.Join(",", PetalLength.Select(a => $"{a:F2}"))}";
         }
     }
 }

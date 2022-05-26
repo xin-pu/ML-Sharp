@@ -115,6 +115,7 @@
   <ItemGroup>
     <Compile Include="DataSet.cs" />
     <Compile Include="Loader\LoadColumnAttribute.cs" />
+    <Compile Include="Loader\Range.cs" />
     <Compile Include="Loader\TextLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
