@@ -1,6 +1,11 @@
-﻿namespace ML.Core.Data.Loader
+﻿using System.Data;
+
+namespace ML.Core.Data.Loader
 {
-    public abstract class TextLoader
+    /// <summary>
+    ///     A text loader for get IEnum<T> from txt file.
+    /// </summary>
+    public class TextLoader
     {
     }
 
