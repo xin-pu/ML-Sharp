@@ -58,12 +58,17 @@ namespace ML.Core.Data
             return new DataSet<T>(Returncache);
         }
 
-        public (DataSet<T>, DataSet<T>) Split(double per)
+        /// <summary>
+        ///     Split function
+        /// </summary>
+        /// <param name="per"></param>
+        /// <returns></returns>
+        public (DataSet<T>, DataSet<T>) Split(double percentage)
         {
-            per.Should().BeInRange(0, 1, "per shoule be in range[0%,100%]");
+            percentage.Should().BeInRange(0, 1, "per shoule be in range[0%,100%]");
 
             var shuffle = Shuffle();
-            var trainCount = (int) Math.Round(Count * per, MidpointRounding.AwayFromZero);
+            var trainCount = (int) Math.Round(Count * percentage, MidpointRounding.AwayFromZero);
             var valCount = Count - trainCount;
             return (shuffle.Take(trainCount), shuffle.Take(valCount));
         }
@@ -93,6 +98,31 @@ namespace ML.Core.Data
 
             var data = DataList.Take(count).ToList();
             return new DataSet<T>(data);
+        }
+
+        /// <summary>
+        ///     Repeat function
+        /// </summary>
+        /// <param name="repeat"></param>
+        /// <returns></returns>
+        public DataSet<T> Repeat(int repeat)
+        {
+            var all = Enumerable.Range(0, repeat)
+                .SelectMany(d => ((DataSet<T>) Clone()).DataList)
+                .ToArray();
+            return new DataSet<T>(all);
+        }
+
+        /// <summary>
+        ///     Concat function
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public DataSet<T> Concat(DataSet<T> input)
+        {
+            var concatDataset = DataList.Concat(input.DataList)
+                .ToArray();
+            return new DataSet<T>(concatDataset);
         }
 
         public override string ToString()

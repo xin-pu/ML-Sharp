@@ -1,5 +1,6 @@
 using System;
 using MathNet.Numerics.Random;
+using ML.Core.Data.Loader;
 
 namespace ML.Core.Data.Test
 {
