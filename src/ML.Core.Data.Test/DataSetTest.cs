@@ -104,6 +104,18 @@ namespace ML.Core.Data.Test
             print(dataset);
         }
 
+        [Fact]
+        public void DataSetLoadMultiIris()
+        {
+            var pathes = new[]
+            {
+                Path.Combine(dataFolder, "iris-train.txt"),
+                Path.Combine(dataFolder, "iris-test.txt")
+            };
+            var dataset = TextLoader.LoadDataSet<IrisData>(pathes, splitChar: '\t');
+            print(dataset);
+        }
+
 
         [Fact]
         public void DataSetLoadOptdigits()

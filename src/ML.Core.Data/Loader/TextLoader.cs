@@ -37,6 +37,14 @@ namespace ML.Core.Data.Loader
             return new DataSet<T>(datas);
         }
 
+        public static DataSet<T> LoadDataSet<T>(string[] pathes, bool hasHeader = true, char splitChar = ',')
+        {
+            var datasets = pathes
+                .SelectMany(path => LoadDataSet<T>(path, hasHeader, splitChar).DataList)
+                .ToList();
+            return new DataSet<T>(datasets);
+        }
+
         private static Dictionary<FieldInfo, Range> GetFieldDict(Type type)
         {
             var fieldInfo = type.GetFields()
