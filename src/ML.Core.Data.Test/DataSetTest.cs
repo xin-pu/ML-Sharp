@@ -9,13 +9,13 @@ using Xunit.Abstractions;
 
 namespace ML.Core.Data.Test
 {
-    public class DataSetTest
+    public class DatasetTest
     {
         private readonly ITestOutputHelper _testOutputHelper;
 
         private readonly string dataFolder = @"..\..\..\..\..\data";
 
-        public DataSetTest(ITestOutputHelper testOutputHelper)
+        public DatasetTest(ITestOutputHelper testOutputHelper)
         {
             _testOutputHelper = testOutputHelper;
         }
@@ -25,12 +25,12 @@ namespace ML.Core.Data.Test
             _testOutputHelper.WriteLine(obj.ToString());
         }
 
-        public DataSet<IrisData> GetIrisDataSet(int count)
+        public Dataset<IrisData> GetIrisDataSet(int count)
         {
             var iris = new List<IrisData>();
             Enumerable.Range(0, count).ToList()
                 .ForEach(_ => iris.Add(IrisData.RandomIris()));
-            var dataset = new DataSet<IrisData>(iris);
+            var dataset = new Dataset<IrisData>(iris.ToArray());
             return dataset;
         }
 
@@ -123,6 +123,24 @@ namespace ML.Core.Data.Test
             var path = Path.Combine(dataFolder, "optdigits-train.csv");
             var dataset = TextLoader.LoadDataSet<OptdigitData>(path, splitChar: ',');
             print(dataset);
+        }
+
+
+        [Fact]
+        public void DataSetIteration()
+        {
+            var path = Path.Combine(dataFolder, "iris-train.txt");
+            var dataset = TextLoader.LoadDataSet<IrisData>(path, splitChar: '\t');
+
+            var i = dataset.GetEnumerator();
+            var j = 0;
+            while (true)
+            {
+                var item = i.MoveNext();
+                if (item == false) break;
+                if (i.Current is Dataset<IrisData> c)
+                    print($"{++j}\t{c.ToDatasetNdArray().Feature}");
+            }
         }
     }
 }

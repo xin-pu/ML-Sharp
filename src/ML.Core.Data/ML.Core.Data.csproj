@@ -113,9 +113,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataSet.cs" />
+    <Compile Include="DatasetNDArray.cs" />
+    <Compile Include="Dataset.cs" />
     <Compile Include="Loader\ImageLoader.cs" />
     <Compile Include="Loader\LoadColumnAttribute.cs" />
+    <Compile Include="Loader\LoadTypeAttribute.cs" />
     <Compile Include="Loader\Range.cs" />
     <Compile Include="Loader\TextLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -12,7 +12,7 @@ namespace ML.Core.Data.Loader
     /// </summary>
     public class TextLoader
     {
-        public static DataSet<T> LoadDataSet<T>(string path, bool hasHeader = true, char splitChar = ',')
+        public static Dataset<T> LoadDataSet<T>(string path, bool hasHeader = true, char splitChar = ',')
         {
             /// Step 0 Precheck
             File.Exists(path).Should().BeTrue($"File {path} should exist.");
@@ -25,24 +25,24 @@ namespace ML.Core.Data.Loader
                 .ToList();
             if (hasHeader)
                 allline.RemoveAt(0);
-            var alldata = allline.Select(l => l.Split(splitChar).ToArray()).ToList();
+            var alldata = allline.Select(l => l.Split(splitChar).ToArray()).ToArray();
 
             /// Step 2 Get Field Dict which have LoadColumn
             var fieldDict = GetFieldDict(typeof(T));
 
             /// Step 2 According LoadColumnAttribute Change to Data
-            var datas = alldata.Select(single => GetData<T>(fieldDict, single)).ToList();
+            var datas = alldata.Select(single => GetData<T>(fieldDict, single)).ToArray();
 
-            /// Step 3 Return DataSet 
-            return new DataSet<T>(datas);
+            /// Step 3 Return Dataset 
+            return new Dataset<T>(datas);
         }
 
-        public static DataSet<T> LoadDataSet<T>(string[] pathes, bool hasHeader = true, char splitChar = ',')
+        public static Dataset<T> LoadDataSet<T>(string[] pathes, bool hasHeader = true, char splitChar = ',')
         {
             var datasets = pathes
-                .SelectMany(path => LoadDataSet<T>(path, hasHeader, splitChar).DataList)
-                .ToList();
-            return new DataSet<T>(datasets);
+                .SelectMany(path => LoadDataSet<T>(path, hasHeader, splitChar).Value)
+                .ToArray();
+            return new Dataset<T>(datasets);
         }
 
         private static Dictionary<FieldInfo, Range> GetFieldDict(Type type)

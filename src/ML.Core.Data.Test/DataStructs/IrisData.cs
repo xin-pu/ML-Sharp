@@ -7,15 +7,20 @@ namespace ML.Core.Data.Test.DataStructs
     [Serializable]
     public class IrisData
     {
-        [LoadColumn(0)] public double Label;
+        [LoadColumn(0)] [LoadType(LoadType.Label)]
+        public double Label;
 
-        [LoadColumn(3)] public double PetalLength;
+        [LoadColumn(3)] [LoadType(LoadType.Feature)]
+        public double PetalLength;
 
-        [LoadColumn(4)] public double PetalWidth;
+        [LoadColumn(3)] [LoadType(LoadType.Feature)]
+        public double PetalWidth;
 
-        [LoadColumn(1)] public double SepalLength;
+        [LoadColumn(3)] [LoadType(LoadType.Feature)]
+        public double SepalLength;
 
-        [LoadColumn(2)] public double SepalWidth;
+        [LoadColumn(3)] [LoadType(LoadType.Feature)]
+        public double SepalWidth;
 
         public override string ToString()
         {
