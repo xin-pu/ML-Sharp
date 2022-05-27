@@ -17,6 +17,7 @@ namespace ML.Core.Data
     /// <typeparam name="T"></typeparam>
     [Serializable]
     public sealed class Dataset<T> : ICloneable
+        where T : DataView
     {
         public Dataset(T[] value)
         {
@@ -32,14 +33,14 @@ namespace ML.Core.Data
 
         public T[] Value { get; }
 
-        public int Count => Value.Count();
+        public int Count => Value.Length;
 
 
         public override string ToString()
         {
             var str = new StringBuilder();
             str.AppendLine($"{Type.Name}({Count})");
-            str.AppendLine(string.Join("\r\n", Value));
+            str.AppendLine(string.Join("\r\n", Value.ToList()));
             return str.ToString();
         }
 
@@ -62,10 +63,13 @@ namespace ML.Core.Data
 
         public DatasetNDArray ToDatasetNdArray()
         {
+            var arrays = Value.Select(a => a.ToDatasetNdArray()).ToList();
+            var feature = arrays.Select(a => a.Feature).ToArray();
+            var labels = arrays.Select(a => a.Label).ToArray();
             return new DatasetNDArray
             {
-                Feature = np.random.rand(4, 2),
-                Label = np.random.rand(4, 1)
+                Feature = np.vstack(feature),
+                Label = np.vstack(labels)
             };
         }
 

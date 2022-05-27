@@ -100,7 +100,7 @@ namespace ML.Core.Data.Test
         public void DataSetLoadIris()
         {
             var path = Path.Combine(dataFolder, "iris-train.txt");
-            var dataset = TextLoader.LoadDataSet<IrisData>(path, splitChar: '\t');
+            var dataset = TextLoader<IrisData>.LoadDataSet(path, splitChar: '\t');
             print(dataset);
         }
 
@@ -112,7 +112,7 @@ namespace ML.Core.Data.Test
                 Path.Combine(dataFolder, "iris-train.txt"),
                 Path.Combine(dataFolder, "iris-test.txt")
             };
-            var dataset = TextLoader.LoadDataSet<IrisData>(pathes, splitChar: '\t');
+            var dataset = TextLoader<IrisData>.LoadDataSet(pathes, splitChar: '\t');
             print(dataset);
         }
 
@@ -121,16 +121,25 @@ namespace ML.Core.Data.Test
         public void DataSetLoadOptdigits()
         {
             var path = Path.Combine(dataFolder, "optdigits-train.csv");
-            var dataset = TextLoader.LoadDataSet<OptdigitData>(path, splitChar: ',');
+            var dataset = TextLoader<OptdigitData>.LoadDataSet(path, splitChar: ',');
             print(dataset);
         }
 
 
         [Fact]
+        public void DataSetToNDArray()
+        {
+            var dataset1 = GetIrisDataSet(10);
+            var arrayND = dataset1.ToDatasetNdArray();
+            print(arrayND.Label);
+            print(arrayND.Feature);
+        }
+
+        [Fact]
         public void DataSetIteration()
         {
             var path = Path.Combine(dataFolder, "iris-train.txt");
-            var dataset = TextLoader.LoadDataSet<IrisData>(path, splitChar: '\t');
+            var dataset = TextLoader<IrisData>.LoadDataSet(path, splitChar: '\t');
 
             var i = dataset.GetEnumerator();
             var j = 0;
@@ -138,8 +147,9 @@ namespace ML.Core.Data.Test
             {
                 var item = i.MoveNext();
                 if (item == false) break;
-                if (i.Current is Dataset<IrisData> c)
-                    print($"{++j}\t{c.ToDatasetNdArray().Feature}");
+                if (i.Current is Dataset<IrisData> c) print(c);
+
+                ;
             }
         }
     }

@@ -10,9 +10,9 @@ namespace ML.Core.Data.Loader
     /// <summary>
     ///     A text loader for get IEnum<T> from txt file.
     /// </summary>
-    public class TextLoader
+    public class TextLoader<T> where T : DataView
     {
-        public static Dataset<T> LoadDataSet<T>(string path, bool hasHeader = true, char splitChar = ',')
+        public static Dataset<T> LoadDataSet(string path, bool hasHeader = true, char splitChar = ',')
         {
             /// Step 0 Precheck
             File.Exists(path).Should().BeTrue($"File {path} should exist.");
@@ -31,16 +31,16 @@ namespace ML.Core.Data.Loader
             var fieldDict = GetFieldDict(typeof(T));
 
             /// Step 2 According LoadColumnAttribute Change to Data
-            var datas = alldata.Select(single => GetData<T>(fieldDict, single)).ToArray();
+            var datas = alldata.Select(single => GetData(fieldDict, single)).ToArray();
 
             /// Step 3 Return Dataset 
             return new Dataset<T>(datas);
         }
 
-        public static Dataset<T> LoadDataSet<T>(string[] pathes, bool hasHeader = true, char splitChar = ',')
+        public static Dataset<T> LoadDataSet(string[] pathes, bool hasHeader = true, char splitChar = ',')
         {
             var datasets = pathes
-                .SelectMany(path => LoadDataSet<T>(path, hasHeader, splitChar).Value)
+                .SelectMany(path => LoadDataSet(path, hasHeader, splitChar).Value)
                 .ToArray();
             return new Dataset<T>(datasets);
         }
@@ -57,7 +57,7 @@ namespace ML.Core.Data.Loader
             return dict;
         }
 
-        private static T GetData<T>(Dictionary<FieldInfo, Range> dict, string[] array)
+        private static T GetData(Dictionary<FieldInfo, Range> dict, string[] array)
         {
             var obj = Activator.CreateInstance(typeof(T));
             dict.ToList().ForEach(p =>

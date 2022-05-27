@@ -1,26 +1,34 @@
 using System;
 using MathNet.Numerics.Random;
 using ML.Core.Data.Loader;
+using NumSharp;
 
 namespace ML.Core.Data.Test.DataStructs
 {
     [Serializable]
-    public class IrisData
+    public class IrisData : DataView
     {
-        [LoadColumn(0)] [LoadType(LoadType.Label)]
-        public double Label;
+        [LoadColumn(0)] public double Label;
 
-        [LoadColumn(3)] [LoadType(LoadType.Feature)]
-        public double PetalLength;
+        [LoadColumn(3)] public double PetalLength;
 
-        [LoadColumn(3)] [LoadType(LoadType.Feature)]
-        public double PetalWidth;
+        [LoadColumn(4)] public double PetalWidth;
 
-        [LoadColumn(3)] [LoadType(LoadType.Feature)]
-        public double SepalLength;
+        [LoadColumn(1)] public double SepalLength;
 
-        [LoadColumn(3)] [LoadType(LoadType.Feature)]
-        public double SepalWidth;
+        [LoadColumn(2)] public double SepalWidth;
+
+
+        public override NDArray GetFeatureArray()
+        {
+            return np.array(PetalLength, PetalWidth, SepalLength, SepalWidth);
+        }
+
+        public override NDArray GetLabelArray()
+        {
+            return np.array(Label);
+        }
+
 
         public override string ToString()
         {

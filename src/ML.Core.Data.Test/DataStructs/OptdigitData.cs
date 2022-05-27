@@ -1,10 +1,11 @@
 using System;
 using ML.Core.Data.Loader;
+using NumSharp;
 
 namespace ML.Core.Data.Test.DataStructs
 {
     [Serializable]
-    public class OptdigitData
+    public class OptdigitData : DataView
     {
         [LoadColumn(64)] public double Label;
 
@@ -15,6 +16,17 @@ namespace ML.Core.Data.Test.DataStructs
         {
             return
                 $"Label:{Label}\tPixel:{string.Join(',', Pixel)}";
+        }
+
+
+        public override NDArray GetFeatureArray()
+        {
+            return np.array(Pixel);
+        }
+
+        public override NDArray GetLabelArray()
+        {
+            return np.array(Label);
         }
     }
 }
