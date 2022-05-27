@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using FluentAssertions;
 using ML.Core.Data.Loader;
+using ML.Core.Data.Test.DataStructs;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -96,7 +97,7 @@ namespace ML.Core.Data.Test
         }
 
         [Fact]
-        public void DataSetLoadTest()
+        public void DataSetLoadIris()
         {
             var path = Path.Combine(dataFolder, "iris-train.txt");
             var dataset = TextLoader.LoadDataSet<IrisData>(path, splitChar: '\t');
@@ -105,10 +106,10 @@ namespace ML.Core.Data.Test
 
 
         [Fact]
-        public void DataSetLoadTest2()
+        public void DataSetLoadOptdigits()
         {
-            var path = Path.Combine(dataFolder, "iris-train.txt");
-            var dataset = TextLoader.LoadDataSet<IrisData2>(path, splitChar: '\t');
+            var path = Path.Combine(dataFolder, "optdigits-train.csv");
+            var dataset = TextLoader.LoadDataSet<OptdigitData>(path, splitChar: ',');
             print(dataset);
         }
     }
