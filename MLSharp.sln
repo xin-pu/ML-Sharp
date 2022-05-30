@@ -31,8 +31,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{09B8763D-6
 		data\optdigits-val.csv = data\optdigits-val.csv
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ML.Core.Optimizer", "src\ML.Core.Optimizer\ML.Core.Optimizer.csproj", "{2F977748-2349-41B4-8B0D-371DDA23AD8D}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,10 +49,6 @@ Global
 		{39EA18D1-0AA9-484E-AE4E-6101740BD1EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39EA18D1-0AA9-484E-AE4E-6101740BD1EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39EA18D1-0AA9-484E-AE4E-6101740BD1EB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2F977748-2349-41B4-8B0D-371DDA23AD8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2F977748-2349-41B4-8B0D-371DDA23AD8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2F977748-2349-41B4-8B0D-371DDA23AD8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2F977748-2349-41B4-8B0D-371DDA23AD8D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -63,7 +57,6 @@ Global
 		{06EAC257-2A85-4C34-98BB-DE114B37E0CC} = {BEC4A84A-80AF-4080-B82B-D1C9AB97F7C7}
 		{24D5D4A9-BBD2-48E0-BFE0-84C743B4A60B} = {BEC4A84A-80AF-4080-B82B-D1C9AB97F7C7}
 		{39EA18D1-0AA9-484E-AE4E-6101740BD1EB} = {1D9A6A24-AAA9-45AE-AF11-BD592272BE60}
-		{2F977748-2349-41B4-8B0D-371DDA23AD8D} = {BEC4A84A-80AF-4080-B82B-D1C9AB97F7C7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E8ED5902-4869-450E-A93F-63DEEF757089}
