@@ -1,4 +1,5 @@
-﻿using Numpy;
+﻿using FluentAssertions;
+using Numpy;
 
 namespace ML.Core.Transform
 {
@@ -17,6 +18,8 @@ namespace ML.Core.Transform
 
         public override NDarray Call(NDarray input)
         {
+            input.ndim.Should().Be(2, "input dims shoulbe be 2");
+
             var one = np.ones(input.shape[0], 1);
             return np.hstack(one, input);
         }

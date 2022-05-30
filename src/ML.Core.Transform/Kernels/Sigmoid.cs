@@ -41,20 +41,16 @@ namespace ML.Core.Transform
 
         public override NDarray Call(NDarray input)
         {
-            var p = input.shape[0];
+            input.ndim.Should().Be(2, "input dims shoulbe be 2");
+            var batchSize = input.shape[0];
 
-            var output = np.zeros(p, p);
+            var output = np.zeros(batchSize, batchSize);
 
-
-            var x_array = Enumerable.Range(0, p)
-                .Select(r => input[$"{r},:"]).ToList();
-
-            Enumerable.Range(0, p)
-                .AsParallel()
+            Enumerable.Range(0, batchSize)
                 .ToList()
                 .ForEach(i =>
                 {
-                    var res = np.dot(input, x_array[i]);
+                    var res = np.dot(input, input[i]);
                     output[i] = np.tanh(Beta * res + Theta);
                 });
 

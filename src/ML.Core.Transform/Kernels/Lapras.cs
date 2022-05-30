@@ -28,20 +28,16 @@ namespace ML.Core.Transform
 
         public override NDarray Call(NDarray input)
         {
-            var p = input.shape[0];
+            input.ndim.Should().Be(2, "input dims shoulbe be 2");
+            var batchSize = input.shape[0];
 
-            var output = np.zeros(p, p);
+            var output = np.zeros(batchSize, batchSize);
 
-
-            var x_array = Enumerable.Range(0, p)
-                .Select(r => input[$"{r},:"]).ToList();
-
-            Enumerable.Range(0, p)
-                .AsParallel()
+            Enumerable.Range(0, batchSize)
                 .ToList()
                 .ForEach(i =>
                 {
-                    var delta = x_array[i] - input;
+                    var delta = input[i] - input;
                     var res = np.linalg.norm(delta, 1, -1);
                     output[i] = np.exp(-Beta * res);
                 });

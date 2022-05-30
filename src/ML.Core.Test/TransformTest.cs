@@ -62,7 +62,7 @@ namespace ML.Core.Test
         #endregion
 
 
-        #region MyRegion
+        #region Normal
 
         [Fact]
         public void LineFirstOrder()
