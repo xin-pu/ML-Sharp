@@ -23,21 +23,20 @@ namespace ML.Core.Transform
 
         public override bool IsKernel => false;
 
+        /// <summary>
+        /// </summary>
+        /// <param name="input">input shape should be [batch size,1] contains 1 feature</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public override NDarray Call(NDarray input)
         {
-            var batch = input.shape[0];
-            var features = input.shape[1];
-            if (features != 1) throw new Exception("Regression for 1 dims");
+            input.ndim.Should().Be(2, "input dims shoulbe be 2");
+            input.shape[1].Should().Be(1, "input should contain only 1 feature");
 
-            var xTranspose = np.transpose(input);
-            var npX = np.ones(Degree + 1, batch);
-            Enumerable.Range(1, Degree).ToList().ForEach(d =>
-            {
-                var row = np.ones(input.shape[0]) * d;
-                npX[d] = np.power(xTranspose, row);
-            });
-            npX = np.transpose(npX);
-            return npX;
+            var all = Enumerable.Range(0, Degree + 1)
+                .Select(d => np.power(input, np.array(1.0 * d)))
+                .ToArray();
+            return np.hstack(all);
         }
     }
 }

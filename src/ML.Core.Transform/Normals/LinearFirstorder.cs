@@ -17,9 +17,8 @@ namespace ML.Core.Transform
 
         public override NDarray Call(NDarray input)
         {
-            var b = np.ones(input.shape[0]);
-            var res = np.insert(input, 0, b, 1);
-            return res;
+            var one = np.ones(input.shape[0], 1);
+            return np.hstack(one, input);
         }
     }
 }

@@ -85,6 +85,7 @@ namespace ML.Core.Test
         {
             var tran = new Polynomial(3);
             var res = tran.Call(InputOneDim);
+
             var trueRes = np.array(new double[,]
             {
                 {1, 1, 1, 1},

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using FluentAssertions;
 using Numpy;
 
@@ -26,21 +25,18 @@ namespace ML.Core.Transform
 
         public override NDarray Call(NDarray input)
         {
-            var batch = input.shape[0];
-            var features = input.shape[1];
-            if (features != 1) throw new Exception("Regression for 1 dims");
-
-            var xTranspose = np.transpose(input);
-            var npX = np.ones(2 * Degree + 1, batch);
+            input.ndim.Should().Be(2, "input dims shoulbe be 2");
+            input.shape[1].Should().Be(1, "input should contain only 1 feature");
 
 
-            Enumerable.Range(0, Degree).ToList().ForEach(d =>
-            {
-                npX[1 + 2 * d] = np.sin(d * xTranspose / 2);
-                npX[2 + 2 * d] = np.cos(d * xTranspose / 2);
-            });
-            npX = np.transpose(npX);
-            return npX;
+            var all = Enumerable.Range(1, 2 * Degree)
+                .Select(d =>
+                    d % 2 == 0
+                        ? np.sin(d / 4.0 * input)
+                        : np.cos(d / 4.0 * input))
+                .ToList();
+            all.Insert(0, np.ones_like(input));
+            return np.hstack(all.ToArray());
         }
     }
 }
