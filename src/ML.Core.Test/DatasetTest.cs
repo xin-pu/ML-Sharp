@@ -2,12 +2,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using FluentAssertions;
+using ML.Core.Data;
 using ML.Core.Data.Loader;
-using ML.Core.Data.Test.DataStructs;
+using ML.Core.Test.DataStructs;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace ML.Core.Data.Test
+namespace ML.Core.Test
 {
     public class DatasetTest
     {

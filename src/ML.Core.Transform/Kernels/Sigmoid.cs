@@ -1,28 +1,43 @@
 ﻿using System;
 using System.Linq;
+using FluentAssertions;
 using Numpy;
 
 namespace ML.Core.Transform
 {
-    /// <summary>
-    ///     h(i,j) =  tanh ( beta *dot( xi,xj) + theta)
-    /// </summary>
-    /// <param name="beta"></param>
-    /// <exception cref="ArgumentException"></exception>
     public class Sigmoid : Kernel
     {
+        private double _beta;
+        private double _theta;
+
+        /// <summary>
+        ///     Sigmoid核模型
+        ///     h(i,j) =  tanh ( beta *dot( xi,xj) + theta)
+        /// </summary>
+        /// <param name="beta"></param>
+        /// <param name="theta"></param>
+        /// <exception cref="Exception"></exception>
         public Sigmoid(double beta = 0.5, double theta = 0.5)
             : base(KernelType.Sigmoid)
         {
-            if (beta <= 0.0 || theta >= 0)
-                throw new Exception("Please give Beta > 0 and Theta < 0");
+            beta.Should().BePositive("Please give Beta > 0");
+            theta.Should().BeNegative("Please give Theta < 0");
+
             Beta = beta;
             Theta = theta;
         }
 
-        public double Beta { protected set; get; }
+        public double Beta
+        {
+            get => _beta;
+            set => SetProperty(ref _beta, value);
+        }
 
-        public double Theta { protected set; get; }
+        public double Theta
+        {
+            get => _theta;
+            set => SetProperty(ref _theta, value);
+        }
 
         public override NDarray Call(NDarray input)
         {

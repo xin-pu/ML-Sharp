@@ -1,9 +1,10 @@
 using System;
 using MathNet.Numerics.Random;
+using ML.Core.Data;
 using ML.Core.Data.Loader;
 using Numpy;
 
-namespace ML.Core.Data.Test.DataStructs
+namespace ML.Core.Test.DataStructs
 {
     [Serializable]
     public class IrisData : DataView
