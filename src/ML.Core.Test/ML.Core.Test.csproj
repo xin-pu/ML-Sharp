@@ -27,6 +27,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ML.Core.Data\ML.Core.Data.csproj" />
     <ProjectReference Include="..\ML.Core.Transform\ML.Core.Transform.csproj" />
+    <ProjectReference Include="..\ML.Core\ML.Core.csproj" />
   </ItemGroup>
 
 </Project>

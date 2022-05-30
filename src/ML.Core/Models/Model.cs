@@ -1,5 +1,5 @@
-﻿using System.Security.Cryptography;
-using ML.Core.Data;
+﻿using ML.Core.Data;
+using ML.Core.Transform;
 using MvvmCross.ViewModels;
 
 namespace ML.Core.Models
@@ -13,7 +13,7 @@ namespace ML.Core.Models
     {
         public string Name => GetType().Name;
 
-        public Transform.Transformer 
+        public Transformer Transformer { set; get; }
     }
 
     /// <summary>
