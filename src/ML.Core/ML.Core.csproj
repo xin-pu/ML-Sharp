@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoDiff, Version=1.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\AutoDiff.1.2.2\lib\net47\AutoDiff.dll</HintPath>
+    </Reference>
     <Reference Include="FluentAssertions, Version=6.7.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\FluentAssertions.6.7.0\lib\net47\FluentAssertions.dll</HintPath>
     </Reference>
@@ -130,6 +133,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Losses\LeastAbsolute.cs" />
+    <Compile Include="Losses\LeastSquares.cs" />
+    <Compile Include="Losses\Loss.cs" />
+    <Compile Include="Losses\Term.cs" />
     <Compile Include="MLScripts\Clustering.cs" />
     <Compile Include="MLScripts\LinearRegression.cs" />
     <Compile Include="MLScript.cs" />

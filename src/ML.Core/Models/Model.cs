@@ -1,4 +1,5 @@
-﻿using ML.Core.Data;
+﻿using AutoDiff;
+using ML.Core.Data;
 using ML.Core.Transform;
 using MvvmCross.ViewModels;
 
@@ -26,5 +27,6 @@ namespace ML.Core.Models
     public abstract class GDModel<T> : Model
         where T : DataView
     {
+        public Variable[] Variables { set; get; }
     }
 }
