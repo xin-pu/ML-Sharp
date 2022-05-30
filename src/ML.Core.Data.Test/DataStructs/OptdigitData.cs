@@ -1,6 +1,6 @@
 using System;
 using ML.Core.Data.Loader;
-using NumSharp;
+using Numpy;
 
 namespace ML.Core.Data.Test.DataStructs
 {
@@ -19,12 +19,12 @@ namespace ML.Core.Data.Test.DataStructs
         }
 
 
-        public override NDArray GetFeatureArray()
+        public override NDarray GetFeatureArray()
         {
             return np.array(Pixel);
         }
 
-        public override NDArray GetLabelArray()
+        public override NDarray GetLabelArray()
         {
             return np.array(Label);
         }

@@ -1,4 +1,4 @@
-﻿using NumSharp;
+﻿using Numpy;
 
 namespace ML.Core.Optimizer
 {
@@ -17,15 +17,15 @@ namespace ML.Core.Optimizer
         /// <summary>
         ///     参数梯度平方的累计值
         /// </summary>
-        public NDArray G { protected set; get; }
+        public NDarray G { protected set; get; }
 
         /// <summary>
         ///     参数更新差值δθ的平方的指数衰减权移动平均
         /// </summary>
-        public NDArray Χ { protected set; get; }
+        public NDarray Χ { protected set; get; }
 
 
-        internal override NDArray call(NDArray weight, NDArray grad, int epoch)
+        internal override NDarray call(NDarray weight, NDarray grad, int epoch)
         {
             if (epoch == 0)
             {

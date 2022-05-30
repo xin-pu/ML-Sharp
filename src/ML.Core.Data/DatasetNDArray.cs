@@ -1,10 +1,10 @@
-﻿using NumSharp;
+﻿using Numpy;
 
 namespace ML.Core.Data
 {
-    public class DatasetNDArray
+    public class DatasetNDarray
     {
-        public NDArray Feature;
-        public NDArray Label;
+        public NDarray Feature;
+        public NDarray Label;
     }
 }

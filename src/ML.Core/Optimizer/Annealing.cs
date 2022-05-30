@@ -1,4 +1,4 @@
-﻿using NumSharp;
+﻿using Numpy;
 
 namespace ML.Core.Optimizer
 {
@@ -13,7 +13,7 @@ namespace ML.Core.Optimizer
         {
         }
 
-        internal override NDArray call(NDArray weight, NDArray grad, int epoch)
+        internal override NDarray call(NDarray weight, NDarray grad, int epoch)
         {
             WorkLearningRate = UpdateLearningRate(epoch);
             return base.call(weight, grad, epoch);

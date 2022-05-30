@@ -1,19 +1,19 @@
 ﻿using System;
-using NumSharp;
+using Numpy;
 
 namespace ML.Core.Data
 {
     [Serializable]
     public abstract class DataView
     {
-        public abstract NDArray GetFeatureArray();
+        public abstract NDarray GetFeatureArray();
 
-        public abstract NDArray GetLabelArray();
+        public abstract NDarray GetLabelArray();
 
 
-        public DatasetNDArray ToDatasetNdArray()
+        public DatasetNDarray ToDatasetNDarray()
         {
-            return new DatasetNDArray
+            return new DatasetNDarray
             {
                 Feature = GetFeatureArray(),
                 Label = GetLabelArray()

@@ -1,4 +1,4 @@
-﻿using NumSharp;
+﻿using Numpy;
 
 namespace ML.Core.Optimizer
 {
@@ -23,9 +23,9 @@ namespace ML.Core.Optimizer
         /// <summary>
         ///     参数梯度平方的累计值
         /// </summary>
-        public NDArray G { set; get; }
+        public NDarray G { set; get; }
 
-        internal override NDArray call(NDArray weight, NDArray grad, int epoch)
+        internal override NDarray call(NDarray weight, NDarray grad, int epoch)
         {
             if (epoch == 0)
                 G = np.zeros_like(weight);

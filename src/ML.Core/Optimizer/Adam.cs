@@ -1,4 +1,4 @@
-﻿using NumSharp;
+﻿using Numpy;
 
 namespace ML.Core.Optimizer
 {
@@ -23,15 +23,15 @@ namespace ML.Core.Optimizer
         /// <summary>
         ///     梯度平方的指数加权平均
         /// </summary>
-        public NDArray M { protected set; get; }
+        public NDarray M { protected set; get; }
 
         /// <summary>
         ///     梯度的指数加权平均
         /// </summary>
-        public NDArray G { protected set; get; }
+        public NDarray G { protected set; get; }
 
 
-        internal override NDArray call(NDArray weight, NDArray grad, int epoch)
+        internal override NDarray call(NDarray weight, NDarray grad, int epoch)
         {
             if (epoch == 0)
             {

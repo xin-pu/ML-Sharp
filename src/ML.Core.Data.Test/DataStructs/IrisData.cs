@@ -1,7 +1,7 @@
 using System;
 using MathNet.Numerics.Random;
 using ML.Core.Data.Loader;
-using NumSharp;
+using Numpy;
 
 namespace ML.Core.Data.Test.DataStructs
 {
@@ -19,12 +19,12 @@ namespace ML.Core.Data.Test.DataStructs
         [LoadColumn(2)] public double SepalWidth;
 
 
-        public override NDArray GetFeatureArray()
+        public override NDarray GetFeatureArray()
         {
             return np.array(PetalLength, PetalWidth, SepalLength, SepalWidth);
         }
 
-        public override NDArray GetLabelArray()
+        public override NDarray GetLabelArray()
         {
             return np.array(Label);
         }

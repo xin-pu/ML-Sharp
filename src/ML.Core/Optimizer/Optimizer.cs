@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using ML.Core.Data;
-using NumSharp;
+using Numpy;
 
 namespace ML.Core.Optimizer
 {
@@ -12,7 +12,7 @@ namespace ML.Core.Optimizer
         internal const double epsilon = 1E-7;
 
         public Action<string> AppendRecord;
-        public Func<NDArray, NDArray, NDArray, (NDArray, NDArray)> calLoss;
+        public Func<NDarray, NDarray, NDarray, (NDarray, NDarray)> calLoss;
 
         /// <summary>
         ///     优化器
@@ -30,18 +30,18 @@ namespace ML.Core.Optimizer
         public double InitLearningRate { protected set; get; }
 
 
-        public NDArray Call(NDArray weight, NDArray grad, int epoch)
+        public NDarray Call(NDarray weight, NDarray grad, int epoch)
         {
             return call(weight, grad, epoch);
         }
 
-        internal abstract NDArray call(NDArray weight, NDArray grad, int epoch);
+        internal abstract NDarray call(NDarray weight, NDarray grad, int epoch);
 
         /// <summary>
         ///     小批量梯度随机下降法
         /// </summary>
         /// <param name="dataSet"></param>
-        public async void Run<T>(Dataset<T> dataSet, NDArray weight, int epoch, int batchSize = 0)
+        public async void Run<T>(Dataset<T> dataSet, NDarray weight, int epoch, int batchSize = 0)
             where T : DataView
         {
             dataSet.Should().NotBeNull("dataset should not ne null");
@@ -56,7 +56,7 @@ namespace ML.Core.Optimizer
                     var iEnumerator = dataSet.GetEnumerator(batchSize);
                     while (iEnumerator.MoveNext())
                     {
-                        var data = (iEnumerator.Current as Dataset<T>)?.ToDatasetNdArray();
+                        var data = (iEnumerator.Current as Dataset<T>)?.ToDatasetNDarray();
                         var feature = data?.Feature;
                         var labels = data?.Label;
 

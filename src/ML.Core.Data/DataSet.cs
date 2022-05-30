@@ -7,7 +7,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using FluentAssertions;
 using MathNet.Numerics.Random;
-using NumSharp;
+using Numpy;
 
 namespace ML.Core.Data
 {
@@ -61,12 +61,12 @@ namespace ML.Core.Data
             }
         }
 
-        public DatasetNDArray ToDatasetNdArray()
+        public DatasetNDarray ToDatasetNDarray()
         {
-            var arrays = Value.Select(a => a.ToDatasetNdArray()).ToList();
+            var arrays = Value.Select(a => a.ToDatasetNDarray()).ToList();
             var feature = arrays.Select(a => a.Feature).ToArray();
             var labels = arrays.Select(a => a.Label).ToArray();
-            return new DatasetNDArray
+            return new DatasetNDarray
             {
                 Feature = np.vstack(feature),
                 Label = np.vstack(labels)

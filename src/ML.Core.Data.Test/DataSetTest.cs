@@ -127,10 +127,10 @@ namespace ML.Core.Data.Test
 
 
         [Fact]
-        public void DataSetToNDArray()
+        public void DataSetToNDarray()
         {
             var dataset1 = GetIrisDataSet(10);
-            var arrayND = dataset1.ToDatasetNdArray();
+            var arrayND = dataset1.ToDatasetNDarray();
             print(arrayND.Label);
             print(arrayND.Feature);
         }
@@ -142,14 +142,11 @@ namespace ML.Core.Data.Test
             var dataset = TextLoader<IrisData>.LoadDataSet(path, splitChar: '\t');
 
             var i = dataset.GetEnumerator();
-            var j = 0;
             while (true)
             {
                 var item = i.MoveNext();
                 if (item == false) break;
                 if (i.Current is Dataset<IrisData> c) print(c);
-
-                ;
             }
         }
     }
