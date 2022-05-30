@@ -5,7 +5,7 @@ using Numpy;
 
 namespace ML.Core.Transform
 {
-    public class TrianglePoly : Transform
+    public class TrianglePoly : Transformer
     {
         /// <summary>
         ///     三角函数逼近器
@@ -22,6 +22,7 @@ namespace ML.Core.Transform
 
         public int Degree { protected set; get; }
 
+        public override bool IsKernel => false;
 
         public override NDarray Call(NDarray input)
         {
@@ -31,6 +32,8 @@ namespace ML.Core.Transform
 
             var xTranspose = np.transpose(input);
             var npX = np.ones(2 * Degree + 1, batch);
+
+
             Enumerable.Range(0, Degree).ToList().ForEach(d =>
             {
                 npX[1 + 2 * d] = np.sin(d * xTranspose / 2);

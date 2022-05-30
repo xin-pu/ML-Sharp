@@ -5,7 +5,7 @@ using Numpy;
 
 namespace ML.Core.Transform
 {
-    public class Polynomial : Transform
+    public class Polynomial : Transformer
     {
         /// <summary>
         ///     多项式逼近器
@@ -21,6 +21,7 @@ namespace ML.Core.Transform
 
         public int Degree { protected set; get; }
 
+        public override bool IsKernel => false;
 
         public override NDarray Call(NDarray input)
         {

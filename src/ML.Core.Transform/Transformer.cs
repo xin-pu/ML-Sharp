@@ -6,9 +6,11 @@ namespace ML.Core.Transform
     /// <summary>
     ///     特征变换
     /// </summary>
-    public abstract class Transform : MvxViewModel
+    public abstract class Transformer : MvxViewModel
     {
         public string Name => GetType().Name;
+
+        public abstract bool IsKernel { get; }
 
         /// <summary>
         ///     执行变换

@@ -2,7 +2,7 @@
 
 namespace ML.Core.Transform
 {
-    public class LinearFirstorder : Transform
+    public class LinearFirstorder : Transformer
     {
         /// <summary>
         ///     一阶逼近器
@@ -12,6 +12,8 @@ namespace ML.Core.Transform
         public LinearFirstorder()
         {
         }
+
+        public override bool IsKernel => false;
 
         public override NDarray Call(NDarray input)
         {

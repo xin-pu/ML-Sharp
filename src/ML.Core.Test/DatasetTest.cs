@@ -10,21 +10,15 @@ using Xunit.Abstractions;
 
 namespace ML.Core.Test
 {
-    public class DatasetTest
+    public class DatasetTest : AbstractTest
     {
-        private readonly ITestOutputHelper _testOutputHelper;
-
         private readonly string dataFolder = @"..\..\..\..\..\data";
 
         public DatasetTest(ITestOutputHelper testOutputHelper)
+            : base(testOutputHelper)
         {
-            _testOutputHelper = testOutputHelper;
         }
 
-        internal void print(object obj)
-        {
-            _testOutputHelper.WriteLine(obj.ToString());
-        }
 
         public Dataset<IrisData> GetIrisDataSet(int count)
         {
@@ -118,13 +112,13 @@ namespace ML.Core.Test
         }
 
 
-        [Fact]
-        public void DataSetLoadOptdigits()
-        {
-            var path = Path.Combine(dataFolder, "optdigits-train.csv");
-            var dataset = TextLoader<OptdigitData>.LoadDataSet(path, splitChar: ',');
-            print(dataset);
-        }
+        //[Fact]
+        //public void DataSetLoadOptdigits()
+        //{
+        //    var path = Path.Combine(dataFolder, "optdigits-train.csv");
+        //    var dataset = TextLoader<OptdigitData>.LoadDataSet(path, splitChar: ',');
+        //    print(dataset);
+        //}
 
 
         [Fact]

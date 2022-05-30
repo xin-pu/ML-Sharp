@@ -127,7 +127,7 @@
     <Compile Include="Normals\LinearFirstorder.cs" />
     <Compile Include="Normals\Polynomial.cs" />
     <Compile Include="Normals\TrianglePoly.cs" />
-    <Compile Include="Transform.cs" />
+    <Compile Include="Transformer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

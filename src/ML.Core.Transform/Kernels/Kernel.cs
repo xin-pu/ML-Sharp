@@ -1,6 +1,6 @@
 ﻿namespace ML.Core.Transform
 {
-    public abstract class Kernel : Transform
+    public abstract class Kernel : Transformer
     {
         protected Kernel(KernelType kernelType = KernelType.Gauss)
         {
@@ -8,6 +8,8 @@
         }
 
         public KernelType KernelType { protected set; get; }
+
+        public override bool IsKernel => true;
     }
 
     public enum KernelType

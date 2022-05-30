@@ -161,6 +161,10 @@
       <Project>{06EAC257-2A85-4C34-98BB-DE114B37E0CC}</Project>
       <Name>ML.Core.Data</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ML.Core.Transform\ML.Core.Transform.csproj">
+      <Project>{1F2E8D74-C66B-4F76-AF56-44CDFEC3210E}</Project>
+      <Name>ML.Core.Transform</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,4 +1,5 @@
-﻿using ML.Core.Data;
+﻿using System.Security.Cryptography;
+using ML.Core.Data;
 using MvvmCross.ViewModels;
 
 namespace ML.Core.Models
@@ -11,6 +12,8 @@ namespace ML.Core.Models
     public abstract class Model : MvxViewModel
     {
         public string Name => GetType().Name;
+
+        public Transform.Transformer 
     }
 
     /// <summary>

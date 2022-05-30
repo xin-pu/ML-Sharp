@@ -1,15 +1,14 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ML.Core.Transform")]
+[assembly: AssemblyTitle("ML.Core.Transformer")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("II-VI Corporation")]
-[assembly: AssemblyProduct("ML.Core.Transform")]
+[assembly: AssemblyProduct("ML.Core.Transformer")]
 [assembly: AssemblyCopyright("Copyright © II-VI Corporation 2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
