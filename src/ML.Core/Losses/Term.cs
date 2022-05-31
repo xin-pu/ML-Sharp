@@ -7,7 +7,7 @@ namespace ML.Core.Losses
 {
     public class term
     {
-        public static Term matmulRow(Variable[] v, NDarray xrow)
+        private static Term matmulRow(Variable[] v, NDarray xrow)
         {
             xrow.shape[0].Should().Be(v.Length);
             var row = xrow.GetData<double>();
@@ -23,12 +23,12 @@ namespace ML.Core.Losses
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public static Term[] matmul(Variable[] v, NDarray x, NDarray y)
+        public static Term[] matmul(Variable[] v, NDarray x)
         {
             x.shape[1].Should().Be(v.Length);
             var batchSize = x.shape[0];
-            var batchY = Enumerable.Range(0, batchSize).Select(r => matmulRow(v, x[r]));
-            return batchY.Zip(y.GetData<double>(), (y_r, y_p) => y_p - y_r).ToArray();
+            var batchY = Enumerable.Range(0, batchSize).Select(r => matmulRow(v, x[r])).ToArray();
+            return batchY;
         }
 
 

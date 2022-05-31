@@ -2,6 +2,7 @@
 using ML.Core.Data;
 using ML.Core.Transform;
 using MvvmCross.ViewModels;
+using Numpy;
 
 namespace ML.Core.Models
 {
@@ -28,5 +29,9 @@ namespace ML.Core.Models
         where T : DataView
     {
         public Variable[] Variables { set; get; }
+
+        public abstract Term CallGraph(NDarray x);
+
+        public abstract NDarray Call(NDarray x);
     }
 }

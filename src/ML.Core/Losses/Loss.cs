@@ -9,9 +9,19 @@ namespace ML.Core.Losses
 {
     public abstract class Loss : MvxViewModel
     {
-        protected Loss(
+        private double _lamdba;
+        private Regularization _regularization;
+
+        /// <summary>
+        ///     算是抽象类
+        /// </summary>
+        /// <param name="regularization1"></param>
+        /// <param name="lamdba"></param>
+        /// <param name="regularization"></param>
+        protected Loss(double lamdba = 1E-4,
             Regularization regularization = Regularization.None)
         {
+            Lamdba = lamdba;
             Regularization = regularization;
         }
 
@@ -21,12 +31,26 @@ namespace ML.Core.Losses
 
         public Variable[] Variables { protected set; get; }
 
-        public double Lamdba { set; get; } = 0.1;
-
-        public Regularization Regularization { protected set; get; }
+        /// <summary>
+        ///     正则化，惩罚参数
+        /// </summary>
+        public double Lamdba
+        {
+            get => _lamdba;
+            set => SetProperty(ref _lamdba, value);
+        }
 
         /// <summary>
-        ///     Give Model's Variables to Loss
+        ///     正则模式，约束模式
+        /// </summary>
+        public Regularization Regularization
+        {
+            get => _regularization;
+            set => SetProperty(ref _regularization, value);
+        }
+
+        /// <summary>
+        ///     赋模型变量
         /// </summary>
         /// <param name="variables"></param>
         public void Complie(Variable[] variables)
@@ -34,26 +58,45 @@ namespace ML.Core.Losses
             Variables = variables;
         }
 
-        public (NDarray, double) Call(NDarray weights, NDarray x, NDarray y)
+        /// <summary>
+        ///     获取损失
+        /// </summary>
+        /// <param name="y_pred"></param>
+        /// <param name="y_true"></param>
+        /// <returns></returns>
+        public Term Call(Term[] y_pred, NDarray y_true)
         {
-            x.shape[0].Should().Be(y.shape[0], "batch size of X and Y should be same.");
+            Variables.Should().NotBeNullOrEmpty("Variables contains null value.");
+            y_true.shape[1].Should().Be(1, "Pred one result");
+            y_true.shape[0].Should().Be(y_pred.Length, "Batch size should be same.");
 
-            LossTerm = getTotalLoss(Variables, x, y);
-            var points = weights.GetData<double>();
-            var loss = LossTerm.Evaluate(Variables, points);
-            var grad = LossTerm.Differentiate(Variables, points);
-            return (grad, loss);
+            var basicLoss = getModelLoss(y_pred, y_true.GetData<double>());
+            var regularizationLoss = getRegularizationLoss(Variables, Regularization, Lamdba);
+            var totalLoss = basicLoss + regularizationLoss;
+            return totalLoss;
+        }
+
+        /// <summary>
+        ///     获取损失
+        /// </summary>
+        /// <param name="y_pred"></param>
+        /// <param name="y_true"></param>
+        /// <returns></returns>
+        public Term Call(Term[] y_pred, double[] y_true)
+        {
+            var y_true_array = np.expand_dims(np.array(y_true), 0);
+            return Call(y_pred, y_true_array);
         }
 
 
-        internal Term getTotalLoss(Variable[] w, NDarray x, NDarray y)
-        {
-            var basicLoss = getModelLoss(w, x, y);
-            var regularizationLoss = getRegularizationLoss(w, Regularization, Lamdba);
-            return basicLoss + regularizationLoss;
-        }
-
-        internal abstract Term getModelLoss(Variable[] w, NDarray x, NDarray y);
+        /// <summary>
+        ///     获取具体模型损失，由各个类型的模型自定义
+        /// </summary>
+        /// <param name="w"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        internal abstract Term getModelLoss(Term[] y_pred, double[] y_true);
 
         /// <summary>
         ///     正则化约束
@@ -72,6 +115,7 @@ namespace ML.Core.Losses
                     return lamdba * getRidgeLoss(variables) / 2;
                 case Regularization.LP:
                     return (1 - lamdba) * getLassoLoss(variables) + lamdba * getRidgeLoss(variables);
+                case Regularization.None:
                 default:
                     return new Constant(0);
             }
@@ -108,20 +152,6 @@ namespace ML.Core.Losses
             str.AppendLine($"---{Name}---");
             return str.ToString();
         }
-    }
-
-    /// <summary>
-    ///     权重约束
-    /// </summary>
-    public enum Regularization
-    {
-        None = 0,
-        L1 = 1,
-        L2 = 2,
-        LP = 3,
-        Ridge = 2,
-        Lasso = 1,
-        ElasticNet = 3
     }
 
     public enum Initialization

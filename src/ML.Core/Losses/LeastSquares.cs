@@ -1,32 +1,32 @@
 ﻿using System.Linq;
 using AutoDiff;
-using FluentAssertions;
-using Numpy;
 
 namespace ML.Core.Losses
 {
     public class LeastSquares : Loss
     {
         /// <summary>
+        ///     最小二乘损失
         ///     J(la)= 0.5*sigma((y-yp)^2)
         /// </summary>
-        public LeastSquares(Regularization regularization)
-            : base(regularization)
+        /// <param name="lamdba"></param>
+        /// <param name="regularization"></param>
+        public LeastSquares(
+            double lamdba = 1E-4,
+            Regularization regularization = Regularization.None)
+            : base(lamdba, regularization)
         {
         }
 
-        internal override Term getModelLoss(Variable[] w, NDarray x, NDarray y)
+
+        internal override Term getModelLoss(Term[] y_pred, double[] y_true)
         {
-            y.shape[1].Should().Be(1, "Pred one result");
-            x.shape[0].Should().Be(y.shape[0], "Batch size should be same.");
-            w.Length.Should().Be(x.shape[1], "Variables length should math with x's features.");
-
-            var y_delta = term.matmul(w, x, y);
-            var allSquares = y_delta
-                .Select(i => TermBuilder.Power(i, 2))
+            var allAbs = y_pred
+                .Zip(y_true, (y1, y2) => y1 - y2)
+                .Select(d => TermBuilder.Power(d, 2))
                 .ToArray();
-
-            return 0.5 * TermBuilder.Sum(allSquares) / x.shape[0];
+            var finalLoss = 0.5 * TermBuilder.Sum(allAbs) / allAbs.Length;
+            return finalLoss;
         }
     }
 }
