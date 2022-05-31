@@ -3,9 +3,15 @@ using AutoDiff;
 
 namespace ML.Core.Losses
 {
-    public class SigmoidLeastSquares : Loss
+    public class BinaryLeastSquares : Loss
     {
-        public SigmoidLeastSquares(
+        /// <summary>
+        ///     二分类最小二乘损失
+        ///     J(la)= (sigmoid(y)-yp)^2
+        /// </summary>
+        /// <param name="lamdba"></param>
+        /// <param name="regularization"></param>
+        public BinaryLeastSquares(
             double lamdba = 1E-4,
             Regularization regularization = Regularization.None)
             : base(lamdba, regularization)
@@ -13,7 +19,6 @@ namespace ML.Core.Losses
         }
 
         /// <summary>
-        ///     J(la)= (sigmoid(y)-yp)^2
         /// </summary>
         /// <param name="y_pred"></param>
         /// <param name="y_true">should be 0 or 1 </param>

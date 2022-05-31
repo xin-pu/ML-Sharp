@@ -3,9 +3,15 @@ using AutoDiff;
 
 namespace ML.Core.Losses
 {
-    public class Softmax : Loss
+    public class BinarySoftmax : Loss
     {
-        public Softmax(
+        /// <summary>
+        ///     二分类Softmax损失（Label∈(-1，1))
+        ///     J(la)= Todo
+        /// </summary>
+        /// <param name="lamdba"></param>
+        /// <param name="regularization"></param>
+        public BinarySoftmax(
             double lamdba = 1E-4,
             Regularization regularization = Regularization.None)
             : base(lamdba, regularization)
@@ -13,7 +19,6 @@ namespace ML.Core.Losses
         }
 
         /// <summary>
-        ///     J(la)= (sigmoid(y)-yp)^2
         /// </summary>
         /// <param name="y_pred"></param>
         /// <param name="y_true">should be -1 or 1 </param>

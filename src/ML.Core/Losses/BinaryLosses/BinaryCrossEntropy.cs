@@ -3,9 +3,15 @@ using AutoDiff;
 
 namespace ML.Core.Losses
 {
-    public class CrossEntropy : Loss
+    public class BinaryCrossEntropy : Loss
     {
-        public CrossEntropy(
+        /// <summary>
+        ///     二分类交叉熵损失（Label∈(0，1))
+        ///     J(la)= Todo
+        /// </summary>
+        /// <param name="lamdba"></param>
+        /// <param name="regularization"></param>
+        public BinaryCrossEntropy(
             double lamdba = 1E-4,
             Regularization regularization = Regularization.None)
             : base(lamdba, regularization)

@@ -133,13 +133,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Losses\CrossEntropy.cs" />
-    <Compile Include="Losses\LeastAbsolute.cs" />
-    <Compile Include="Losses\LeastSquares.cs" />
+    <Compile Include="Losses\BinaryLosses\BinaryCrossEntropy.cs" />
+    <Compile Include="Losses\RegressionLosses\LeastAbsolute.cs" />
+    <Compile Include="Losses\RegressionLosses\LeastSquares.cs" />
     <Compile Include="Losses\Loss.cs" />
     <Compile Include="Losses\Regularization.cs" />
-    <Compile Include="Losses\SigmoidLeastSquares.cs" />
-    <Compile Include="Losses\Softmax.cs" />
+    <Compile Include="Losses\BinaryLosses\BinaryLeastSquares.cs" />
+    <Compile Include="Losses\BinaryLosses\BinarySoftmax.cs" />
     <Compile Include="Losses\Term.cs" />
     <Compile Include="MLScripts\Clustering.cs" />
     <Compile Include="MLScripts\LinearRegression.cs" />
