@@ -1,9 +1,11 @@
 ﻿using System.Linq;
 using AutoDiff;
+using ML.Utilty;
+using Numpy;
 
 namespace ML.Core.Losses
 {
-    public class BinaryCrossEntropy : Loss
+    public class BinaryCrossentropy : Loss
     {
         /// <summary>
         ///     二分类交叉熵损失（Label∈(0，1))
@@ -11,11 +13,19 @@ namespace ML.Core.Losses
         /// </summary>
         /// <param name="lamdba"></param>
         /// <param name="regularization"></param>
-        public BinaryCrossEntropy(
+        public BinaryCrossentropy(
             double lamdba = 1E-4,
             Regularization regularization = Regularization.None)
             : base(lamdba, regularization)
         {
+        }
+
+
+        internal override double CalculateLLoss(NDarray y_pred, NDarray y_true)
+        {
+            var sigmoid = nn.sigmoid(y_pred);
+            var alllogdelta = y_true * np.log(sigmoid) + (1 - y_true) * np.log(1 - sigmoid);
+            return -np.average(alllogdelta);
         }
 
         internal override Term getModelLoss(Term[] y_pred, double[] y_true)

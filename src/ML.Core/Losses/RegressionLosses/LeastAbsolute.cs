@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using AutoDiff;
+using Numpy;
 
 namespace ML.Core.Losses
 {
@@ -7,7 +8,7 @@ namespace ML.Core.Losses
     {
         /// <summary>
         ///     最小绝对值损失
-        ///     J(la)= sigma(|y-yp|)
+        ///     J(la)= sigma{|y-yp|}
         /// </summary>
         /// <param name="lamdba"></param>
         /// <param name="regularization"></param>
@@ -18,6 +19,12 @@ namespace ML.Core.Losses
         {
         }
 
+
+        internal override double CalculateLLoss(NDarray y_pred, NDarray y_true)
+        {
+            var allAbdDetta = np.abs(y_pred - y_true);
+            return np.average(allAbdDetta);
+        }
 
         internal override Term getModelLoss(Term[] y_pred, double[] y_true)
         {

@@ -1,5 +1,7 @@
 ﻿using System.Linq;
 using AutoDiff;
+using ML.Utilty;
+using Numpy;
 
 namespace ML.Core.Losses
 {
@@ -16,6 +18,13 @@ namespace ML.Core.Losses
             Regularization regularization = Regularization.None)
             : base(lamdba, regularization)
         {
+        }
+
+        internal override double CalculateLLoss(NDarray y_pred, NDarray y_true)
+        {
+            var tah = nn.tanh(y_pred);
+            var alllogdelta = np.log(1 + np.exp(-tah * y_true));
+            return np.average(alllogdelta);
         }
 
         /// <summary>

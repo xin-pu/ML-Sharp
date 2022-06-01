@@ -81,12 +81,21 @@ namespace ML.Core.Losses
         /// </summary>
         /// <param name="y_pred"></param>
         /// <param name="y_true"></param>
-        /// <returns></returns>
+        /// <returns>用于计算梯度的损失关系</returns>
         public Term Call(Term[] y_pred, double[] y_true)
         {
             var y_true_array = np.expand_dims(np.array(y_true), 0);
             return Call(y_pred, y_true_array);
         }
+
+        public double Call(NDarray y_pred, NDarray y_true)
+        {
+            y_pred.size.Should().Be(y_true.size, "size of pred and ture should be same.");
+            var y_pred_reshape = np.reshape(y_pred, y_true.shape);
+            return CalculateLLoss(y_pred_reshape, y_true);
+        }
+
+        internal abstract double CalculateLLoss(NDarray y_pred, NDarray y_true);
 
 
         /// <summary>

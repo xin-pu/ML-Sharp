@@ -133,7 +133,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Losses\BinaryLosses\BinaryCrossEntropy.cs" />
+    <Compile Include="Losses\BinaryLosses\BinaryCrossentropy.cs" />
     <Compile Include="Losses\RegressionLosses\LeastAbsolute.cs" />
     <Compile Include="Losses\RegressionLosses\LeastSquares.cs" />
     <Compile Include="Losses\Loss.cs" />
@@ -175,6 +175,10 @@
     <ProjectReference Include="..\ML.Core.Transform\ML.Core.Transform.csproj">
       <Project>{1F2E8D74-C66B-4F76-AF56-44CDFEC3210E}</Project>
       <Name>ML.Core.Transform</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ML.Utilty\ML.Utilty.csproj">
+      <Project>{A8775479-716A-46EC-B15F-124AF4633166}</Project>
+      <Name>ML.Utilty</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
