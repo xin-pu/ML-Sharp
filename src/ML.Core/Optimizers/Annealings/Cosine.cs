@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ML.Core.Optimizer
+namespace ML.Core.Optimizers
 {
     public class Cosine : Annealing
     {

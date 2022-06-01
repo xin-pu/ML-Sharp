@@ -1,6 +1,6 @@
 ﻿using Numpy;
 
-namespace ML.Core.Optimizer
+namespace ML.Core.Optimizers
 {
     /// <summary>
     ///     variables=variables-η*f'(variables)

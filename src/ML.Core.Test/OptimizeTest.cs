@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using ML.Core.Optimizer;
+using ML.Core.Optimizers;
 using Numpy;
 using Xunit;
 using Xunit.Abstractions;
