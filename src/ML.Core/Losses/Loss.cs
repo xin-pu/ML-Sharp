@@ -93,7 +93,7 @@ namespace ML.Core.Losses
 
             checkLabels(y_true);
 
-            var basicLoss = getModelLoss(y_pred, y_true.GetData<double>());
+            var basicLoss = getModelLoss(y_pred, y_true);
             var regularizationLoss = getRegularizationLoss(variables, Regularization, Lamdba);
             var totalLoss = basicLoss + regularizationLoss;
             return totalLoss;
@@ -153,7 +153,7 @@ namespace ML.Core.Losses
 
         internal abstract void checkLabels(NDarray y_true);
         internal abstract double calculateLoss(NDarray y_pred, NDarray y_true);
-        internal abstract Term getModelLoss(Term[] y_pred, double[] y_true);
+        internal abstract Term getModelLoss(Term[] y_pred, NDarray y_true);
 
         #endregion
     }

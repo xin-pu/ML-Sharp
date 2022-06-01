@@ -40,7 +40,7 @@ namespace ML.Core.Losses.CategoricalLosses
             throw new NotImplementedException();
         }
 
-        internal override Term getModelLoss(Term[] y_pred, double[] y_true)
+        internal override Term getModelLoss(Term[] y_pred, NDarray y_true)
         {
             throw new NotImplementedException();
         }

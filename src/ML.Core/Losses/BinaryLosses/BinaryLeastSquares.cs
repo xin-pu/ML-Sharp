@@ -41,10 +41,11 @@ namespace ML.Core.Losses
         /// <param name="y_pred">should be 0 or 1</param>
         /// <param name="y_true">should be 0 or 1 </param>
         /// <returns></returns>
-        internal override Term getModelLoss(Term[] y_pred, double[] y_true)
+        internal override Term getModelLoss(Term[] y_pred, NDarray y_true)
         {
+            var array = y_true.GetData<double>();
             var allAbs = y_pred
-                .Zip(y_true, (y1, y2) => y1 - y2)
+                .Zip(array, (y1, y2) => y1 - y2)
                 .Select(d => TermBuilder.Power(d, 2))
                 .ToArray();
             var finalLoss = 0.5 * TermBuilder.Sum(allAbs) / allAbs.Length;

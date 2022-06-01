@@ -31,10 +31,11 @@ namespace ML.Core.Losses
             return np.average(allAbdDetta);
         }
 
-        internal override Term getModelLoss(Term[] y_pred, double[] y_true)
+        internal override Term getModelLoss(Term[] y_pred, NDarray y_true)
         {
+            var array = y_true.GetData<double>();
             var allAbs = y_pred
-                .Zip(y_true, (y1, y2) => y1 - y2)
+                .Zip(array, (y1, y2) => y1 - y2)
                 .Select(d => TermBuilder.Power(TermBuilder.Power(d, 2), 0.5))
                 .ToArray();
             var finalLoss = TermBuilder.Sum(allAbs) / allAbs.Length;

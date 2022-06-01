@@ -54,6 +54,15 @@ namespace ML.Core.Test
         }
 
         [Fact]
+        public void TestLogCoshLoss()
+        {
+            var yTrue = np.array(new double[,] {{0, 1}, {0, 0}});
+            var yPred = np.array(new double[,] {{1, 1}, {0, 0}});
+            var loss = new LogCosh().GetLoss(yPred, yTrue);
+            print(loss);
+        }
+
+        [Fact]
         public void TestBinaryLeastSquaresLoss()
         {
             var yTrue = np.array(new double[] {0, 0, 1, 0});
