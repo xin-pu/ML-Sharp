@@ -10,8 +10,7 @@ namespace ML.Core.Losses
     {
         /// <summary>
         ///     二分类Softmax损失（Label∈(-1，1))
-        ///     如果提供了0,1标签，则会转为-1,1标签
-        ///     J(la)= Todo
+        ///     J(la)= sigma ( log(1+e^(-y_t*y_p) )
         /// </summary>
         /// <param name="lamdba"></param>
         /// <param name="regularization"></param>
@@ -23,13 +22,13 @@ namespace ML.Core.Losses
         {
         }
 
-        internal override void CheckLabels(NDarray y_true)
+        internal override void checkLabels(NDarray y_true)
         {
             var labels = y_true.GetData<double>();
             labels.Distinct().Should().BeEquivalentTo(new double[] {-1, 1}, "Labels should be -1 or 1");
         }
 
-        internal override double CalculateLoss(NDarray y_pred, NDarray y_true)
+        internal override double calculateLoss(NDarray y_pred, NDarray y_true)
         {
             var alllogdelta = np.log(1 + np.exp(-y_pred * y_true));
             return np.average(alllogdelta);
@@ -50,12 +49,12 @@ namespace ML.Core.Losses
         }
 
 
-        public override Term convertProbabilityTerm(Term labels_logits)
+        internal override Term convertProbabilityTerm(Term labels_logits)
         {
             return term.tanh(labels_logits);
         }
 
-        public override NDarray convertProbabilityNDarray(NDarray labels_logits)
+        internal override NDarray convertProbabilityNDarray(NDarray labels_logits)
         {
             return nn.tanh(labels_logits);
         }

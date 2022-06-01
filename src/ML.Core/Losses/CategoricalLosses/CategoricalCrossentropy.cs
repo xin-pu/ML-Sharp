@@ -22,13 +22,20 @@ namespace ML.Core.Losses.CategoricalLosses
         }
 
 
-        internal override void CheckLabels(NDarray y_true)
+        internal override void checkLabels(NDarray y_true)
         {
             var labels = y_true.GetData<double>();
             labels.Distinct().Should().BeEquivalentTo(new double[] {0, 1}, "Labels should be 0 or 1");
         }
 
-        internal override double CalculateLoss(NDarray y_pred, NDarray y_true)
+        /// <summary>
+        ///     the shape of both y_pred and y_true are [batch_size, num_classes].
+        /// </summary>
+        /// <param name="y_pred">[batch_size, num_classes]</param>
+        /// <param name="y_true">[batch_size, num_classes]</param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        internal override double calculateLoss(NDarray y_pred, NDarray y_true)
         {
             throw new NotImplementedException();
         }

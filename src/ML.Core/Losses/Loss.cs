@@ -13,11 +13,10 @@ namespace ML.Core.Losses
         private Regularization _regularization;
 
         /// <summary>
-        ///     算是抽象类
+        ///     损失抽象类
         /// </summary>
-        /// <param name="regularization1"></param>
         /// <param name="lamdba"></param>
-        /// <param name="regularization"></param>
+        /// <param name="regularization">regularization type</param>
         protected Loss(double lamdba = 1E-4,
             Regularization regularization = Regularization.None)
         {
@@ -48,7 +47,6 @@ namespace ML.Core.Losses
             set => SetProperty(ref _regularization, value);
         }
 
-
         public override string ToString()
         {
             var str = new StringBuilder();
@@ -56,23 +54,22 @@ namespace ML.Core.Losses
             return str.ToString();
         }
 
-
-        #region cal loss
+        #region Calculate loss
 
         /// <summary>
         ///     直接计算损失
         /// </summary>
-        /// <param name="y_pred"></param>
-        /// <param name="y_true"></param>
+        /// <param name="y_pred">[batch size, ... ]</param>
+        /// <param name="y_true">[batch size, ... ]</param>
         /// <returns></returns>
         public virtual double GetLoss(NDarray y_pred, NDarray y_true)
         {
             y_pred.size.Should().Be(y_true.size, "size of pred and ture should be same.");
             var y_pred_reshape = np.reshape(y_pred, y_true.shape);
 
-            CheckLabels(y_true);
+            checkLabels(y_true);
 
-            var loss = CalculateLoss(y_pred_reshape, y_true);
+            var loss = calculateLoss(y_pred_reshape, y_true);
 
             return loss;
         }
@@ -84,8 +81,9 @@ namespace ML.Core.Losses
         /// <summary>
         ///     获取损失
         /// </summary>
-        /// <param name="y_pred">[batch size, ... ]</param>
-        /// <param name="y_true">[batch size, ... ]</param>
+        /// <param name="y_pred">模型预测</param>
+        /// <param name="y_true">真实Y</param>
+        /// <param name="variables">模型变量</param>
         /// <returns></returns>
         public virtual Term GetLossTerm(Term[] y_pred, NDarray y_true, Variable[] variables)
         {
@@ -93,7 +91,7 @@ namespace ML.Core.Losses
             y_true.shape[0].Should().Be(y_pred.Length, "Batch size should be same.");
             y_true.shape[1].Should().Be(1, "Pred one result");
 
-            CheckLabels(y_true);
+            checkLabels(y_true);
 
             var basicLoss = getModelLoss(y_pred, y_true.GetData<double>());
             var regularizationLoss = getRegularizationLoss(variables, Regularization, Lamdba);
@@ -153,8 +151,8 @@ namespace ML.Core.Losses
 
         #region Internal
 
-        internal abstract void CheckLabels(NDarray y_true);
-        internal abstract double CalculateLoss(NDarray y_pred, NDarray y_true);
+        internal abstract void checkLabels(NDarray y_true);
+        internal abstract double calculateLoss(NDarray y_pred, NDarray y_true);
         internal abstract Term getModelLoss(Term[] y_pred, double[] y_true);
 
         #endregion
@@ -165,12 +163,5 @@ namespace ML.Core.Losses
     {
         Logits,
         Probability
-    }
-
-    public enum Initialization
-    {
-        Zero,
-        Rand,
-        Randn
     }
 }

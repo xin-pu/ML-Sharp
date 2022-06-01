@@ -4,15 +4,16 @@ using Numpy;
 
 namespace ML.Core.Losses
 {
-    public class LeastSquares : Loss
+    public class MeanSquaredError : Loss
     {
         /// <summary>
         ///     最小二乘损失
-        ///     J(la)= sigma{(y-yp)^2}
+        ///     Computes the mean of squares of errors between labels and predictions.
+        ///     J(la)= square(y_true - y_pred)
         /// </summary>
         /// <param name="lamdba"></param>
         /// <param name="regularization"></param>
-        public LeastSquares(
+        public MeanSquaredError(
             double lamdba = 1E-4,
             Regularization regularization = Regularization.None)
             : base(lamdba, regularization)
@@ -20,11 +21,11 @@ namespace ML.Core.Losses
         }
 
 
-        internal override void CheckLabels(NDarray y_true)
+        internal override void checkLabels(NDarray y_true)
         {
         }
 
-        internal override double CalculateLoss(NDarray y_pred, NDarray y_true)
+        internal override double calculateLoss(NDarray y_pred, NDarray y_true)
         {
             var allAbdDetta = np.square(y_pred - y_true);
             return 0.5 * np.average(allAbdDetta);

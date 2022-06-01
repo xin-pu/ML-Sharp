@@ -9,7 +9,7 @@ namespace ML.Core.Losses
         private LabelType _labelType;
 
         /// <summary>
-        ///     算是抽象类
+        ///     分类损失抽象类
         /// </summary>
         /// <param name="regularization1"></param>
         /// <param name="lamdba"></param>
@@ -28,11 +28,6 @@ namespace ML.Core.Losses
             get => _labelType;
             set => SetProperty(ref _labelType, value);
         }
-
-
-        public abstract Term convertProbabilityTerm(Term term);
-
-        public abstract NDarray convertProbabilityNDarray(NDarray value);
 
         /// <summary>
         ///     获取损失
@@ -54,8 +49,9 @@ namespace ML.Core.Losses
         /// <summary>
         ///     直接计算损失
         /// </summary>
-        /// <param name="y_pred"></param>
-        /// <param name="y_true"></param>
+        /// <param name="y_pred">模型预测</param>
+        /// <param name="y_true">真实Y</param>
+        /// <param name="variables">模型变量</param>
         /// <returns></returns>
         public override double GetLoss(NDarray y_pred, NDarray y_true)
         {
@@ -66,5 +62,13 @@ namespace ML.Core.Losses
 
             return base.GetLoss(y_pred_array, y_true);
         }
+
+        #region Internal
+
+        internal abstract Term convertProbabilityTerm(Term term);
+
+        internal abstract NDarray convertProbabilityNDarray(NDarray value);
+
+        #endregion
     }
 }

@@ -40,7 +40,7 @@ namespace ML.Core.Test
         {
             var yTrue = np.array(new double[] {1, 2, 2, 4});
             var yPred = np.array(new double[] {1, 2, 3, 4});
-            var loss = new LeastSquares().GetLoss(yPred, yTrue);
+            var loss = new MeanSquaredError().GetLoss(yPred, yTrue);
             loss.Should().Be(0.125);
         }
 
@@ -49,7 +49,7 @@ namespace ML.Core.Test
         {
             var yTrue = np.array(new double[] {1, 2, 2, 4});
             var yPred = np.array(new double[] {1, 2, 3, 4});
-            var loss = new LeastAbsolute().GetLoss(yPred, yTrue);
+            var loss = new MeanAbsoluteError().GetLoss(yPred, yTrue);
             loss.Should().Be(0.25);
         }
 
@@ -103,7 +103,7 @@ namespace ML.Core.Test
             var variables = new[] {new Variable(), new Variable()};
             var y_pred = Call(variables);
 
-            var lossTerm = new LeastSquares().GetLossTerm(y_pred, y_true, variables);
+            var lossTerm = new MeanSquaredError().GetLossTerm(y_pred, y_true, variables);
 
             var loss = lossTerm.Evaluate(variables, result.GetData<double>());
             var gradient = lossTerm.Differentiate(variables, result.GetData<double>());
@@ -118,7 +118,7 @@ namespace ML.Core.Test
             var variables = new[] {new Variable(), new Variable()};
             var y_pred = Call(variables);
 
-            var leastSquares = new LeastAbsolute();
+            var leastSquares = new MeanAbsoluteError();
 
             var lossTerm = leastSquares.GetLossTerm(y_pred, y_true, variables);
 
