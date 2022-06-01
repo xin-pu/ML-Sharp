@@ -65,7 +65,7 @@ namespace ML.Core.Losses
         /// <param name="y_pred"></param>
         /// <param name="y_true"></param>
         /// <returns></returns>
-        public double GetLoss(NDarray y_pred, NDarray y_true)
+        public virtual double GetLoss(NDarray y_pred, NDarray y_true)
         {
             y_pred.size.Should().Be(y_true.size, "size of pred and ture should be same.");
             var y_pred_reshape = np.reshape(y_pred, y_true.shape);
@@ -87,7 +87,7 @@ namespace ML.Core.Losses
         /// <param name="y_pred">[batch size, ... ]</param>
         /// <param name="y_true">[batch size, ... ]</param>
         /// <returns></returns>
-        public Term GetLossTerm(Term[] y_pred, NDarray y_true, Variable[] variables)
+        public virtual Term GetLossTerm(Term[] y_pred, NDarray y_true, Variable[] variables)
         {
             variables.Should().NotBeNullOrEmpty("Variables contains null value.");
             y_true.shape[0].Should().Be(y_pred.Length, "Batch size should be same.");
@@ -99,21 +99,6 @@ namespace ML.Core.Losses
             var regularizationLoss = getRegularizationLoss(variables, Regularization, Lamdba);
             var totalLoss = basicLoss + regularizationLoss;
             return totalLoss;
-        }
-
-        /// <summary>
-        ///     获取损失
-        /// </summary>
-        /// <param name="y_pred"></param>
-        /// <param name="y_true"></param>
-        /// <returns>用于计算梯度的损失关系</returns>
-        public Term GetLossTerm(Term[] y_pred, double[] y_true, Variable[] variables)
-        {
-            var y_true_array = np.expand_dims(np.array(y_true), 0);
-
-            var lossTerm = GetLossTerm(y_pred, y_true_array, variables);
-
-            return lossTerm;
         }
 
 
@@ -173,6 +158,13 @@ namespace ML.Core.Losses
         internal abstract Term getModelLoss(Term[] y_pred, double[] y_true);
 
         #endregion
+    }
+
+
+    public enum LabelType
+    {
+        Logits,
+        Probability
     }
 
     public enum Initialization

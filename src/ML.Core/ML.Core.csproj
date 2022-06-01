@@ -134,6 +134,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Losses\BinaryLosses\BinaryCrossentropy.cs" />
+    <Compile Include="Losses\CategoricalLosses\CategoricalCrossentropy.cs" />
+    <Compile Include="Losses\CategoricalLoss.cs" />
     <Compile Include="Losses\RegressionLosses\LeastAbsolute.cs" />
     <Compile Include="Losses\RegressionLosses\LeastSquares.cs" />
     <Compile Include="Losses\Loss.cs" />
@@ -181,6 +183,8 @@
       <Name>ML.Utilty</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Losses\NewFolder1\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

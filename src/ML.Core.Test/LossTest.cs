@@ -19,7 +19,7 @@ namespace ML.Core.Test
         {
         }
 
-        public Term[] Call(Variable[] weight, NDarray x)
+        public Term[] Call(Variable[] weight)
         {
             return term.matmul(weight, x);
         }
@@ -28,7 +28,7 @@ namespace ML.Core.Test
         {
             var weights = result.GetData<double>();
             var variables = new[] {new Variable(), new Variable()};
-            var y_pred_array = Call(variables, x)
+            var y_pred_array = Call(variables)
                 .Select(t => t.Evaluate(variables, weights))
                 .ToArray();
             var y_pred = np.array(y_pred_array);
@@ -38,8 +38,8 @@ namespace ML.Core.Test
         [Fact]
         public void TestLeastSquaresLoss()
         {
-            var yPred = np.array(1, 2, 3, 4);
-            var yTrue = np.array(1, 2, 2, 4);
+            var yTrue = np.array(new double[] {1, 2, 2, 4});
+            var yPred = np.array(new double[] {1, 2, 3, 4});
             var loss = new LeastSquares().GetLoss(yPred, yTrue);
             loss.Should().Be(0.125);
         }
@@ -47,8 +47,8 @@ namespace ML.Core.Test
         [Fact]
         public void TestLeastAbsoluteLoss()
         {
-            var yPred = np.array(1, 2, 3, 4);
-            var yTrue = np.array(1, 2, 2, 4);
+            var yTrue = np.array(new double[] {1, 2, 2, 4});
+            var yPred = np.array(new double[] {1, 2, 3, 4});
             var loss = new LeastAbsolute().GetLoss(yPred, yTrue);
             loss.Should().Be(0.25);
         }
@@ -56,28 +56,44 @@ namespace ML.Core.Test
         [Fact]
         public void TestBinaryLeastSquaresLoss()
         {
-            var yPred = np.array(-18.6, 0.51, 2.94, -12.8);
-            var yTrue = np.array(new double[] {0, 1, 0, 0});
-            var loss = new BinaryLeastSquares().GetLoss(yPred, yTrue);
-            print(loss);
+            var yTrue = np.array(new double[] {0, 0, 1, 0});
+
+            var yPred = np.array(new double[] {0, 0, 1, 0});
+            var loss1 = new BinaryLeastSquares().GetLoss(yPred, yTrue);
+            loss1.Should().Be(0);
+
+            yPred = np.array(-18.6, 0.51, 2.94, -12.8);
+            var loss2 = new BinaryLeastSquares(LabelType.Logits).GetLoss(yPred, yTrue);
+            print(loss2);
         }
 
         [Fact]
         public void TestBinaryCrossEntropyLoss()
         {
-            var yPred = np.array(-18.6, 0.51, 2.94, -12.8);
-            var yTrue = np.array(new double[] {0, 1, 0, 0});
-            var loss = new BinaryCrossentropy().GetLoss(yPred, yTrue);
-            print(loss);
+            var yTrue = np.array(new double[] {0, 0, 1, 0});
+
+            var yPred = np.array(0.1, 0.1, 0.8, 0.1);
+            var loss1 = new BinaryCrossentropy().GetLoss(yPred, yTrue);
+            print(loss1);
+
+
+            yPred = np.array(-18.6, 0.51, 2.94, -12.8);
+            var loss2 = new BinaryLeastSquares(LabelType.Logits).GetLoss(yPred, yTrue);
+            print(loss2);
         }
 
         [Fact]
         public void TestBinarySoftmaxLoss()
         {
-            var yPred = np.array(-18.6, 0.51, 2.94, -12.8);
-            var yTrue = np.array(new double[] {-1, 1, -1, -1});
-            var loss = new BinarySoftmax().GetLoss(yPred, yTrue);
-            print(loss);
+            var yTrue = np.array(new double[] {-1, -1, 1, -1});
+
+            var yPred = np.array(new double[] {-1, -1, 1, -1});
+            var loss1 = new BinarySoftmax().GetLoss(yPred, yTrue);
+            print(loss1);
+
+            yPred = np.array(-18.6, 0.51, 2.94, -12.8);
+            var loss2 = new BinarySoftmax(LabelType.Logits).GetLoss(yPred, yTrue);
+            print(loss2);
         }
 
 
@@ -85,7 +101,7 @@ namespace ML.Core.Test
         public void TestLeastSquaresTerm()
         {
             var variables = new[] {new Variable(), new Variable()};
-            var y_pred = Call(variables, x);
+            var y_pred = Call(variables);
 
             var lossTerm = new LeastSquares().GetLossTerm(y_pred, y_true, variables);
 
@@ -100,7 +116,7 @@ namespace ML.Core.Test
         public void TestLeastAbsoluteTerm()
         {
             var variables = new[] {new Variable(), new Variable()};
-            var y_pred = Call(variables, x);
+            var y_pred = Call(variables);
 
             var leastSquares = new LeastAbsolute();
 

@@ -6,18 +6,20 @@ using Numpy;
 
 namespace ML.Core.Losses
 {
-    public class BinaryCrossentropy : Loss
+    public class BinaryCrossentropy : CategoricalLoss
     {
         /// <summary>
         ///     二分类交叉熵损失（Label∈(0，1))
+        ///     Y_pred should be Probability
         ///     J(la)= Todo
         /// </summary>
         /// <param name="lamdba"></param>
         /// <param name="regularization"></param>
         public BinaryCrossentropy(
+            LabelType labelType = LabelType.Probability,
             double lamdba = 1E-4,
             Regularization regularization = Regularization.None)
-            : base(lamdba, regularization)
+            : base(labelType, lamdba, regularization)
         {
         }
 
@@ -29,22 +31,28 @@ namespace ML.Core.Losses
 
         internal override double CalculateLoss(NDarray y_pred, NDarray y_true)
         {
-            var sigmoid = nn.sigmoid(y_pred);
-            var alllogdelta = y_true * np.log(sigmoid) + (1 - y_true) * np.log(1 - sigmoid);
+            var alllogdelta = y_true * np.log(y_pred) + (1 - y_true) * np.log(1 - y_pred);
             return -np.average(alllogdelta);
         }
 
         internal override Term getModelLoss(Term[] y_pred, double[] y_true)
         {
             var alllogdelta = y_pred
-                .Zip(y_true, (y1, y2) =>
-                {
-                    var sigmoid = term.sigmoid(y1);
-                    return y2 * TermBuilder.Log(sigmoid) + (1 - y2) * TermBuilder.Log(1 - sigmoid);
-                })
+                .Zip(y_true, (y1, y2) => y2 * TermBuilder.Log(y1) + (1 - y2) * TermBuilder.Log(1 - y1))
                 .ToArray();
             var crossEntropy = -TermBuilder.Sum(alllogdelta) / alllogdelta.Length;
             return crossEntropy;
+        }
+
+
+        public override Term convertProbabilityTerm(Term labels_logits)
+        {
+            return term.sigmoid(labels_logits);
+        }
+
+        public override NDarray convertProbabilityNDarray(NDarray labels_logits)
+        {
+            return nn.sigmoid(labels_logits);
         }
     }
 }

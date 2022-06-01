@@ -6,18 +6,20 @@ using Numpy;
 
 namespace ML.Core.Losses
 {
-    public class BinarySoftmax : Loss
+    public class BinarySoftmax : CategoricalLoss
     {
         /// <summary>
         ///     二分类Softmax损失（Label∈(-1，1))
+        ///     如果提供了0,1标签，则会转为-1,1标签
         ///     J(la)= Todo
         /// </summary>
         /// <param name="lamdba"></param>
         /// <param name="regularization"></param>
         public BinarySoftmax(
+            LabelType labelType = LabelType.Probability,
             double lamdba = 1E-4,
             Regularization regularization = Regularization.None)
-            : base(lamdba, regularization)
+            : base(labelType, lamdba, regularization)
         {
         }
 
@@ -29,8 +31,7 @@ namespace ML.Core.Losses
 
         internal override double CalculateLoss(NDarray y_pred, NDarray y_true)
         {
-            var tah = nn.tanh(y_pred);
-            var alllogdelta = np.log(1 + np.exp(-tah * y_true));
+            var alllogdelta = np.log(1 + np.exp(-y_pred * y_true));
             return np.average(alllogdelta);
         }
 
@@ -46,6 +47,17 @@ namespace ML.Core.Losses
                 .ToArray();
             var crossEntropy = -TermBuilder.Sum(alllogdelta) / alllogdelta.Length;
             return crossEntropy;
+        }
+
+
+        public override Term convertProbabilityTerm(Term labels_logits)
+        {
+            return term.tanh(labels_logits);
+        }
+
+        public override NDarray convertProbabilityNDarray(NDarray labels_logits)
+        {
+            return nn.tanh(labels_logits);
         }
     }
 }
