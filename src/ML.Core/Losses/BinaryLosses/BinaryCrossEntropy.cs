@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using AutoDiff;
+using FluentAssertions;
 using ML.Utilty;
 using Numpy;
 
@@ -20,8 +21,13 @@ namespace ML.Core.Losses
         {
         }
 
+        internal override void CheckLabels(NDarray y_true)
+        {
+            var labels = y_true.GetData<double>();
+            labels.Distinct().Should().BeEquivalentTo(new double[] {0, 1}, "Labels should be 0 or 1");
+        }
 
-        internal override double CalculateLLoss(NDarray y_pred, NDarray y_true)
+        internal override double CalculateLoss(NDarray y_pred, NDarray y_true)
         {
             var sigmoid = nn.sigmoid(y_pred);
             var alllogdelta = y_true * np.log(sigmoid) + (1 - y_true) * np.log(1 - sigmoid);

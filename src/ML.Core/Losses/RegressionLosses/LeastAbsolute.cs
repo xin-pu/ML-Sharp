@@ -20,7 +20,11 @@ namespace ML.Core.Losses
         }
 
 
-        internal override double CalculateLLoss(NDarray y_pred, NDarray y_true)
+        internal override void CheckLabels(NDarray y_true)
+        {
+        }
+
+        internal override double CalculateLoss(NDarray y_pred, NDarray y_true)
         {
             var allAbdDetta = np.abs(y_pred - y_true);
             return np.average(allAbdDetta);

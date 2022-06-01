@@ -29,7 +29,6 @@ namespace ML.Core.Losses
 
         public Term LossTerm { protected set; get; }
 
-        public Variable[] Variables { protected set; get; }
 
         /// <summary>
         ///     正则化，惩罚参数
@@ -49,29 +48,55 @@ namespace ML.Core.Losses
             set => SetProperty(ref _regularization, value);
         }
 
-        /// <summary>
-        ///     赋模型变量
-        /// </summary>
-        /// <param name="variables"></param>
-        public void Complie(Variable[] variables)
+
+        public override string ToString()
         {
-            Variables = variables;
+            var str = new StringBuilder();
+            str.AppendLine($"---{Name}---");
+            return str.ToString();
         }
 
+
+        #region cal loss
+
         /// <summary>
-        ///     获取损失
+        ///     直接计算损失
         /// </summary>
         /// <param name="y_pred"></param>
         /// <param name="y_true"></param>
         /// <returns></returns>
-        public Term Call(Term[] y_pred, NDarray y_true)
+        public double GetLoss(NDarray y_pred, NDarray y_true)
         {
-            Variables.Should().NotBeNullOrEmpty("Variables contains null value.");
-            y_true.shape[1].Should().Be(1, "Pred one result");
+            y_pred.size.Should().Be(y_true.size, "size of pred and ture should be same.");
+            var y_pred_reshape = np.reshape(y_pred, y_true.shape);
+
+            CheckLabels(y_true);
+
+            var loss = CalculateLoss(y_pred_reshape, y_true);
+
+            return loss;
+        }
+
+        #endregion
+
+        #region Loss- AutoDiff
+
+        /// <summary>
+        ///     获取损失
+        /// </summary>
+        /// <param name="y_pred">[batch size, ... ]</param>
+        /// <param name="y_true">[batch size, ... ]</param>
+        /// <returns></returns>
+        public Term GetLossTerm(Term[] y_pred, NDarray y_true, Variable[] variables)
+        {
+            variables.Should().NotBeNullOrEmpty("Variables contains null value.");
             y_true.shape[0].Should().Be(y_pred.Length, "Batch size should be same.");
+            y_true.shape[1].Should().Be(1, "Pred one result");
+
+            CheckLabels(y_true);
 
             var basicLoss = getModelLoss(y_pred, y_true.GetData<double>());
-            var regularizationLoss = getRegularizationLoss(Variables, Regularization, Lamdba);
+            var regularizationLoss = getRegularizationLoss(variables, Regularization, Lamdba);
             var totalLoss = basicLoss + regularizationLoss;
             return totalLoss;
         }
@@ -82,30 +107,15 @@ namespace ML.Core.Losses
         /// <param name="y_pred"></param>
         /// <param name="y_true"></param>
         /// <returns>用于计算梯度的损失关系</returns>
-        public Term Call(Term[] y_pred, double[] y_true)
+        public Term GetLossTerm(Term[] y_pred, double[] y_true, Variable[] variables)
         {
             var y_true_array = np.expand_dims(np.array(y_true), 0);
-            return Call(y_pred, y_true_array);
+
+            var lossTerm = GetLossTerm(y_pred, y_true_array, variables);
+
+            return lossTerm;
         }
 
-        public double Call(NDarray y_pred, NDarray y_true)
-        {
-            y_pred.size.Should().Be(y_true.size, "size of pred and ture should be same.");
-            var y_pred_reshape = np.reshape(y_pred, y_true.shape);
-            return CalculateLLoss(y_pred_reshape, y_true);
-        }
-
-        internal abstract double CalculateLLoss(NDarray y_pred, NDarray y_true);
-
-
-        /// <summary>
-        ///     获取具体模型损失，由各个类型的模型自定义
-        /// </summary>
-        /// <param name="w"></param>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
-        internal abstract Term getModelLoss(Term[] y_pred, double[] y_true);
 
         /// <summary>
         ///     正则化约束
@@ -154,13 +164,15 @@ namespace ML.Core.Losses
             return sum;
         }
 
+        #endregion
 
-        public override string ToString()
-        {
-            var str = new StringBuilder();
-            str.AppendLine($"---{Name}---");
-            return str.ToString();
-        }
+        #region Internal
+
+        internal abstract void CheckLabels(NDarray y_true);
+        internal abstract double CalculateLoss(NDarray y_pred, NDarray y_true);
+        internal abstract Term getModelLoss(Term[] y_pred, double[] y_true);
+
+        #endregion
     }
 
     public enum Initialization
