@@ -15,10 +15,11 @@ namespace ML.Core.Trainers
     public class Trainer<T> : MvxViewModel
         where T : DataView
     {
-        private Dataset<T> _dataset;
         private Loss _loss;
         private Model<T> _model;
         private Optimizer _optimizer;
+        private Dataset<T> _testDataset;
+        private Dataset<T> _trainDataset;
 
         private TrainPlan _trainPlan;
 
@@ -36,10 +37,16 @@ namespace ML.Core.Trainers
             set => SetProperty(ref _model, value);
         }
 
-        public Dataset<T> Dataset
+        public Dataset<T> TrainDataset
         {
-            get => _dataset;
-            set => SetProperty(ref _dataset, value);
+            get => _trainDataset;
+            set => SetProperty(ref _trainDataset, value);
+        }
+
+        public Dataset<T> TestDataset
+        {
+            get => _testDataset;
+            set => SetProperty(ref _testDataset, value);
         }
 
         public Optimizer Optimizer
@@ -62,16 +69,16 @@ namespace ML.Core.Trainers
 
         public async Task Fit()
         {
-            Dataset.Should().NotBeNull("dataset should not ne null");
+            TrainDataset.Should().NotBeNull("dataset should not ne null");
 
-            Model.PipelineDataSet(Dataset);
+            Model.PipelineDataSet(TrainDataset);
 
             foreach (var e in Enumerable.Range(0, TrainPlan.Epoch))
                 await Task.Run(() =>
                 {
                     BeforeEpochPipeline?.Invoke(this);
 
-                    var iEnumerator = Dataset.GetEnumerator(TrainPlan.BatchSize);
+                    var iEnumerator = TrainDataset.GetEnumerator(TrainPlan.BatchSize);
 
                     while (iEnumerator.MoveNext() &&
                            iEnumerator.Current is Dataset<T> data)
@@ -93,7 +100,7 @@ namespace ML.Core.Trainers
                         AfterBatchPipeline?.Invoke(this);
                     }
 
-                    var alldataset = Dataset.ToDatasetNDarray();
+                    var alldataset = TrainDataset.ToDatasetNDarray();
                     var epochpredterms = Model.CallGraph(alldataset.Feature);
                     var epochlossTerm = Loss.GetLossTerm(epochpredterms, alldataset.Label, Model.Variables);
                     var loss = epochlossTerm.Evaluate(Model.Variables, Model.WeightsArray);

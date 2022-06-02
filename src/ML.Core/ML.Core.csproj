@@ -145,6 +145,7 @@
     <Compile Include="Losses\BinaryLosses\BinaryLeastSquares.cs" />
     <Compile Include="Losses\BinaryLosses\BinarySoftmax.cs" />
     <Compile Include="Losses\Term.cs" />
+    <Compile Include="Models\BinaryLogicClassify.cs" />
     <Compile Include="Models\Model.cs" />
     <Compile Include="Models\MultipleLinearRegression.cs" />
     <Compile Include="Optimizers\AdaDelta.cs" />

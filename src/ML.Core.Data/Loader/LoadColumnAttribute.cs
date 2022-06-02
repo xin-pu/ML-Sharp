@@ -19,7 +19,4 @@ namespace ML.Core.Data.Loader
             Range = new Range(min, max);
         }
     }
-
-
-  
 }

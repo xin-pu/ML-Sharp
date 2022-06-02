@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using AutoDiff;
-using FluentAssertions;
 using ML.Utilty;
 using Numpy;
 
@@ -27,7 +26,8 @@ namespace ML.Core.Losses
         internal override void checkLabels(NDarray y_true)
         {
             var labels = y_true.GetData<double>();
-            labels.Distinct().Should().BeEquivalentTo(new double[] {0, 1}, "Labels should be 0 or 1");
+            //labels.Distinct().Should().BeEquivalentTo(new double[] {0, 1}, "Labels should be 0 or 1");
+            //Todo
         }
 
         internal override double calculateLoss(NDarray y_pred, NDarray y_true)

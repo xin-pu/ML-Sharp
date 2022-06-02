@@ -1,5 +1,8 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
+using ML.Core.Data;
 using ML.Core.Data.Loader;
 using ML.Core.Losses;
 using ML.Core.Models;
@@ -29,24 +32,53 @@ namespace ML.Core.Test
         }
 
         [Fact]
-        public async Task TestTrainer()
+        public async Task TestMultipleLinearRegression()
         {
             var path = Path.Combine(dataFolder, "data_singlevar.txt");
 
             var trainer = new Trainer<LinearData>
             {
+                TrainDataset = TextLoader<LinearData>.LoadDataSet(path, false),
                 Model = new MultipleLinearRegression<LinearData>(),
-                Dataset = TextLoader<LinearData>.LoadDataSet(path, false),
                 Optimizer = new Momentum(1E-2),
                 Loss = new MeanSquaredError(),
                 TrainPlan = new TrainPlan {Epoch = 100, BatchSize = 25},
                 Print = _testOutputHelper.WriteLine
             };
 
+            await trainer.Fit();
+            print(trainer.Model);
+        }
+
+
+        [Fact]
+        public async Task TestBinaryLogicClassify()
+        {
+            var trainDataset = GetBinaryIris("iris-train.txt");
+            var testDataset = GetBinaryIris("iris-train.txt");
+
+            var trainer = new Trainer<IrisData>
+            {
+                TrainDataset = trainDataset,
+                TestDataset = testDataset,
+                Model = new BinaryLogicClassify<IrisData>(),
+                Optimizer = new Momentum(1E-2),
+                Loss = new BinaryCrossentropy(),
+                TrainPlan = new TrainPlan {Epoch = 100, BatchSize = 25},
+                Print = _testOutputHelper.WriteLine
+            };
 
             await trainer.Fit();
-
             print(trainer.Model);
+        }
+
+        private Dataset<IrisData> GetBinaryIris(string path)
+        {
+            var trainpath = Path.Combine(dataFolder, path);
+            var dataset = TextLoader<IrisData>.LoadDataSet(trainpath, true, '\t');
+            var some = dataset.Value.Where(a => a.Label == 0 || Math.Abs(a.Label - 1) < 0.1).ToList();
+            dataset = new Dataset<IrisData>(some);
+            return dataset;
         }
     }
 }
