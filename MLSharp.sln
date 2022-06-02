@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ML.Core", "src\ML.Core\ML.C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{09B8763D-6D0E-4E58-B336-5B35467120FA}"
 	ProjectSection(SolutionItems) = preProject
+		data\data_multivar.txt = data\data_multivar.txt
+		data\data_singlevar.txt = data\data_singlevar.txt
 		data\iris-test.txt = data\iris-test.txt
 		data\iris-train.txt = data\iris-train.txt
 		data\optdigits-train.csv = data\optdigits-train.csv

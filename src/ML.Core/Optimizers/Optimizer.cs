@@ -28,7 +28,8 @@ namespace ML.Core.Optimizers
 
         public NDarray Call(NDarray weight, NDarray grad, int epoch)
         {
-            return call(weight, grad, epoch);
+            var gradientNDarray = np.reshape(grad, weight.shape);
+            return call(weight, gradientNDarray, epoch);
         }
 
         internal abstract NDarray call(NDarray weight, NDarray grad, int epoch);

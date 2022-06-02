@@ -20,6 +20,8 @@ namespace ML.Core.Trainers
         private Model<T> _model;
         private Optimizer _optimizer;
 
+        private TrainPlan _trainPlan;
+
         public Action<Trainer<T>> AfterBatchPipeline;
         public Action<Trainer<T>> AfterEpochPipeline;
 
@@ -51,31 +53,42 @@ namespace ML.Core.Trainers
             set => SetProperty(ref _loss, value);
         }
 
-        public async Task Fit(TrainPlan trainPlan)
+        public TrainPlan TrainPlan
+        {
+            get => _trainPlan;
+            set => SetProperty(ref _trainPlan, value);
+        }
+
+        public async Task Fit()
         {
             Dataset.Should().NotBeNull("dataset should not ne null");
 
 
-            foreach (var e in Enumerable.Range(0, trainPlan.Epoch))
+            foreach (var e in Enumerable.Range(0, TrainPlan.Epoch))
                 await Task.Run(() =>
                 {
                     BeforeEpochPipeline?.Invoke(this);
-                    var iEnumerator = Dataset.GetEnumerator(trainPlan.BatchSize);
-                    while (iEnumerator.MoveNext())
+
+                    Model.PipelineDataSet(Dataset);
+
+                    var iEnumerator = Dataset.GetEnumerator(TrainPlan.BatchSize);
+
+                    while (iEnumerator.MoveNext() &&
+                           iEnumerator.Current is Dataset<T> data)
                     {
+                        if (data.Count == 0)
+                            continue;
+
                         BeforeBatchPipeline?.Invoke(this);
+                        var d = data.ToDatasetNDarray();
 
-                        var data = (iEnumerator.Current as Dataset<T>)?.ToDatasetNDarray();
-                        var feature = data?.Feature;
-                        var labels = data?.Label;
+                        var predterms = Model.CallGraph(d.Feature);
+                        var lossTerm = Loss.GetLossTerm(predterms, d.Label, Model.Variables);
 
+                        var gradient = lossTerm.Differentiate(Model.Variables, Model.WeightsArray);
 
-                        var predterms = Model.CallGraph(feature);
-                        var lossTerm = Loss.GetLossTerm(predterms, labels, Model.Variables);
-
-                        var gradient = lossTerm.Evaluate(Model.Variables, Model.WeightsArray);
-
-                        var newWeights = Optimizer.Call(np.array(Model.Weights), np.array(gradient), e);
+                        var newWeights = Optimizer.Call(Model.Weights, np.array(gradient), e);
+                        Model.UpdateWeights(newWeights);
 
 
                         AfterBatchPipeline?.Invoke(this);

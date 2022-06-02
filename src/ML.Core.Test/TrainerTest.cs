@@ -21,26 +21,36 @@ namespace ML.Core.Test
         }
 
         [Fact]
+        public void TestDataSet()
+        {
+            var path = Path.Combine(dataFolder, "data_singlevar.txt");
+            var Dataset = TextLoader<LinearData>.LoadDataSet(path, false);
+            print(Dataset);
+        }
+
+        [Fact]
         public async Task TestTrainer()
         {
-            var path = Path.Combine(dataFolder, "iris-train.txt");
-
-
-            var trainer = new Trainer<IrisData>
-            {
-                Model = new MultipleLinearRegression<IrisData>(),
-                Dataset = TextLoader<IrisData>.LoadDataSet(path, splitChar: '\t'),
-                Optimizer = new AdaDelta(),
-                Loss = new MeanSquaredError()
-            };
-
+            var path = Path.Combine(dataFolder, "data_singlevar.txt");
             var trainPlan = new TrainPlan
             {
-                BatchSize = 4,
-                Epoch = 100
+                Epoch = 500,
+                BatchSize = 0
             };
 
-            await trainer.Fit(trainPlan);
+            var trainer = new Trainer<LinearData>
+            {
+                Model = new MultipleLinearRegression<LinearData>(),
+                Dataset = TextLoader<LinearData>.LoadDataSet(path, false),
+                Optimizer = new SGD(1E-1),
+                Loss = new MeanSquaredError(),
+                TrainPlan = trainPlan
+            };
+
+
+            await trainer.Fit();
+
+            print(trainer.Model);
         }
     }
 }

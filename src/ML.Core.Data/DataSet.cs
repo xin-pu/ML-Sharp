@@ -51,12 +51,15 @@ namespace ML.Core.Data
 
         public IEnumerator GetEnumerator(int batchSize = 4)
         {
-            for (var index = 0; index < Count / batchSize; index++)
+            if (batchSize <= 0)
+                batchSize = Count;
+            for (var index = 0; index <= Count / batchSize; index++)
             {
                 var skip = batchSize * index;
                 var it = Value
                     .Skip(skip)
-                    .Take(batchSize).ToArray();
+                    .Take(batchSize)
+                    .ToArray();
                 yield return new Dataset<T>(it);
             }
         }

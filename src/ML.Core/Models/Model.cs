@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Text;
 using AutoDiff;
+using FluentAssertions;
 using ML.Core.Data;
 using ML.Core.Transform;
 using MvvmCross.ViewModels;
@@ -20,6 +21,8 @@ namespace ML.Core.Models
     {
         private InitialWeigts _initialWeights = InitialWeigts.False;
         private Variable[] _variables;
+
+        private WeightInitial _weightInitial;
         private NDarray _weights;
 
         public string Name => GetType().Name;
@@ -46,11 +49,17 @@ namespace ML.Core.Models
             protected set => SetProperty(ref _initialWeights, value);
         }
 
+        public WeightInitial WeightInitial
+        {
+            get => _weightInitial;
+            protected set => SetProperty(ref _weightInitial, value);
+        }
+
         /// <summary>
         ///     1.通过传入数据集=>模型变换，确认参数数量
         /// </summary>
         /// <param name="dataset"></param>
-        public void PipelineDataSet(Dataset<T> dataset, WeightInitial weightInitial = WeightInitial.Rand)
+        public void PipelineDataSet(Dataset<T> dataset)
         {
             var dataview = dataset.ToDatasetNDarray();
             var transformNDarray = Transformer.Call(dataview.Feature);
@@ -64,7 +73,7 @@ namespace ML.Core.Models
                 .ToArray();
 
 
-            switch (weightInitial)
+            switch (WeightInitial)
             {
                 case WeightInitial.One:
                     Weights = np.ones(featureCount, labelCount);
@@ -79,6 +88,13 @@ namespace ML.Core.Models
             }
 
             InitialWeights = InitialWeigts.True;
+        }
+
+        public void UpdateWeights(NDarray weightNDarray)
+        {
+            weightNDarray.shape.Should().BeEquivalentTo(Weights.shape, "Weigts shape should keep.");
+
+            Weights = weightNDarray;
         }
 
         /// <summary>
