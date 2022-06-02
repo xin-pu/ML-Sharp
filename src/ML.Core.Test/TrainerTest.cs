@@ -55,12 +55,12 @@ namespace ML.Core.Test
         public async Task TestBinaryLogicClassify()
         {
             var trainDataset = GetBinaryIris("iris-train.txt");
-            var testDataset = GetBinaryIris("iris-train.txt");
+            var valDataset = GetBinaryIris("iris-test.txt");
 
             var trainer = new Trainer<IrisData>
             {
                 TrainDataset = trainDataset,
-                TestDataset = testDataset,
+                ValDataset = valDataset,
                 Model = new BinaryLogicClassify<IrisData>(),
                 Optimizer = new Momentum(1E-2),
                 Loss = new BinaryCrossentropy(),

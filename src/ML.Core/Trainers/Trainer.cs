@@ -18,10 +18,10 @@ namespace ML.Core.Trainers
         private Loss _loss;
         private Model<T> _model;
         private Optimizer _optimizer;
-        private Dataset<T> _testDataset;
         private Dataset<T> _trainDataset;
 
         private TrainPlan _trainPlan;
+        private Dataset<T> _valDataset;
 
         public Action<Trainer<T>> AfterBatchPipeline;
         public Action<Trainer<T>> AfterEpochPipeline;
@@ -43,10 +43,10 @@ namespace ML.Core.Trainers
             set => SetProperty(ref _trainDataset, value);
         }
 
-        public Dataset<T> TestDataset
+        public Dataset<T> ValDataset
         {
-            get => _testDataset;
-            set => SetProperty(ref _testDataset, value);
+            get => _valDataset;
+            set => SetProperty(ref _valDataset, value);
         }
 
         public Optimizer Optimizer
@@ -100,16 +100,22 @@ namespace ML.Core.Trainers
                         AfterBatchPipeline?.Invoke(this);
                     }
 
-                    var alldataset = TrainDataset.ToDatasetNDarray();
-                    var epochpredterms = Model.CallGraph(alldataset.Feature);
-                    var epochlossTerm = Loss.GetLossTerm(epochpredterms, alldataset.Label, Model.Variables);
-                    var loss = epochlossTerm.Evaluate(Model.Variables, Model.WeightsArray);
-                    Print?.Invoke($"Epoch:{e}\tLoss:\t{loss:F2}");
+                    var trainloss = loss(TrainDataset);
+                    var valloss = loss(ValDataset);
+                    Print?.Invoke($"Epoch:{e}\tLoss:\t{trainloss:F4}\tVal-Loss:{valloss:F4}");
 
                     AfterEpochPipeline?.Invoke(this);
                 });
             /// early stoping
             /// Print status of each epoch
+        }
+
+        public double loss(Dataset<T> dataset)
+        {
+            var dataview = dataset.ToDatasetNDarray();
+            var predterms = Model.CallGraph(dataview.Feature);
+            var lossTerm = Loss.GetLossTerm(predterms, dataview.Label, Model.Variables);
+            return lossTerm.Evaluate(Model.Variables, Model.WeightsArray);
         }
     }
 }
