@@ -27,6 +27,7 @@ namespace ML.Core.Trainers
 
         public Action<Trainer<T>> BeforeBatchPipeline;
         public Action<Trainer<T>> BeforeEpochPipeline;
+        public Action<string> Print;
 
 
         public Model<T> Model
@@ -63,13 +64,12 @@ namespace ML.Core.Trainers
         {
             Dataset.Should().NotBeNull("dataset should not ne null");
 
+            Model.PipelineDataSet(Dataset);
 
             foreach (var e in Enumerable.Range(0, TrainPlan.Epoch))
                 await Task.Run(() =>
                 {
                     BeforeEpochPipeline?.Invoke(this);
-
-                    Model.PipelineDataSet(Dataset);
 
                     var iEnumerator = Dataset.GetEnumerator(TrainPlan.BatchSize);
 
@@ -80,19 +80,24 @@ namespace ML.Core.Trainers
                             continue;
 
                         BeforeBatchPipeline?.Invoke(this);
-                        var d = data.ToDatasetNDarray();
+                        var batchdataSet = data.ToDatasetNDarray();
 
-                        var predterms = Model.CallGraph(d.Feature);
-                        var lossTerm = Loss.GetLossTerm(predterms, d.Label, Model.Variables);
+                        var predterms = Model.CallGraph(batchdataSet.Feature);
+                        var lossTerm = Loss.GetLossTerm(predterms, batchdataSet.Label, Model.Variables);
+
 
                         var gradient = lossTerm.Differentiate(Model.Variables, Model.WeightsArray);
-
                         var newWeights = Optimizer.Call(Model.Weights, np.array(gradient), e);
                         Model.UpdateWeights(newWeights);
 
-
                         AfterBatchPipeline?.Invoke(this);
                     }
+
+                    var alldataset = Dataset.ToDatasetNDarray();
+                    var epochpredterms = Model.CallGraph(alldataset.Feature);
+                    var epochlossTerm = Loss.GetLossTerm(epochpredterms, alldataset.Label, Model.Variables);
+                    var loss = epochlossTerm.Evaluate(Model.Variables, Model.WeightsArray);
+                    Print?.Invoke($"Epoch:{e}\tLoss:\t{loss:F2}");
 
                     AfterEpochPipeline?.Invoke(this);
                 });

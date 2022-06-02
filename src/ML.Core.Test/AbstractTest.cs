@@ -4,7 +4,7 @@ namespace ML.Core.Test
 {
     public abstract class AbstractTest
     {
-        private readonly ITestOutputHelper _testOutputHelper;
+        internal readonly ITestOutputHelper _testOutputHelper;
 
         protected AbstractTest(ITestOutputHelper testOutputHelper)
         {

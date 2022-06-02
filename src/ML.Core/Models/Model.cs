@@ -52,7 +52,7 @@ namespace ML.Core.Models
         public WeightInitial WeightInitial
         {
             get => _weightInitial;
-            protected set => SetProperty(ref _weightInitial, value);
+            set => SetProperty(ref _weightInitial, value);
         }
 
         /// <summary>

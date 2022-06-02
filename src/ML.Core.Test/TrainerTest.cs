@@ -32,19 +32,15 @@ namespace ML.Core.Test
         public async Task TestTrainer()
         {
             var path = Path.Combine(dataFolder, "data_singlevar.txt");
-            var trainPlan = new TrainPlan
-            {
-                Epoch = 500,
-                BatchSize = 0
-            };
 
             var trainer = new Trainer<LinearData>
             {
                 Model = new MultipleLinearRegression<LinearData>(),
                 Dataset = TextLoader<LinearData>.LoadDataSet(path, false),
-                Optimizer = new SGD(1E-1),
+                Optimizer = new Momentum(1E-2),
                 Loss = new MeanSquaredError(),
-                TrainPlan = trainPlan
+                TrainPlan = new TrainPlan {Epoch = 100, BatchSize = 25},
+                Print = _testOutputHelper.WriteLine
             };
 
 
