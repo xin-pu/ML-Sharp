@@ -20,7 +20,7 @@ namespace ML.Core.Models
     {
         private InitialWeigts _initialWeights = InitialWeigts.False;
         private Variable[] _variables;
-        private double[] _weights;
+        private NDarray _weights;
 
         public string Name => GetType().Name;
 
@@ -32,11 +32,13 @@ namespace ML.Core.Models
             protected set => SetProperty(ref _variables, value);
         }
 
-        public double[] Weights
+        public NDarray Weights
         {
             get => _weights;
             protected set => SetProperty(ref _weights, value);
         }
+
+        public double[] WeightsArray => Weights?.GetData<double>();
 
         public InitialWeigts InitialWeights
         {
@@ -44,18 +46,17 @@ namespace ML.Core.Models
             protected set => SetProperty(ref _initialWeights, value);
         }
 
-        internal NDarray WeightNDarray => np.expand_dims(np.array(Weights), -1);
-
         /// <summary>
         ///     1.通过传入数据集=>模型变换，确认参数数量
         /// </summary>
         /// <param name="dataset"></param>
         public void PipelineDataSet(Dataset<T> dataset, WeightInitial weightInitial = WeightInitial.Rand)
         {
-            var feature = dataset.ToDatasetNDarray().Feature;
-            var transformNDarray = Transformer.Call(feature);
+            var dataview = dataset.ToDatasetNDarray();
+            var transformNDarray = Transformer.Call(dataview.Feature);
 
             var featureCount = transformNDarray.shape[1];
+            var labelCount = dataview.Label.shape[1];
             var enumerable = Enumerable.Range(0, featureCount);
 
             Variables = enumerable
@@ -66,14 +67,14 @@ namespace ML.Core.Models
             switch (weightInitial)
             {
                 case WeightInitial.One:
-                    Weights = np.ones(featureCount).GetData<double>();
+                    Weights = np.ones(featureCount, labelCount);
                     break;
                 case WeightInitial.Zero:
-                    Weights = np.zeros(featureCount).GetData<double>();
+                    Weights = np.zeros(featureCount, labelCount);
                     break;
                 case WeightInitial.Rand:
                 default:
-                    Weights = np.random.rand(featureCount).GetData<double>();
+                    Weights = np.random.rand(featureCount, labelCount);
                     break;
             }
 
@@ -86,6 +87,11 @@ namespace ML.Core.Models
         /// <returns></returns>
         public abstract Term[] CallGraph(NDarray x);
 
+        /// <summary>
+        ///     call by X*W
+        /// </summary>
+        /// <param name="x">[batch size, ... ]</param>
+        /// <returns>[batch size, labels]</returns>
         public abstract NDarray Call(NDarray x);
 
         public override string ToString()
@@ -96,7 +102,7 @@ namespace ML.Core.Models
             if (InitialWeights == InitialWeigts.True)
             {
                 str.AppendLine($"ParaCount:\t{Variables.Length}");
-                str.AppendLine($"ParaData:\t{WeightNDarray}");
+                str.AppendLine($"ParaData:\r{Weights}");
             }
 
             return str.ToString();

@@ -23,7 +23,7 @@ namespace ML.Core.Transform
         public override string ToString()
         {
             var str = new StringBuilder();
-            str.AppendLine($"Transform:\t{Name}");
+            str.Append($"Transform:\t{Name}");
             return str.ToString();
         }
     }

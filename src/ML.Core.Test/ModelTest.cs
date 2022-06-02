@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using FluentAssertions;
 using ML.Core.Data;
 using ML.Core.Data.Loader;
 using ML.Core.Models;
@@ -22,6 +23,7 @@ namespace ML.Core.Test
         {
             var model = new MultipleLinearRegression<IrisData>();
             print(model);
+            model.Weights.Should().BeNull();
         }
 
 
@@ -33,8 +35,8 @@ namespace ML.Core.Test
 
             var model = new MultipleLinearRegression<IrisData>();
             model.PipelineDataSet(data);
-
             print(model);
+            model.Weights.Should().NotBeNull();
 
             var iEnumerator = data.GetEnumerator();
             if (iEnumerator.MoveNext() && iEnumerator.Current is Dataset<IrisData> batch)

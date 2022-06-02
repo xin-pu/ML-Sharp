@@ -1,11 +1,14 @@
-﻿using MvvmCross.ViewModels;
+﻿using System;
+using MvvmCross.ViewModels;
 
 namespace ML.Core.Trainers
 {
-    public class TrainConfig : MvxViewModel
+    public class TrainPlan : MvxViewModel
     {
         private int _batchSize;
         private int _epoch;
+
+        public Func<bool> EarlyStoping { set; get; } = () => false;
 
         public int Epoch
         {
@@ -21,6 +24,11 @@ namespace ML.Core.Trainers
 
         public void Check()
         {
+        }
+
+        public void GiveEarlyStoping(Func<bool> func)
+        {
+            EarlyStoping = func;
         }
     }
 }

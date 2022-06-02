@@ -17,10 +17,11 @@ namespace ML.Core.Models
             return term.matmul(Variables, feature);
         }
 
+
         public override NDarray Call(NDarray x)
         {
             var feature = Transformer.Call(x);
-            var y_pred = np.matmul(feature, WeightNDarray);
+            var y_pred = np.matmul(feature, Weights);
             return y_pred;
         }
     }

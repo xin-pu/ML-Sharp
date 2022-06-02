@@ -160,7 +160,7 @@
     <Compile Include="Optimizers\RMSProp.cs" />
     <Compile Include="Optimizers\SGD.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Trainers\TrainConfig.cs" />
+    <Compile Include="Trainers\TrainPlan.cs" />
     <Compile Include="Trainers\Trainer.cs" />
   </ItemGroup>
   <ItemGroup>

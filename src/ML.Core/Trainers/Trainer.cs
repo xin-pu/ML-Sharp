@@ -7,12 +7,19 @@ using ML.Core.Data;
 using ML.Core.Losses;
 using ML.Core.Models;
 using ML.Core.Optimizers;
+using MvvmCross.ViewModels;
 using Numpy;
 
 namespace ML.Core.Trainers
 {
-    public abstract class Trainer<T> where T : DataView
+    public class Trainer<T> : MvxViewModel
+        where T : DataView
     {
+        private Dataset<T> _dataset;
+        private Loss _loss;
+        private Model<T> _model;
+        private Optimizer _optimizer;
+
         public Action<Trainer<T>> AfterBatchPipeline;
         public Action<Trainer<T>> AfterEpochPipeline;
 
@@ -20,24 +27,40 @@ namespace ML.Core.Trainers
         public Action<Trainer<T>> BeforeEpochPipeline;
 
 
-        public abstract Model<T> Model { get; }
+        public Model<T> Model
+        {
+            get => _model;
+            set => SetProperty(ref _model, value);
+        }
 
-        public abstract Dataset<T> Dataset { get; }
+        public Dataset<T> Dataset
+        {
+            get => _dataset;
+            set => SetProperty(ref _dataset, value);
+        }
 
-        public abstract Optimizer Optimizer { get; }
+        public Optimizer Optimizer
+        {
+            get => _optimizer;
+            set => SetProperty(ref _optimizer, value);
+        }
 
-        public abstract Loss Loss { get; }
+        public Loss Loss
+        {
+            get => _loss;
+            set => SetProperty(ref _loss, value);
+        }
 
-        public async Task Fit(TrainConfig trainConfig)
+        public async Task Fit(TrainPlan trainPlan)
         {
             Dataset.Should().NotBeNull("dataset should not ne null");
 
 
-            foreach (var e in Enumerable.Range(0, trainConfig.Epoch))
+            foreach (var e in Enumerable.Range(0, trainPlan.Epoch))
                 await Task.Run(() =>
                 {
                     BeforeEpochPipeline?.Invoke(this);
-                    var iEnumerator = Dataset.GetEnumerator(trainConfig.BatchSize);
+                    var iEnumerator = Dataset.GetEnumerator(trainPlan.BatchSize);
                     while (iEnumerator.MoveNext())
                     {
                         BeforeBatchPipeline?.Invoke(this);
@@ -50,7 +73,7 @@ namespace ML.Core.Trainers
                         var predterms = Model.CallGraph(feature);
                         var lossTerm = Loss.GetLossTerm(predterms, labels, Model.Variables);
 
-                        var gradient = lossTerm.Evaluate(Model.Variables, Model.Weights);
+                        var gradient = lossTerm.Evaluate(Model.Variables, Model.WeightsArray);
 
                         var newWeights = Optimizer.Call(np.array(Model.Weights), np.array(gradient), e);
 
