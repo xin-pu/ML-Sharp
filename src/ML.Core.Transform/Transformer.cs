@@ -1,4 +1,5 @@
-﻿using MvvmCross.ViewModels;
+﻿using System.Text;
+using MvvmCross.ViewModels;
 using Numpy;
 
 namespace ML.Core.Transform
@@ -21,7 +22,9 @@ namespace ML.Core.Transform
 
         public override string ToString()
         {
-            return Name;
+            var str = new StringBuilder();
+            str.AppendLine($"Transform:\t{Name}");
+            return str.ToString();
         }
     }
 }

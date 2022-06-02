@@ -6,6 +6,8 @@ namespace ML.Core.Data
     [Serializable]
     public abstract class DataView
     {
+        public int GetFeatures => GetFeatureArray().size;
+
         public abstract NDarray GetFeatureArray();
 
         public abstract NDarray GetLabelArray();

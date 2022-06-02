@@ -7,7 +7,6 @@ using ML.Core.Data;
 using ML.Core.Losses;
 using ML.Core.Models;
 using ML.Core.Optimizers;
-using MvvmCross.ViewModels;
 using Numpy;
 
 namespace ML.Core.Trainers
@@ -54,7 +53,7 @@ namespace ML.Core.Trainers
                         var gradient = lossTerm.Evaluate(Model.Variables, Model.Weights);
 
                         var newWeights = Optimizer.Call(np.array(Model.Weights), np.array(gradient), e);
-                        Model.Weights = newWeights.GetData<double>();
+
 
                         AfterBatchPipeline?.Invoke(this);
                     }
@@ -63,28 +62,6 @@ namespace ML.Core.Trainers
                 });
             /// early stoping
             /// Print status of each epoch
-        }
-    }
-
-    public class TrainConfig : MvxViewModel
-    {
-        private int _batchSize;
-        private int _epoch;
-
-        public int Epoch
-        {
-            get => _epoch;
-            set => SetProperty(ref _epoch, value);
-        }
-
-        public int BatchSize
-        {
-            get => _batchSize;
-            set => SetProperty(ref _batchSize, value);
-        }
-
-        public void Check()
-        {
         }
     }
 }
