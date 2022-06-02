@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using ML.Core.Data;
 using ML.Core.Data.Loader;
 using ML.Core.Losses;
+using ML.Core.Metrics;
+using ML.Core.Metrics.Regression;
 using ML.Core.Models;
 using ML.Core.Optimizers;
 using ML.Core.Test.DataStructs;
@@ -43,6 +46,7 @@ namespace ML.Core.Test
                 Optimizer = new Momentum(1E-2),
                 Loss = new MeanSquaredError(),
                 TrainPlan = new TrainPlan {Epoch = 100, BatchSize = 25},
+                Metrics = new ObservableCollection<Metric> {new MAE()},
                 Print = _testOutputHelper.WriteLine
             };
 
@@ -65,6 +69,7 @@ namespace ML.Core.Test
                 Optimizer = new Momentum(1E-2),
                 Loss = new BinaryCrossentropy(),
                 TrainPlan = new TrainPlan {Epoch = 100, BatchSize = 25},
+                Metrics = new ObservableCollection<Metric> {new MAE()},
                 Print = _testOutputHelper.WriteLine
             };
 

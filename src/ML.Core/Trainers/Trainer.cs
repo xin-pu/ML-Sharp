@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using AutoDiff;
 using FluentAssertions;
 using ML.Core.Data;
 using ML.Core.Losses;
+using ML.Core.Metrics;
 using ML.Core.Models;
 using ML.Core.Optimizers;
 using MvvmCross.ViewModels;
@@ -16,6 +19,8 @@ namespace ML.Core.Trainers
         where T : DataView
     {
         private Loss _loss;
+
+        private ObservableCollection<Metric> _metrics;
         private Model<T> _model;
         private Optimizer _optimizer;
         private Dataset<T> _trainDataset;
@@ -61,6 +66,12 @@ namespace ML.Core.Trainers
             set => SetProperty(ref _loss, value);
         }
 
+        public ObservableCollection<Metric> Metrics
+        {
+            get => _metrics;
+            set => SetProperty(ref _metrics, value);
+        }
+
         public TrainPlan TrainPlan
         {
             get => _trainPlan;
@@ -89,8 +100,8 @@ namespace ML.Core.Trainers
                         BeforeBatchPipeline?.Invoke(this);
                         var batchdataSet = data.ToDatasetNDarray();
 
-                        var predterms = Model.CallGraph(batchdataSet.Feature);
-                        var lossTerm = Loss.GetLossTerm(predterms, batchdataSet.Label, Model.Variables);
+                        var predTerms = Model.CallGraph(batchdataSet.Feature);
+                        var lossTerm = Loss.GetLossTerm(predTerms, batchdataSet.Label, Model.Variables);
 
 
                         var gradient = lossTerm.Differentiate(Model.Variables, Model.WeightsArray);
@@ -100,22 +111,39 @@ namespace ML.Core.Trainers
                         AfterBatchPipeline?.Invoke(this);
                     }
 
-                    var trainloss = loss(TrainDataset);
-                    var valloss = loss(ValDataset);
-                    Print?.Invoke($"Epoch:{e}\tLoss:\t{trainloss:F4}\tVal-Loss:{valloss:F4}");
+                    var trainMsg = new StringBuilder($"#{e + 1:D4}\t");
+                    var train_loss = UpdateLossMetric(TrainDataset);
+                    trainMsg.Append($"Loss:{train_loss:F4}\t");
+                    foreach (var metric in Metrics) trainMsg.Append($"{metric}\t");
+
+                    if (ValDataset != null)
+                    {
+                        var val_loss = UpdateLossMetric(ValDataset);
+                        trainMsg.Append($"Val_Loss:{train_loss:F4}\t");
+                        foreach (var metric in Metrics) trainMsg.Append($"Val-{metric}\t");
+                    }
+
+                    Print?.Invoke(trainMsg.ToString());
 
                     AfterEpochPipeline?.Invoke(this);
                 });
+
             /// early stoping
             /// Print status of each epoch
         }
 
-        public double loss(Dataset<T> dataset)
+        public double UpdateLossMetric(Dataset<T> dataset)
         {
             var dataview = dataset.ToDatasetNDarray();
+            var y_pred = Model.Call(dataview.Feature);
+            var y_true = dataview.Label;
             var predterms = Model.CallGraph(dataview.Feature);
             var lossTerm = Loss.GetLossTerm(predterms, dataview.Label, Model.Variables);
-            return lossTerm.Evaluate(Model.Variables, Model.WeightsArray);
+            var loss = lossTerm.Evaluate(Model.Variables, Model.WeightsArray);
+
+            Metrics.ToList().ForEach(m => m.Call(y_pred, y_true));
+
+            return loss;
         }
     }
 }
