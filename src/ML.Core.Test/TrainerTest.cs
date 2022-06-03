@@ -54,6 +54,26 @@ namespace ML.Core.Test
             print(trainer.Model);
         }
 
+        [Fact]
+        public async Task TestPolyRegression()
+        {
+            var path = Path.Combine(dataFolder, "data_singlevar.txt");
+
+            var trainer = new Trainer<LinearData>
+            {
+                TrainDataset = TextLoader<LinearData>.LoadDataSet(path, false),
+                Model = new PolynomialRegression<LinearData>(2),
+                Optimizer = new Momentum(1E-2),
+                Loss = new MeanSquaredError(regularization: Regularization.L2),
+                TrainPlan = new TrainPlan { Epoch = 100, BatchSize = 25 },
+                Metrics = new ObservableCollection<Metric> { new MAE() },
+                Print = _testOutputHelper.WriteLine
+            };
+
+            await trainer.Fit();
+            print(trainer.Model);
+        }
+
 
         [Fact]
         public async Task TestBinaryLogicClassify()
