@@ -10,7 +10,18 @@ namespace ML.Core.Models
     public class BinaryLogicClassify<T> : Model<T>
         where T : DataView
     {
+        /// <summary>
+        ///     多元线性逻辑回归模型
+        ///     y=α + β1*x1 + β2*x2 + ... + βn*xn"
+        /// </summary>
+        public BinaryLogicClassify()
+        {
+            Transformer = new LinearFirstorder();
+        }
+
         public override Transformer Transformer { get; set; } = new LinearFirstorder();
+
+        public override string Description => " 多元线性逻辑回归模型\r\n y=α + β1*x1 + β2*x2 + ... + βn*xn";
 
         public override Term[] CallGraph(NDarray x)
         {

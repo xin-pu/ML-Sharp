@@ -45,8 +45,8 @@ namespace ML.Core.Test
                 Model = new MultipleLinearRegression<LinearData>(),
                 Optimizer = new Momentum(1E-2),
                 Loss = new MeanSquaredError(),
-                TrainPlan = new TrainPlan {Epoch = 100, BatchSize = 25},
-                Metrics = new ObservableCollection<Metric> {new MAE()},
+                TrainPlan = new TrainPlan { Epoch = 100, BatchSize = 25 },
+                Metrics = new ObservableCollection<Metric> { new MAE() },
                 Print = _testOutputHelper.WriteLine
             };
 
@@ -68,14 +68,17 @@ namespace ML.Core.Test
                 Model = new BinaryLogicClassify<IrisData>(),
                 Optimizer = new Momentum(1E-2),
                 Loss = new BinaryCrossentropy(),
-                TrainPlan = new TrainPlan {Epoch = 100, BatchSize = 25},
-                Metrics = new ObservableCollection<Metric> {new MAE()},
+                TrainPlan = new TrainPlan { Epoch = 100, BatchSize = 25 },
+                Metrics = new ObservableCollection<Metric> { new MAE() },
                 Print = _testOutputHelper.WriteLine
             };
 
             await trainer.Fit();
             print(trainer.Model);
+            var pred = trainer.Model.Call(valDataset.ToDatasetNDarray().Feature);
+            print(pred);
         }
+
 
         private Dataset<IrisData> GetBinaryIris(string path)
         {

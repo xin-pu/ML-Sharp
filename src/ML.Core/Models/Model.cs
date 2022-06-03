@@ -49,6 +49,8 @@ namespace ML.Core.Models
             protected set => SetProperty(ref _initialWeights, value);
         }
 
+        public abstract string Description { get; }
+
         public WeightInitial WeightInitial
         {
             get => _weightInitial;
@@ -114,12 +116,10 @@ namespace ML.Core.Models
         {
             var str = new StringBuilder();
             str.AppendLine(Name);
+            str.AppendLine(Description);
             str.AppendLine($"{Transformer}");
             if (InitialWeights == InitialWeigts.True)
-            {
                 str.AppendLine($"ParaCount:\t{Variables.Length}");
-                str.AppendLine($"ParaData:\r{Weights}");
-            }
 
             return str.ToString();
         }
