@@ -23,7 +23,14 @@ namespace ML.Core.Models
         {
             var feature = Transformer.Call(x);
             var y_pred = nn.sigmoid(np.matmul(feature, Weights));
-            return y_pred;
+            return sign(y_pred);
+        }
+
+        private NDarray sign(NDarray input)
+        {
+            return np.select(
+                new[] { input >= 0.5, input < 0.5 },
+                new NDarray[] { np.array(1), np.array(0) });
         }
     }
 }
