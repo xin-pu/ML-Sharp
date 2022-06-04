@@ -153,6 +153,7 @@
     <Compile Include="Models\BinaryLogicClassify.cs" />
     <Compile Include="Models\Model.cs" />
     <Compile Include="Models\MultipleLinearRegression.cs" />
+    <Compile Include="Models\Perceptron.cs" />
     <Compile Include="Models\PolynomialRegression.cs" />
     <Compile Include="Optimizers\AdaDelta.cs" />
     <Compile Include="Optimizers\AdaGrad.cs" />

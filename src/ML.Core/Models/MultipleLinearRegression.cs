@@ -32,7 +32,7 @@ namespace ML.Core.Models
         public override NDarray Call(NDarray x)
         {
             var feature = Transformer.Call(x);
-            var y_pred = np.matmul(feature, Weights);
+            var y_pred = np.matmul(feature, Weights.T);
             return y_pred;
         }
     }

@@ -35,6 +35,9 @@ namespace ML.Core.Models
             protected set => SetProperty(ref _variables, value);
         }
 
+        /// <summary>
+        ///     [Labels,Features]
+        /// </summary>
         public NDarray Weights
         {
             get => _weights;
@@ -78,14 +81,14 @@ namespace ML.Core.Models
             switch (WeightInitial)
             {
                 case WeightInitial.One:
-                    Weights = np.ones(featureCount, labelCount);
+                    Weights = np.ones(labelCount, featureCount);
                     break;
                 case WeightInitial.Zero:
-                    Weights = np.zeros(featureCount, labelCount);
+                    Weights = np.zeros(labelCount, featureCount);
                     break;
                 case WeightInitial.Rand:
                 default:
-                    Weights = np.random.rand(featureCount, labelCount);
+                    Weights = np.random.rand(labelCount, featureCount);
                     break;
             }
 

@@ -12,6 +12,7 @@ using ML.Core.Models;
 using ML.Core.Optimizers;
 using ML.Core.Test.DataStructs;
 using ML.Core.Trainers;
+using Numpy;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -99,6 +100,14 @@ namespace ML.Core.Test
             print(pred);
         }
 
+
+        [Fact]
+        public void Test()
+        {
+            var a = np.random.rand(4, 3);
+            print(a);
+            print(np.expand_dims(np.argmax(a, -1), -1));
+        }
 
         private Dataset<IrisData> GetBinaryIris(string path)
         {
