@@ -2,7 +2,7 @@
 
 namespace ML.Core.Optimizers
 {
-    public class Adam : Optimizer
+    public class Nadam : Optimizer
     {
         /// <summary>
         ///     Adaptive Moment Estimation Algorithm
@@ -11,7 +11,7 @@ namespace ML.Core.Optimizers
         /// <param name="workLearningRate"></param>
         /// <param name="beta1"></param>
         /// <param name="beta2"></param>
-        public Adam(
+        public Nadam(
             double workLearningRate = 0.001,
             double beta1 = 0.9,
             double beta2 = 0.99)
@@ -41,6 +41,9 @@ namespace ML.Core.Optimizers
         /// </summary>
         public NDarray G { protected set; get; }
 
+        public NDarray m => M / (1 - Beta1);
+        public NDarray g => G / (1 - Beta1);
+
 
         internal override NDarray call(NDarray weight, int epoch)
         {
@@ -51,13 +54,11 @@ namespace ML.Core.Optimizers
             }
 
 
-            var grad = CalGradient(weight);
+            var theda = weight - WorkLearningRate * m / np.sqrt(g + epsilon);
+            var grad = CalGradient(theda);
 
             M = Beta1 * M + (1 - Beta1) * grad;
             G = Beta2 * G + (1 - Beta2) * np.square(grad);
-
-            var m = M / (1 - Beta1);
-            var g = G / (1 - Beta2);
 
             ///参数更新差值
             var delta_weight = -WorkLearningRate * m / np.sqrt(g + epsilon);

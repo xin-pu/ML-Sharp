@@ -22,20 +22,23 @@ namespace ML.Core.Optimizers
 
         /// <summary>
         ///     负梯度的加权移动平均 => 参数更新方向
+        ///     θ=θ(t-1)+ρ*σθ(t-1)
+        ///     σθ=ρ*σθ(t-1)-α*g(θ)
+        ///     w=w+σθ
+        ///     《神经网络与深度学习》 P167
         /// </summary>
-        public NDarray DeltaTheda { protected set; get; }
+        public NDarray DeltaWeight { protected set; get; }
 
         internal override NDarray call(NDarray weight, int epoch)
         {
             if (epoch == 0)
-                DeltaTheda = np.zeros_like(weight);
+                DeltaWeight = np.zeros_like(weight);
 
-            var next = Rho * DeltaTheda + DeltaTheda;
-            var predWeight = weight + next;
-            var grad = CalGradient(predWeight);
+            var theda = weight + Rho * DeltaWeight;
+            var grad = CalGradient(theda);
 
-            DeltaTheda = Rho * DeltaTheda - WorkLearningRate * grad;
-            return weight + DeltaTheda;
+            DeltaWeight = Rho * DeltaWeight - WorkLearningRate * grad;
+            return weight + DeltaWeight;
         }
     }
 }

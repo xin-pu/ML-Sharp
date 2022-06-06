@@ -8,7 +8,8 @@ namespace ML.Core.Optimizers
     {
         /// <summary>
         ///     自适应学习率
-        ///     adapter gradient algorithm
+        ///     Adapter Gradient Algorithm
+        ///     每次迭代时自适应地调整每个参数的学习率
         /// </summary>
         /// <param name="beta">学习率</param>
         public AdaGrad(double workLearningRate)

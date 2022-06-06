@@ -42,10 +42,10 @@ namespace ML.Core.Test
 
             var trainer = new Trainer<LinearData>
             {
-                TrainDataset = TextLoader<LinearData>.LoadDataSet(path, false),
+                TrainDataset = TextLoader<LinearData>.LoadDataSet(path, false).Shuffle(),
                 Model = new MultipleLinearRegression<LinearData>(),
-                Optimizer = new Momentum(1E-2),
-                Loss = new MeanSquaredError(),
+                Optimizer = new Nesterov(1E-2),
+                Loss = new MeanSquaredError(1),
                 TrainPlan = new TrainPlan {Epoch = 100, BatchSize = 25},
                 Metrics = new ObservableCollection<Metric> {new MAE()},
                 Print = _testOutputHelper.WriteLine
@@ -64,8 +64,8 @@ namespace ML.Core.Test
             {
                 TrainDataset = TextLoader<LinearData>.LoadDataSet(path, false),
                 Model = new PolynomialRegression<LinearData>(1),
-                Optimizer = new Momentum(1E-2),
-                Loss = new MeanSquaredError(regularization: Regularization.L2),
+                Optimizer = new Nesterov(1E-1),
+                Loss = new MeanSquaredError(),
                 TrainPlan = new TrainPlan {Epoch = 100, BatchSize = 25},
                 Metrics = new ObservableCollection<Metric> {new MAE()},
                 Print = _testOutputHelper.WriteLine

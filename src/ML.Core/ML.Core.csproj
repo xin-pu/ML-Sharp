@@ -166,6 +166,7 @@
     <Compile Include="Optimizers\Annealings\InverseTime.cs" />
     <Compile Include="Optimizers\Annealings\NaturalExponential.cs" />
     <Compile Include="Optimizers\Momentum.cs" />
+    <Compile Include="Optimizers\Nadam.cs" />
     <Compile Include="Optimizers\Nesterov.cs" />
     <Compile Include="Optimizers\Optimizer.cs" />
     <Compile Include="Optimizers\RMSProp.cs" />

@@ -24,6 +24,9 @@ namespace ML.Core.Optimizers
 
         /// <summary>
         ///     负梯度的加权移动平均 => 参数更新方向
+        ///     σθ=ρσ(t-1)-α*gt
+        ///     w=w+σθ
+        ///     《神经网络与深度学习》 P167
         /// </summary>
         public NDarray DeltaTheda { protected set; get; }
 
