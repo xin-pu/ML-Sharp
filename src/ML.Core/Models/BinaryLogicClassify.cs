@@ -33,11 +33,7 @@ namespace ML.Core.Models
         public override NDarray Call(NDarray x)
         {
             var feature = Transformer.Call(x);
-<<<<<<< HEAD
-            var y_pred = nn.sigmoid(np.matmul(feature, Weights));
 
-            return y_pred;
-=======
             var y_pred = nn.sigmoid(np.matmul(feature, Weights.T));
             return sign(y_pred);
         }
@@ -45,9 +41,8 @@ namespace ML.Core.Models
         private NDarray sign(NDarray input)
         {
             return np.select(
-                new[] { input >= 0.5, input < 0.5 },
-                new NDarray[] { np.array(1), np.array(0) });
->>>>>>> 6c5c3f443b24b38a3005513278cc48a229df1b00
+                new[] {input >= 0.5, input < 0.5},
+                new NDarray[] {np.array(1), np.array(0)});
         }
     }
 }

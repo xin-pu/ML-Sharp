@@ -7,7 +7,6 @@ using ML.Core.Data;
 using ML.Core.Data.Loader;
 using ML.Core.Losses;
 using ML.Core.Metrics;
-using ML.Core.Metrics.Categorical;
 using ML.Core.Metrics.Regression;
 using ML.Core.Models;
 using ML.Core.Optimizers;
@@ -47,8 +46,8 @@ namespace ML.Core.Test
                 Model = new MultipleLinearRegression<LinearData>(),
                 Optimizer = new Momentum(1E-2),
                 Loss = new MeanSquaredError(),
-                TrainPlan = new TrainPlan { Epoch = 100, BatchSize = 25 },
-                Metrics = new ObservableCollection<Metric> { new MAE() },
+                TrainPlan = new TrainPlan {Epoch = 100, BatchSize = 25},
+                Metrics = new ObservableCollection<Metric> {new MAE()},
                 Print = _testOutputHelper.WriteLine
             };
 
@@ -67,8 +66,8 @@ namespace ML.Core.Test
                 Model = new PolynomialRegression<LinearData>(2),
                 Optimizer = new Momentum(1E-2),
                 Loss = new MeanSquaredError(regularization: Regularization.L2),
-                TrainPlan = new TrainPlan { Epoch = 100, BatchSize = 25 },
-                Metrics = new ObservableCollection<Metric> { new MAE() },
+                TrainPlan = new TrainPlan {Epoch = 100, BatchSize = 25},
+                Metrics = new ObservableCollection<Metric> {new MAE()},
                 Print = _testOutputHelper.WriteLine
             };
 
@@ -90,13 +89,10 @@ namespace ML.Core.Test
                 Model = new BinaryLogicClassify<IrisData>(),
                 Optimizer = new Momentum(1E-2),
                 Loss = new BinaryCrossentropy(),
-<<<<<<< HEAD
+
                 TrainPlan = new TrainPlan {Epoch = 100, BatchSize = 25},
-                Metrics = new ObservableCollection<Metric> {new Accuracy(), new ErrorRate()},
-=======
-                TrainPlan = new TrainPlan { Epoch = 100, BatchSize = 25 },
-                Metrics = new ObservableCollection<Metric> { new MAE() },
->>>>>>> 6c5c3f443b24b38a3005513278cc48a229df1b00
+                Metrics = new ObservableCollection<Metric> {new MAE()},
+
                 Print = _testOutputHelper.WriteLine
             };
 
