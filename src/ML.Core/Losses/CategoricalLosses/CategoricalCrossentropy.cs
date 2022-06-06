@@ -2,6 +2,7 @@
 using System.Linq;
 using AutoDiff;
 using FluentAssertions;
+using ML.Utility;
 using Numpy;
 
 namespace ML.Core.Losses.CategoricalLosses
@@ -40,7 +41,7 @@ namespace ML.Core.Losses.CategoricalLosses
             throw new NotImplementedException();
         }
 
-        internal override Term getModelLoss(Term[] y_pred, NDarray y_true)
+        internal override Term getModelLoss(TermMatrix y_pred, NDarray y_true)
         {
             throw new NotImplementedException();
         }

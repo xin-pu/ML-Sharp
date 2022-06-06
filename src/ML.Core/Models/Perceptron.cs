@@ -43,17 +43,22 @@ namespace ML.Core.Models
                     p => p.Select(a => a.v).ToArray());
         }
 
-        public override Term[] CallGraph(NDarray features)
-        {
-            var lablesPredict = VariablesDict
-                .ToDictionary(
-                    p => p.Key,
-                    p =>
-                    {
-                        var feature = Transformer.Call(features);
-                        return term.matmul(p.Value, feature);
-                    });
+        //public override Term[] CallGraph(NDarray features)
+        //{
+        //    var lablesPredict = VariablesDict
+        //        .ToDictionary(
+        //            p => p.Key,
+        //            p =>
+        //            {
+        //                var feature = Transformer.Call(features);
+        //                return term.matmul(p.Value, feature);
+        //            });
 
+        //    throw new NotImplementedException();
+        //}
+
+        public override TermMatrix CallGraph(NDarray features)
+        {
             throw new NotImplementedException();
         }
 

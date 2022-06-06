@@ -2,6 +2,7 @@
 using System.Text;
 using AutoDiff;
 using FluentAssertions;
+using ML.Utility;
 using MvvmCross.ViewModels;
 using Numpy;
 
@@ -85,11 +86,11 @@ namespace ML.Core.Losses
         /// <param name="y_true">真实Y</param>
         /// <param name="variables">模型变量</param>
         /// <returns></returns>
-        public virtual Term GetLossTerm(Term[] y_pred, NDarray y_true, Variable[] variables)
+        public virtual Term GetLossTerm(TermMatrix y_pred, NDarray y_true, Variable[] variables)
         {
             variables.Should().NotBeNullOrEmpty("Variables contains null value.");
-            y_true.shape[0].Should().Be(y_pred.Length, "Batch size should be same.");
-            y_true.shape[1].Should().Be(1, "Pred one result");
+            y_true.shape[0].Should().Be(y_pred.Height, "Batch size should be same.");
+            y_true.shape[1].Should().Be(y_pred.Width, "Pred size should be same.");
 
             checkLabels(y_true);
 
@@ -153,7 +154,7 @@ namespace ML.Core.Losses
 
         internal abstract void checkLabels(NDarray y_true);
         internal abstract double calculateLoss(NDarray y_pred, NDarray y_true);
-        internal abstract Term getModelLoss(Term[] y_pred, NDarray y_true);
+        internal abstract Term getModelLoss(TermMatrix y_pred, NDarray y_true);
 
         #endregion
     }

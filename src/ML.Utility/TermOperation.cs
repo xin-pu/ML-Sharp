@@ -31,6 +31,26 @@ namespace ML.Utility
             return batchY;
         }
 
+        public static TermMatrix multiply(NDarray x, Variable[] variables)
+        {
+            var features = x.shape[1];
+            var variablsLength = variables.Length;
+            (variablsLength % features).Should().Be(0);
+
+            var batchSize = x.shape[0];
+            var labels = variablsLength / features;
+            var varDict = variables
+                .Select((v, i) => (v, i / features))
+                .GroupBy(p => p.Item2, p => p.v)
+                .ToDictionary(p => p.Key, p => p.ToArray());
+            var matrix = new TermMatrix(labels, batchSize);
+
+            foreach (var b in Enumerable.Range(0, batchSize))
+            foreach (var v in varDict)
+                matrix[b, v.Key] = matmulRow(v.Value, x[b]);
+
+            return matrix;
+        }
 
         /// <summary>
         /// </summary>

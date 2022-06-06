@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using AutoDiff;
+﻿using AutoDiff;
 using Numpy;
 
 namespace ML.Core.Losses
@@ -27,22 +26,6 @@ namespace ML.Core.Losses
         {
             get => _labelType;
             set => SetProperty(ref _labelType, value);
-        }
-
-        /// <summary>
-        ///     获取损失
-        /// </summary>
-        /// <param name="y_pred">[batch size, ... ]</param>
-        /// <param name="y_true">[batch size, ... ]</param>
-        /// <returns></returns>
-        public override Term GetLossTerm(Term[] y_pred, NDarray y_true, Variable[] variables)
-        {
-            var tems =
-                LabelType == LabelType.Probability
-                    ? y_pred
-                    : y_pred.Select(convertProbabilityTerm).ToArray();
-
-            return base.GetLossTerm(tems, y_true, variables);
         }
 
 

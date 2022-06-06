@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using AutoDiff;
+﻿using AutoDiff;
 using FluentAssertions;
 using ML.Core.Losses;
 using ML.Utility;
@@ -19,21 +18,11 @@ namespace ML.Core.Test
         {
         }
 
-        public Term[] Call(Variable[] weight)
+        public TermMatrix Call(Variable[] weight)
         {
-            return term.matmul(weight, x);
+            return term.multiply(x, new[] {new(), new Variable()});
         }
 
-        public NDarray getYPred()
-        {
-            var weights = result.GetData<double>();
-            var variables = new[] {new Variable(), new Variable()};
-            var y_pred_array = Call(variables)
-                .Select(t => t.Evaluate(variables, weights))
-                .ToArray();
-            var y_pred = np.array(y_pred_array);
-            return y_pred;
-        }
 
         [Fact]
         public void TestLeastSquaresLoss()

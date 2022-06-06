@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using AutoDiff;
+﻿using AutoDiff;
+using ML.Utility;
 using Numpy;
 
 namespace ML.Core.Losses
@@ -31,15 +31,12 @@ namespace ML.Core.Losses
             return 0.5 * np.average(allAbdDetta);
         }
 
-        internal override Term getModelLoss(Term[] y_pred, NDarray y_true)
+        internal override Term getModelLoss(TermMatrix y_pred, NDarray y_true)
         {
-            var array = y_true.GetData<double>();
-            var squares = y_pred
-                .Zip(array, (y1, y2) => y1 - y2)
-                .Select(d => TermBuilder.Power(d, 2))
-                .ToArray();
-            var finalLoss = 0.5 * TermBuilder.Sum(squares) / squares.Length;
-            return finalLoss;
+            var lossTerm = (y_pred - y_true)
+                .Power(2)
+                .Average();
+            return lossTerm;
         }
     }
 }

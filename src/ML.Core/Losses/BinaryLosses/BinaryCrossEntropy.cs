@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using AutoDiff;
+﻿using AutoDiff;
 using ML.Utility;
 using Numpy;
 
@@ -36,14 +35,10 @@ namespace ML.Core.Losses
             return -np.average(alllogdelta);
         }
 
-        internal override Term getModelLoss(Term[] y_pred, NDarray y_true)
+        internal override Term getModelLoss(TermMatrix y_pred, NDarray y_true)
         {
-            var array = y_true.GetData<double>();
-            var alllogdelta = y_pred
-                .Zip(array, (y1, y2) => y2 * TermBuilder.Log(y1) + (1 - y2) * TermBuilder.Log(1 - y1))
-                .ToArray();
-            var crossEntropy = -TermBuilder.Sum(alllogdelta) / alllogdelta.Length;
-            return crossEntropy;
+            var lossMatrix = y_pred.Log() * y_true + (y_pred.Negation() + 1).Log() * (1 - y_true);
+            return -lossMatrix.Average();
         }
 
 

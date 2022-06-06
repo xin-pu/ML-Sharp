@@ -1,5 +1,6 @@
 ﻿using AutoDiff;
 using ML.Core.Data;
+using ML.Utility;
 using Numpy;
 
 namespace ML.Core.Models
@@ -11,6 +12,10 @@ namespace ML.Core.Models
 
         void PipelineDataSet(Dataset<T> dataset);
 
-        Term[] CallGraph(NDarray features);
+        /// <summary>
+        /// </summary>
+        /// <param name="features">[batch size, variables]</param>
+        /// <returns></returns>
+        TermMatrix CallGraph(NDarray features);
     }
 }

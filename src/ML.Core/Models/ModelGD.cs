@@ -4,6 +4,7 @@ using AutoDiff;
 using FluentAssertions;
 using ML.Core.Data;
 using ML.Core.Transform;
+using ML.Utility;
 using MvvmCross.ViewModels;
 using Numpy;
 
@@ -99,7 +100,7 @@ namespace ML.Core.Models
         /// </summary>
         /// <param name="features">[batch size, d1, d2, ... ]</param>
         /// <returns></returns>
-        public abstract Term[] CallGraph(NDarray features);
+        public abstract TermMatrix CallGraph(NDarray features);
 
 
         public double[] GetWeightArray()

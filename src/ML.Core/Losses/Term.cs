@@ -1,3 +1,0 @@
-﻿namespace ML.Core.Losses
-{
-}
