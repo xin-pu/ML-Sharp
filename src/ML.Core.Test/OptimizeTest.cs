@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using ML.Core.Optimizers;
 using Numpy;
 using Xunit;
@@ -12,12 +13,38 @@ namespace ML.Core.Test
             : base(testOutputHelper)
         {
             Weight = np.array(2.0, 1.0);
-            Grad = np.array(1.0, 1.0);
+            Grad = a => np.array(0.1, 0.1);
         }
 
-        protected NDarray Weight { set; get; }
-        protected NDarray Grad { set; get; }
 
+        protected NDarray Weight { set; get; }
+        protected Func<NDarray, NDarray> Grad { set; get; }
+
+        [Fact]
+        public void TestMomentum()
+        {
+            var momentummo = new Momentum(1E-1);
+            var weight = Weight.copy();
+
+            Enumerable.Range(0, 2).ToList().ForEach(_ =>
+            {
+                weight = momentummo.Call(weight, Grad, 0);
+                print(weight);
+            });
+        }
+
+        [Fact]
+        public void TestNesterov()
+        {
+            var nesterov = new Nesterov(1E-1);
+            var weight = Weight.copy();
+
+            Enumerable.Range(0, 2).ToList().ForEach(_ =>
+            {
+                weight = nesterov.Call(weight, Grad, 0);
+                print(weight);
+            });
+        }
 
         [Fact]
         public void TestSGD()
@@ -66,19 +93,6 @@ namespace ML.Core.Test
             Enumerable.Range(0, 2).ToList().ForEach(_ =>
             {
                 weight = rmsProp.Call(weight, Grad, 0);
-                print(weight);
-            });
-        }
-
-        [Fact]
-        public void TestMomentum()
-        {
-            var momentummo = new Momentum(1E-1);
-            var weight = Weight.copy();
-
-            Enumerable.Range(0, 2).ToList().ForEach(_ =>
-            {
-                weight = momentummo.Call(weight, Grad, 0);
                 print(weight);
             });
         }

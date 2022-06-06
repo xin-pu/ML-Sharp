@@ -8,7 +8,8 @@ namespace ML.Core.Optimizers
         internal const double epsilon = 1E-7;
 
         public Action<string> AppendRecord;
-        public Func<NDarray, NDarray, NDarray, (NDarray, NDarray)> calLoss;
+
+        internal Func<NDarray, NDarray> CalGradient;
 
         /// <summary>
         ///     优化器
@@ -25,13 +26,19 @@ namespace ML.Core.Optimizers
         public double WorkLearningRate { protected set; get; }
         public double InitLearningRate { protected set; get; }
 
-
-        public NDarray Call(NDarray weight, NDarray grad, int epoch)
+        /// <summary>
+        ///     Core optimize function to update weights
+        /// </summary>
+        /// <param name="weight">Current Weights</param>
+        /// <param name="calGradient">Function to calculation gradient</param>
+        /// <param name="epoch"></param>
+        /// <returns></returns>
+        public NDarray Call(NDarray weight, Func<NDarray, NDarray> calGradient, int epoch)
         {
-            var gradientNDarray = np.reshape(grad, weight.shape);
-            return call(weight, gradientNDarray, epoch);
+            CalGradient = calGradient;
+            return call(weight, epoch);
         }
 
-        internal abstract NDarray call(NDarray weight, NDarray grad, int epoch);
+        internal abstract NDarray call(NDarray weight, int epoch);
     }
 }

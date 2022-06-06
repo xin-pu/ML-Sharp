@@ -2,16 +2,14 @@
 
 namespace ML.Core.Optimizers
 {
-    public class Momentum : Optimizer
+    public class Nesterov : Optimizer
     {
         /// <summary>
-        ///     SGD with Momentum
-        ///     动量法
-        ///     1.可以使用较大的学习率
+        ///     SGD with Nesterov Accelerated Gradient
+        ///     Nesterov 加速梯度
         /// </summary>
         /// <param name="learningrate"></param>
-        /// <param name="rho"></param>
-        public Momentum(double learningrate, double rho = 0.9)
+        public Nesterov(double learningrate, double rho = 0.9)
             : base(learningrate)
         {
             Rho = rho;
@@ -32,9 +30,11 @@ namespace ML.Core.Optimizers
             if (epoch == 0)
                 DeltaTheda = np.zeros_like(weight);
 
-            var grad = CalGradient(weight);
-            DeltaTheda = Rho * DeltaTheda - WorkLearningRate * grad;
+            var next = Rho * DeltaTheda + DeltaTheda;
+            var predWeight = weight + next;
+            var grad = CalGradient(predWeight);
 
+            DeltaTheda = Rho * DeltaTheda - WorkLearningRate * grad;
             return weight + DeltaTheda;
         }
     }

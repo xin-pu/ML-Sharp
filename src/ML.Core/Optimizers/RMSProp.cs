@@ -25,11 +25,12 @@ namespace ML.Core.Optimizers
         /// </summary>
         public NDarray G { set; get; }
 
-        internal override NDarray call(NDarray weight, NDarray grad, int epoch)
+        internal override NDarray call(NDarray weight, int epoch)
         {
             if (epoch == 0)
                 G = np.zeros_like(weight);
 
+            var grad = CalGradient(weight);
             G = Beta * G + (1 - Beta) * np.square(grad);
             var delta = -np.multiply(WorkLearningRate / np.sqrt(G + epsilon), grad);
             return weight + delta;

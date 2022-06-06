@@ -21,8 +21,10 @@ namespace ML.Core.Optimizers
         /// </summary>
         public NDarray G { protected set; get; }
 
-        internal override NDarray call(NDarray weight, NDarray grad, int epoch)
+        internal override NDarray call(NDarray weight, int epoch)
         {
+            var grad = CalGradient(weight);
+
             if (epoch == 0)
                 G = np.zeros_like(weight);
 

@@ -1,6 +1,4 @@
-﻿using Numpy;
-
-namespace ML.Core.Optimizers
+﻿namespace ML.Core.Optimizers
 {
     public abstract class Annealing : SGD
     {
@@ -13,11 +11,6 @@ namespace ML.Core.Optimizers
         {
         }
 
-        internal override NDarray call(NDarray weight, NDarray grad, int epoch)
-        {
-            WorkLearningRate = UpdateLearningRate(epoch);
-            return base.call(weight, grad, epoch);
-        }
 
         internal abstract double UpdateLearningRate(int epoch);
     }

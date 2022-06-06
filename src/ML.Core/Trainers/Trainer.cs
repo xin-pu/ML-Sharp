@@ -104,8 +104,14 @@ namespace ML.Core.Trainers
                         var lossTerm = Loss.GetLossTerm(predTerms, batchdataSet.Label, Model.Variables);
 
 
-                        var gradient = lossTerm.Differentiate(Model.Variables, Model.WeightsArray);
-                        var newWeights = Optimizer.Call(Model.Weights, np.array(gradient), e);
+                        NDarray GetGradient(NDarray weight)
+                        {
+                            var gradientArray = lossTerm.Differentiate(Model.Variables, weight.GetData<double>());
+                            var g = np.array(gradientArray);
+                            return np.reshape(g, weight.shape);
+                        }
+
+                        var newWeights = Optimizer.Call(Model.Weights, GetGradient, e);
                         Model.UpdateWeights(newWeights);
 
                         AfterBatchPipeline?.Invoke(this);
@@ -140,7 +146,6 @@ namespace ML.Core.Trainers
             var predterms = Model.CallGraph(dataview.Feature);
             var lossTerm = Loss.GetLossTerm(predterms, dataview.Label, Model.Variables);
             var loss = lossTerm.Evaluate(Model.Variables, Model.WeightsArray);
-            Print(y_pred.ToString());
             Metrics.ToList().ForEach(m => m.Call(y_pred, y_true));
 
             return loss;

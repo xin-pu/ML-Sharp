@@ -122,7 +122,10 @@ namespace ML.Core.Models
             str.AppendLine(Description);
             str.AppendLine($"{Transformer}");
             if (InitialWeights == InitialWeigts.True)
+            {
                 str.AppendLine($"ParaCount:\t{Variables.Length}");
+                str.AppendLine($"Weight:\t{Weights}");
+            }
 
             return str.ToString();
         }

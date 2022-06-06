@@ -25,7 +25,7 @@ namespace ML.Core.Optimizers
         public NDarray Χ { protected set; get; }
 
 
-        internal override NDarray call(NDarray weight, NDarray grad, int epoch)
+        internal override NDarray call(NDarray weight, int epoch)
         {
             if (epoch == 0)
             {
@@ -33,6 +33,7 @@ namespace ML.Core.Optimizers
                 Χ = np.zeros_like(weight);
             }
 
+            var grad = CalGradient(weight);
             G = Beta * G + (1 - Beta) * np.square(grad);
 
             var deltaGrad = np.multiply(np.sqrt((Χ + epsilon) / (G + epsilon)), grad);

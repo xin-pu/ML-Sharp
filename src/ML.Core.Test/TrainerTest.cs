@@ -63,7 +63,7 @@ namespace ML.Core.Test
             var trainer = new Trainer<LinearData>
             {
                 TrainDataset = TextLoader<LinearData>.LoadDataSet(path, false),
-                Model = new PolynomialRegression<LinearData>(2),
+                Model = new PolynomialRegression<LinearData>(1),
                 Optimizer = new Momentum(1E-2),
                 Loss = new MeanSquaredError(regularization: Regularization.L2),
                 TrainPlan = new TrainPlan {Epoch = 100, BatchSize = 25},
@@ -87,7 +87,7 @@ namespace ML.Core.Test
                 TrainDataset = trainDataset,
                 ValDataset = valDataset,
                 Model = new BinaryLogicClassify<IrisData>(),
-                Optimizer = new Momentum(1E-2),
+                Optimizer = new Nesterov(1E-2),
                 Loss = new BinaryCrossentropy(),
 
                 TrainPlan = new TrainPlan {Epoch = 100, BatchSize = 25},
