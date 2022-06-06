@@ -1,6 +1,6 @@
 ﻿using Numpy;
 
-namespace ML.Utilty
+namespace ML.Utility
 {
     public class nn
     {

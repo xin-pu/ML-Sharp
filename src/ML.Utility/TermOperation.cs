@@ -3,7 +3,7 @@ using AutoDiff;
 using FluentAssertions;
 using Numpy;
 
-namespace ML.Utilty
+namespace ML.Utility
 {
     public class term
     {

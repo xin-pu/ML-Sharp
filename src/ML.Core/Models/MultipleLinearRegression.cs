@@ -1,7 +1,7 @@
 ﻿using AutoDiff;
 using ML.Core.Data;
 using ML.Core.Transform;
-using ML.Utilty;
+using ML.Utility;
 using Numpy;
 
 namespace ML.Core.Models

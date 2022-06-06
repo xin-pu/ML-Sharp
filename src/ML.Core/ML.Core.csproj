@@ -190,9 +190,9 @@
       <Project>{1F2E8D74-C66B-4F76-AF56-44CDFEC3210E}</Project>
       <Name>ML.Core.Transform</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ML.Utilty\ML.Utilty.csproj">
+    <ProjectReference Include="..\ML.Utility\ML.Utility.csproj">
       <Project>{A8775479-716A-46EC-B15F-124AF4633166}</Project>
-      <Name>ML.Utilty</Name>
+      <Name>ML.Utility</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

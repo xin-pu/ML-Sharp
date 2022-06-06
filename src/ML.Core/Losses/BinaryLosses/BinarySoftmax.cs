@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using AutoDiff;
 using FluentAssertions;
-using ML.Utilty;
+using ML.Utility;
 using Numpy;
 
 namespace ML.Core.Losses

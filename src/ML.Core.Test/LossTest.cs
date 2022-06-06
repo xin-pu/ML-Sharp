@@ -2,7 +2,7 @@
 using AutoDiff;
 using FluentAssertions;
 using ML.Core.Losses;
-using ML.Utilty;
+using ML.Utility;
 using Numpy;
 using Xunit;
 using Xunit.Abstractions;
