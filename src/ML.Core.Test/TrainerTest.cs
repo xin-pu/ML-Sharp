@@ -13,6 +13,7 @@ using ML.Core.Models;
 using ML.Core.Optimizers;
 using ML.Core.Test.DataStructs;
 using ML.Core.Trainers;
+using Numpy;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -46,8 +47,28 @@ namespace ML.Core.Test
                 Model = new MultipleLinearRegression<LinearData>(),
                 Optimizer = new Momentum(1E-2),
                 Loss = new MeanSquaredError(),
-                TrainPlan = new TrainPlan {Epoch = 100, BatchSize = 25},
-                Metrics = new ObservableCollection<Metric> {new MAE()},
+                TrainPlan = new TrainPlan { Epoch = 100, BatchSize = 25 },
+                Metrics = new ObservableCollection<Metric> { new MAE() },
+                Print = _testOutputHelper.WriteLine
+            };
+
+            await trainer.Fit();
+            print(trainer.Model);
+        }
+
+        [Fact]
+        public async Task TestPolyRegression()
+        {
+            var path = Path.Combine(dataFolder, "data_singlevar.txt");
+
+            var trainer = new Trainer<LinearData>
+            {
+                TrainDataset = TextLoader<LinearData>.LoadDataSet(path, false),
+                Model = new PolynomialRegression<LinearData>(2),
+                Optimizer = new Momentum(1E-2),
+                Loss = new MeanSquaredError(regularization: Regularization.L2),
+                TrainPlan = new TrainPlan { Epoch = 100, BatchSize = 25 },
+                Metrics = new ObservableCollection<Metric> { new MAE() },
                 Print = _testOutputHelper.WriteLine
             };
 
@@ -69,13 +90,29 @@ namespace ML.Core.Test
                 Model = new BinaryLogicClassify<IrisData>(),
                 Optimizer = new Momentum(1E-2),
                 Loss = new BinaryCrossentropy(),
+<<<<<<< HEAD
                 TrainPlan = new TrainPlan {Epoch = 100, BatchSize = 25},
                 Metrics = new ObservableCollection<Metric> {new Accuracy(), new ErrorRate()},
+=======
+                TrainPlan = new TrainPlan { Epoch = 100, BatchSize = 25 },
+                Metrics = new ObservableCollection<Metric> { new MAE() },
+>>>>>>> 6c5c3f443b24b38a3005513278cc48a229df1b00
                 Print = _testOutputHelper.WriteLine
             };
 
             await trainer.Fit();
             print(trainer.Model);
+            var pred = trainer.Model.Call(valDataset.ToDatasetNDarray().Feature);
+            print(pred);
+        }
+
+
+        [Fact]
+        public void Test()
+        {
+            var a = np.random.rand(4, 3);
+            print(a);
+            print(np.expand_dims(np.argmax(a, -1), -1));
         }
 
         private Dataset<IrisData> GetBinaryIris(string path)
