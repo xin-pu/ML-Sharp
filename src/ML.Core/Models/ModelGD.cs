@@ -16,7 +16,7 @@ namespace ML.Core.Models
     ///     需要定义转换器
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class Model<T> : MvxViewModel
+    public abstract class ModelGD<T> : MvxViewModel, IModelGD<T>
         where T : DataView
     {
         private InitialWeigts _initialWeights = InitialWeigts.False;
@@ -27,24 +27,8 @@ namespace ML.Core.Models
 
         public string Name => GetType().Name;
 
-        public abstract Transformer Transformer { set; get; }
+        public Transformer Transformer { set; get; }
 
-        public Variable[] Variables
-        {
-            get => _variables;
-            protected set => SetProperty(ref _variables, value);
-        }
-
-        /// <summary>
-        ///     [Labels,Features]
-        /// </summary>
-        public NDarray Weights
-        {
-            get => _weights;
-            protected set => SetProperty(ref _weights, value);
-        }
-
-        public double[] WeightsArray => Weights?.GetData<double>();
 
         public InitialWeigts InitialWeights
         {
@@ -59,6 +43,22 @@ namespace ML.Core.Models
             get => _weightInitial;
             set => SetProperty(ref _weightInitial, value);
         }
+
+        public Variable[] Variables
+        {
+            get => _variables;
+            set => SetProperty(ref _variables, value);
+        }
+
+        /// <summary>
+        ///     [Labels,Features]
+        /// </summary>
+        public NDarray Weights
+        {
+            get => _weights;
+            set => SetProperty(ref _weights, value);
+        }
+
 
         /// <summary>
         ///     1.通过传入数据集=>模型变换，确认参数数量
@@ -95,25 +95,31 @@ namespace ML.Core.Models
             InitialWeights = InitialWeigts.True;
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="features">[batch size, d1, d2, ... ]</param>
+        /// <returns></returns>
+        public abstract Term[] CallGraph(NDarray features);
+
+
+        public double[] GetWeightArray()
+        {
+            return Weights?.GetData<double>();
+        }
+
+        /// <summary>
+        ///     call by X*W
+        /// </summary>
+        /// <param name="features">[batch size, ... ]</param>
+        /// <returns>[batch size, labels]</returns>
+        public abstract NDarray Call(NDarray features);
+
         public void UpdateWeights(NDarray weightNDarray)
         {
             weightNDarray.shape.Should().BeEquivalentTo(Weights.shape, "Weigts shape should keep.");
 
             Weights = weightNDarray;
         }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="x">[batch size, d1, d2, ... ]</param>
-        /// <returns></returns>
-        public abstract Term[] CallGraph(NDarray x);
-
-        /// <summary>
-        ///     call by X*W
-        /// </summary>
-        /// <param name="x">[batch size, ... ]</param>
-        /// <returns>[batch size, labels]</returns>
-        public abstract NDarray Call(NDarray x);
 
         public override string ToString()
         {

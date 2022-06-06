@@ -18,7 +18,6 @@ namespace ML.Core.Models
 
         public int Degree { protected set; get; }
 
-        public override Transformer Transformer { get; set; }
 
         public override string Description => "多项式回归\r\n y=α + β1*x + β2*x^2 + ... + βn*x^n";
     }

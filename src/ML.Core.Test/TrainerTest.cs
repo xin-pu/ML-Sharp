@@ -40,10 +40,10 @@ namespace ML.Core.Test
         {
             var path = Path.Combine(dataFolder, "data_singlevar.txt");
 
-            var trainer = new Trainer<LinearData>
+            var trainer = new GDTrainer<LinearData>
             {
                 TrainDataset = TextLoader<LinearData>.LoadDataSet(path, false).Shuffle(),
-                Model = new MultipleLinearRegression<LinearData>(),
+                ModelGd = new MultipleLinearRegression<LinearData>(),
                 Optimizer = new Nesterov(1E-2),
                 Loss = new MeanSquaredError(1),
                 TrainPlan = new TrainPlan {Epoch = 100, BatchSize = 25},
@@ -52,7 +52,7 @@ namespace ML.Core.Test
             };
 
             await trainer.Fit();
-            print(trainer.Model);
+            print(trainer.ModelGd);
         }
 
         [Fact]
@@ -60,10 +60,10 @@ namespace ML.Core.Test
         {
             var path = Path.Combine(dataFolder, "data_singlevar.txt");
 
-            var trainer = new Trainer<LinearData>
+            var trainer = new GDTrainer<LinearData>
             {
                 TrainDataset = TextLoader<LinearData>.LoadDataSet(path, false),
-                Model = new PolynomialRegression<LinearData>(1),
+                ModelGd = new PolynomialRegression<LinearData>(1),
                 Optimizer = new Nesterov(1E-1),
                 Loss = new MeanSquaredError(),
                 TrainPlan = new TrainPlan {Epoch = 100, BatchSize = 25},
@@ -72,7 +72,7 @@ namespace ML.Core.Test
             };
 
             await trainer.Fit();
-            print(trainer.Model);
+            print(trainer.ModelGd);
         }
 
 
@@ -82,11 +82,11 @@ namespace ML.Core.Test
             var trainDataset = GetBinaryIris("iris-train.txt");
             var valDataset = GetBinaryIris("iris-test.txt");
 
-            var trainer = new Trainer<IrisData>
+            var trainer = new GDTrainer<IrisData>
             {
-                TrainDataset = trainDataset,
-                ValDataset = valDataset,
-                Model = new BinaryLogicClassify<IrisData>(),
+                TrainDataset = trainDataset.Shuffle(),
+                ValDataset = valDataset.Shuffle(),
+                ModelGd = new BinaryLogicClassify<IrisData>(),
                 Optimizer = new Nesterov(1E-2),
                 Loss = new BinaryCrossentropy(),
 
@@ -97,8 +97,8 @@ namespace ML.Core.Test
             };
 
             await trainer.Fit();
-            print(trainer.Model);
-            var pred = trainer.Model.Call(valDataset.ToDatasetNDarray().Feature);
+            print(trainer.ModelGd);
+            var pred = trainer.ModelGd.Call(valDataset.Shuffle().ToDatasetNDarray().Feature);
             print(pred);
         }
 

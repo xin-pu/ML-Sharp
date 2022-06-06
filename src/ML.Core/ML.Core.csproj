@@ -153,7 +153,9 @@
     <Compile Include="Metrics\Regression\MSE.cs" />
     <Compile Include="Metrics\Regression\R2.cs" />
     <Compile Include="Models\BinaryLogicClassify.cs" />
-    <Compile Include="Models\Model.cs" />
+    <Compile Include="Models\Interface\IModel.cs" />
+    <Compile Include="Models\Interface\IModelGD.cs" />
+    <Compile Include="Models\ModelGD.cs" />
     <Compile Include="Models\MultipleLinearRegression.cs" />
     <Compile Include="Models\Perceptron.cs" />
     <Compile Include="Models\PolynomialRegression.cs" />
@@ -173,7 +175,7 @@
     <Compile Include="Optimizers\SGD.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Trainers\TrainPlan.cs" />
-    <Compile Include="Trainers\Trainer.cs" />
+    <Compile Include="Trainers\GDTrainer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

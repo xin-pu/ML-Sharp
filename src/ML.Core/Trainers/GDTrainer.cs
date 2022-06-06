@@ -15,31 +15,31 @@ using Numpy;
 
 namespace ML.Core.Trainers
 {
-    public class Trainer<T> : MvxViewModel
+    public class GDTrainer<T> : MvxViewModel
         where T : DataView
     {
         private Loss _loss;
 
         private ObservableCollection<Metric> _metrics;
-        private Model<T> _model;
+        private IModelGD<T> _modelGd;
         private Optimizer _optimizer;
         private Dataset<T> _trainDataset;
 
         private TrainPlan _trainPlan;
         private Dataset<T> _valDataset;
 
-        public Action<Trainer<T>> AfterBatchPipeline;
-        public Action<Trainer<T>> AfterEpochPipeline;
+        public Action<GDTrainer<T>> AfterBatchPipeline;
+        public Action<GDTrainer<T>> AfterEpochPipeline;
 
-        public Action<Trainer<T>> BeforeBatchPipeline;
-        public Action<Trainer<T>> BeforeEpochPipeline;
+        public Action<GDTrainer<T>> BeforeBatchPipeline;
+        public Action<GDTrainer<T>> BeforeEpochPipeline;
         public Action<string> Print;
 
 
-        public Model<T> Model
+        public IModelGD<T> ModelGd
         {
-            get => _model;
-            set => SetProperty(ref _model, value);
+            get => _modelGd;
+            set => SetProperty(ref _modelGd, value);
         }
 
         public Dataset<T> TrainDataset
@@ -82,7 +82,7 @@ namespace ML.Core.Trainers
         {
             TrainDataset.Should().NotBeNull("dataset should not ne null");
 
-            Model.PipelineDataSet(TrainDataset);
+            ModelGd.PipelineDataSet(TrainDataset);
 
             foreach (var e in Enumerable.Range(0, TrainPlan.Epoch))
                 await Task.Run(() =>
@@ -100,19 +100,18 @@ namespace ML.Core.Trainers
                         BeforeBatchPipeline?.Invoke(this);
                         var batchdataSet = data.ToDatasetNDarray();
 
-                        var predTerms = Model.CallGraph(batchdataSet.Feature);
-                        var lossTerm = Loss.GetLossTerm(predTerms, batchdataSet.Label, Model.Variables);
+                        var predTerms = ModelGd.CallGraph(batchdataSet.Feature);
+                        var lossTerm = Loss.GetLossTerm(predTerms, batchdataSet.Label, ModelGd.Variables);
 
 
                         NDarray GetGradient(NDarray weight)
                         {
-                            var gradientArray = lossTerm.Differentiate(Model.Variables, weight.GetData<double>());
+                            var gradientArray = lossTerm.Differentiate(ModelGd.Variables, weight.GetData<double>());
                             var g = np.array(gradientArray);
                             return np.reshape(g, weight.shape);
                         }
 
-                        var newWeights = Optimizer.Call(Model.Weights, GetGradient, e);
-                        Model.UpdateWeights(newWeights);
+                        ModelGd.Weights = Optimizer.Call(ModelGd.Weights, GetGradient, e);
 
                         AfterBatchPipeline?.Invoke(this);
                     }
@@ -141,11 +140,11 @@ namespace ML.Core.Trainers
         public double UpdateLossMetric(Dataset<T> dataset)
         {
             var dataview = dataset.ToDatasetNDarray();
-            var y_pred = Model.Call(dataview.Feature);
+            var y_pred = ModelGd.Call(dataview.Feature);
             var y_true = dataview.Label;
-            var predterms = Model.CallGraph(dataview.Feature);
-            var lossTerm = Loss.GetLossTerm(predterms, dataview.Label, Model.Variables);
-            var loss = lossTerm.Evaluate(Model.Variables, Model.WeightsArray);
+            var predterms = ModelGd.CallGraph(dataview.Feature);
+            var lossTerm = Loss.GetLossTerm(predterms, dataview.Label, ModelGd.Variables);
+            var loss = lossTerm.Evaluate(ModelGd.Variables, ModelGd.GetWeightArray());
             Metrics.ToList().ForEach(m => m.Call(y_pred, y_true));
 
             return loss;

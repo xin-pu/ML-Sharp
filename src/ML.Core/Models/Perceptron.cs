@@ -9,7 +9,7 @@ using Numpy;
 
 namespace ML.Core.Models
 {
-    public class Perceptron<T> : Model<T>
+    public class Perceptron<T> : ModelGD<T>
         where T : DataView
     {
         /// <summary>
@@ -26,7 +26,7 @@ namespace ML.Core.Models
             Classes = classes;
         }
 
-        public override Transformer Transformer { get; set; }
+
         public int Classes { set; get; }
         public override string Description { get; }
 
@@ -43,23 +43,23 @@ namespace ML.Core.Models
                     p => p.Select(a => a.v).ToArray());
         }
 
-        public override Term[] CallGraph(NDarray x)
+        public override Term[] CallGraph(NDarray features)
         {
             var lablesPredict = VariablesDict
                 .ToDictionary(
                     p => p.Key,
                     p =>
                     {
-                        var feature = Transformer.Call(x);
+                        var feature = Transformer.Call(features);
                         return term.matmul(p.Value, feature);
                     });
 
             throw new NotImplementedException();
         }
 
-        public override NDarray Call(NDarray x)
+        public override NDarray Call(NDarray features)
         {
-            var feature = Transformer.Call(x);
+            var feature = Transformer.Call(features);
             var y_pred = nn.sigmoid(np.matmul(feature, Weights.T));
             return sign(y_pred);
         }
