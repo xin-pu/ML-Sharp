@@ -145,6 +145,8 @@
     <Compile Include="Losses\BinaryLosses\BinaryLeastSquares.cs" />
     <Compile Include="Losses\BinaryLosses\BinarySoftmax.cs" />
     <Compile Include="Losses\Term.cs" />
+    <Compile Include="Metrics\Categorical\Accuracy.cs" />
+    <Compile Include="Metrics\Categorical\ErrorRate.cs" />
     <Compile Include="Metrics\Metric.cs" />
     <Compile Include="Metrics\Regression\EVS.cs" />
     <Compile Include="Metrics\Regression\MAE.cs" />
@@ -190,7 +192,6 @@
   <ItemGroup>
     <Folder Include="Losses\NewFolder1\" />
     <Folder Include="Metrics\Binary\" />
-    <Folder Include="Metrics\Categorical\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

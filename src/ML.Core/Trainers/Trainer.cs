@@ -119,7 +119,7 @@ namespace ML.Core.Trainers
                     if (ValDataset != null)
                     {
                         var val_loss = UpdateLossMetric(ValDataset);
-                        trainMsg.Append($"Val_Loss:{train_loss:F4}\t");
+                        trainMsg.Append($"Val_Loss:{val_loss:F4}\t");
                         foreach (var metric in Metrics) trainMsg.Append($"Val-{metric}\t");
                     }
 
@@ -140,7 +140,7 @@ namespace ML.Core.Trainers
             var predterms = Model.CallGraph(dataview.Feature);
             var lossTerm = Loss.GetLossTerm(predterms, dataview.Label, Model.Variables);
             var loss = lossTerm.Evaluate(Model.Variables, Model.WeightsArray);
-
+            Print(y_pred.ToString());
             Metrics.ToList().ForEach(m => m.Call(y_pred, y_true));
 
             return loss;

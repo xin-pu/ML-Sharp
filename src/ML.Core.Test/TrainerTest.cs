@@ -7,6 +7,7 @@ using ML.Core.Data;
 using ML.Core.Data.Loader;
 using ML.Core.Losses;
 using ML.Core.Metrics;
+using ML.Core.Metrics.Categorical;
 using ML.Core.Metrics.Regression;
 using ML.Core.Models;
 using ML.Core.Optimizers;
@@ -69,7 +70,7 @@ namespace ML.Core.Test
                 Optimizer = new Momentum(1E-2),
                 Loss = new BinaryCrossentropy(),
                 TrainPlan = new TrainPlan {Epoch = 100, BatchSize = 25},
-                Metrics = new ObservableCollection<Metric> {new MAE()},
+                Metrics = new ObservableCollection<Metric> {new Accuracy(), new ErrorRate()},
                 Print = _testOutputHelper.WriteLine
             };
 

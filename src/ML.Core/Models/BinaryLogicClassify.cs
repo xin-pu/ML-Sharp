@@ -23,6 +23,7 @@ namespace ML.Core.Models
         {
             var feature = Transformer.Call(x);
             var y_pred = nn.sigmoid(np.matmul(feature, Weights));
+
             return y_pred;
         }
     }
