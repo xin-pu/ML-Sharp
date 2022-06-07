@@ -2,12 +2,18 @@
 
 namespace ML.Core.Metrics.Regression
 {
-    /// <summary>
-    ///     Explained variance
-    ///     可解释变异
-    /// </summary>
-    public class EVS : Metric
+    public class ExplainedVariance : Metric
     {
+        /// <summary>
+        ///     Explained Variance
+        ///     可解释变异
+        /// </summary>
+        public ExplainedVariance()
+        {
+        }
+
+        public override string Describe => "";
+
         internal override double call(NDarray y_true, NDarray y_pred)
         {
             var delta = y_true - y_pred;

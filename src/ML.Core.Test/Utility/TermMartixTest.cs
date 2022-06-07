@@ -1,5 +1,6 @@
 ﻿using AutoDiff;
 using ML.Utility;
+using Numpy;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -41,6 +42,15 @@ namespace ML.Core.Test.Utility
             var resP = p[0, 0].Evaluate(new[] {v1}, new[] {2.0});
             print(resT);
             print(resP);
+        }
+
+
+        [Fact]
+        public void Test()
+        {
+            var a = np.array(new[,] {{1, 2, 3}, {2, 3, 1}});
+            var c = np.multiply(a, np.expand_dims(np.array(2, 3), -1));
+            print(c);
         }
     }
 }

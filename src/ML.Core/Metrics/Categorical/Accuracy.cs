@@ -9,6 +9,8 @@ namespace ML.Core.Metrics.Categorical
     /// </summary>
     public class Accuracy : Metric
     {
+        public override string Describe { get; }
+
         internal override double call(NDarray y_true, NDarray y_pred)
         {
             var res = np.abs(y_true - y_pred);
@@ -18,7 +20,7 @@ namespace ML.Core.Metrics.Categorical
 
         public override string ToString()
         {
-            return $"{GetType().Name}:\t{Value:P2}";
+            return $"{GetType().Name}:\t{ValueError:P2}";
         }
     }
 }

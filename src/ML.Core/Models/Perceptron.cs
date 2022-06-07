@@ -51,7 +51,7 @@ namespace ML.Core.Models
         //            p =>
         //            {
         //                var feature = Transformer.Call(features);
-        //                return term.matmul(p.Value, feature);
+        //                return term.matmul(p.ValueError, feature);
         //            });
 
         //    throw new NotImplementedException();

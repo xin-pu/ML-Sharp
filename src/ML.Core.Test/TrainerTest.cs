@@ -7,14 +7,13 @@ using ML.Core.Data;
 using ML.Core.Data.Loader;
 using ML.Core.Losses;
 using ML.Core.Metrics;
-using ML.Core.Metrics.Regression;
 using ML.Core.Models;
 using ML.Core.Optimizers;
 using ML.Core.Test.DataStructs;
 using ML.Core.Trainers;
-using Numpy;
 using Xunit;
 using Xunit.Abstractions;
+using MeanAbsoluteError = ML.Core.Metrics.Regression.MeanAbsoluteError;
 
 namespace ML.Core.Test
 {
@@ -47,7 +46,7 @@ namespace ML.Core.Test
                 Optimizer = new Nesterov(1E-2),
                 Loss = new MeanSquaredError(1),
                 TrainPlan = new TrainPlan {Epoch = 100, BatchSize = 25},
-                Metrics = new ObservableCollection<Metric> {new MAE()},
+                Metrics = new ObservableCollection<Metric> {new MeanAbsoluteError()},
                 Print = _testOutputHelper.WriteLine
             };
 
@@ -67,7 +66,7 @@ namespace ML.Core.Test
                 Optimizer = new Momentum(1E-1),
                 Loss = new MeanSquaredError(),
                 TrainPlan = new TrainPlan {Epoch = 100, BatchSize = 50},
-                Metrics = new ObservableCollection<Metric> {new MAE()},
+                Metrics = new ObservableCollection<Metric> {new MeanAbsoluteError()},
                 Print = _testOutputHelper.WriteLine
             };
 
@@ -91,25 +90,17 @@ namespace ML.Core.Test
                 Loss = new BinaryCrossentropy(),
 
                 TrainPlan = new TrainPlan {Epoch = 100, BatchSize = 25},
-                Metrics = new ObservableCollection<Metric> {new MAE()},
+                Metrics = new ObservableCollection<Metric> {new MeanAbsoluteError()},
 
                 Print = _testOutputHelper.WriteLine
             };
 
             await trainer.Fit();
             print(trainer.ModelGd);
-            var pred = trainer.ModelGd.Call(valDataset.Shuffle().ToDatasetNDarray().Feature);
+            var pred = trainer.ModelGd.Call(valDataset.ToDatasetNDarray().Feature);
             print(pred);
         }
 
-
-        [Fact]
-        public void Test()
-        {
-            var a = np.random.rand(4, 3);
-            print(a);
-            print(np.expand_dims(np.argmax(a, -1), -1));
-        }
 
         private Dataset<IrisData> GetBinaryIris(string path)
         {
