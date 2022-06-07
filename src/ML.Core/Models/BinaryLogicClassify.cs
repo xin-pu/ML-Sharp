@@ -1,5 +1,4 @@
-﻿using System;
-using ML.Core.Data;
+﻿using ML.Core.Data;
 using ML.Core.Transform;
 using ML.Utility;
 using Numpy;
@@ -21,16 +20,11 @@ namespace ML.Core.Models
 
         public override string Description => " 多元线性逻辑回归模型\r\n y=α + β1*x1 + β2*x2 + ... + βn*xn";
 
-        //public override Term[] CallGraph(NDarray features)
-        //{
-        //    var feature = Transformer.Call(features);
-        //    var terms = term.matmul(Variables, feature);
-        //    return terms.Select(a => term.sigmoid(a)).ToArray();
-        //}
 
         public override TermMatrix CallGraph(NDarray features)
         {
-            throw new NotImplementedException();
+            var feature = Transformer.Call(features);
+            return term.multiply(feature, Variables).Sigmoid();
         }
 
         public override NDarray Call(NDarray features)

@@ -33,7 +33,7 @@ namespace ML.Core.Losses
 
         internal override Term getModelLoss(TermMatrix y_pred, NDarray y_true)
         {
-            var lossTerm = y_pred.Subtract(y_true)
+            var lossTerm = (y_pred - y_true)
                 .Power(2)
                 .Power(0.5)
                 .Average();

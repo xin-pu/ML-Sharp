@@ -20,7 +20,7 @@ namespace ML.Core.Test
 
         public TermMatrix Call(Variable[] weight)
         {
-            return term.multiply(x, new[] {new(), new Variable()});
+            return term.multiply(x, weight);
         }
 
 
@@ -116,9 +116,7 @@ namespace ML.Core.Test
             var variables = new[] {new Variable(), new Variable()};
             var y_pred = Call(variables);
 
-            var leastSquares = new MeanAbsoluteError();
-
-            var lossTerm = leastSquares.GetLossTerm(y_pred, y_true, variables);
+            var lossTerm = new MeanAbsoluteError().GetLossTerm(y_pred, y_true, variables);
 
             var loss = lossTerm.Evaluate(variables, result.GetData<double>());
             var gradient = lossTerm.Differentiate(variables, result.GetData<double>());

@@ -60,60 +60,49 @@ namespace ML.Utility
         }
 
 
-        public TermMatrix Add(NDarray input)
-        {
-            foreach (var r in Enumerable.Range(0, Height))
-            foreach (var c in Enumerable.Range(0, Width))
-                this[r, c] += input[r, c].GetData<double>()[0];
-            return this;
-        }
-
-        public TermMatrix Subtract(NDarray input)
-        {
-            foreach (var r in Enumerable.Range(0, Height))
-            foreach (var c in Enumerable.Range(0, Width))
-                this[r, c] -= input[r, c].GetData<double>()[0];
-            return this;
-        }
-
-        public TermMatrix Divide(NDarray input)
-        {
-            foreach (var r in Enumerable.Range(0, Height))
-            foreach (var c in Enumerable.Range(0, Width))
-                this[r, c] /= input[r, c].GetData<double>()[0];
-            return this;
-        }
-
-        public TermMatrix Divide(double input)
-        {
-            foreach (var r in Enumerable.Range(0, Height))
-            foreach (var c in Enumerable.Range(0, Width))
-                this[r, c] /= input;
-            return this;
-        }
-
         public TermMatrix Power(double power)
         {
+            var clone = Clone();
             foreach (var r in Enumerable.Range(0, Height))
             foreach (var c in Enumerable.Range(0, Width))
-                this[r, c] = TermBuilder.Power(this[r, c], power);
-            return this;
+                clone[r, c] = TermBuilder.Power(this[r, c], power);
+            return clone;
         }
 
         public TermMatrix Exp()
         {
+            var clone = Clone();
             foreach (var r in Enumerable.Range(0, Height))
             foreach (var c in Enumerable.Range(0, Width))
-                this[r, c] = TermBuilder.Exp(this[r, c]);
-            return this;
+                clone[r, c] = TermBuilder.Exp(this[r, c]);
+            return clone;
         }
 
         public TermMatrix Log()
         {
+            var clone = Clone();
             foreach (var r in Enumerable.Range(0, Height))
             foreach (var c in Enumerable.Range(0, Width))
-                this[r, c] = TermBuilder.Log(this[r, c]);
-            return this;
+                clone[r, c] = TermBuilder.Log(this[r, c]);
+            return clone;
+        }
+
+        public TermMatrix Sigmoid()
+        {
+            var clone = Clone();
+            foreach (var r in Enumerable.Range(0, Height))
+            foreach (var c in Enumerable.Range(0, Width))
+                clone[r, c] = term.sigmoid(this[r, c]);
+            return clone;
+        }
+
+        public TermMatrix Tanh()
+        {
+            var clone = Clone();
+            foreach (var r in Enumerable.Range(0, Height))
+            foreach (var c in Enumerable.Range(0, Width))
+                clone[r, c] = term.tanh(this[r, c]);
+            return clone;
         }
 
 
@@ -148,7 +137,7 @@ namespace ML.Utility
 
         public TermMatrix Clone()
         {
-            return this;
+            return new TermMatrix((Term[,]) Value.Clone());
         }
 
 

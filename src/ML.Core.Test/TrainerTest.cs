@@ -64,9 +64,9 @@ namespace ML.Core.Test
             {
                 TrainDataset = TextLoader<LinearData>.LoadDataSet(path, false),
                 ModelGd = new PolynomialRegression<LinearData>(1),
-                Optimizer = new Nesterov(1E-1),
+                Optimizer = new Momentum(1E-1),
                 Loss = new MeanSquaredError(),
-                TrainPlan = new TrainPlan {Epoch = 100, BatchSize = 25},
+                TrainPlan = new TrainPlan {Epoch = 100, BatchSize = 50},
                 Metrics = new ObservableCollection<Metric> {new MAE()},
                 Print = _testOutputHelper.WriteLine
             };
