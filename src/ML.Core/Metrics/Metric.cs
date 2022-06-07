@@ -1,13 +1,24 @@
-﻿using FluentAssertions;
+﻿using System.Text.RegularExpressions;
+using FluentAssertions;
 using Numpy;
 
 namespace ML.Core.Metrics
 {
     public abstract class Metric
     {
+        protected Metric()
+        {
+            Name = GetType().Name;
+            Logogram = Regex.Replace(Name, @"[^A-Z]+", "");
+        }
+
         public double ValueError { protected set; get; }
 
         public abstract string Describe { get; }
+
+        public string Name { protected set; get; }
+
+        public string Logogram { protected set; get; }
 
         public double Call(NDarray y_true, NDarray y_pred)
         {
@@ -25,7 +36,7 @@ namespace ML.Core.Metrics
 
         public override string ToString()
         {
-            return $"{GetType().Name}:\t{ValueError:F4}";
+            return $"[{Logogram}]:{ValueError:F4}";
         }
     }
 }

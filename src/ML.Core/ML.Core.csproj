@@ -137,9 +137,9 @@
     <Compile Include="Losses\CategoricalLosses\CategoricalCrossentropy.cs" />
     <Compile Include="Losses\CategoricalLoss.cs" />
     <Compile Include="Losses\RegressionLosses\LogCosh.cs" />
-    <Compile Include="Losses\RegressionLosses\MeanAbsoluteError.cs" />
-    <Compile Include="Losses\RegressionLosses\MeanAbsolutePercentageError.cs" />
-    <Compile Include="Losses\RegressionLosses\MeanSquaredError.cs" />
+    <Compile Include="Losses\RegressionLosses\MeanAbsolute.cs" />
+    <Compile Include="Losses\RegressionLosses\MeanAbsolutePercentage.cs" />
+    <Compile Include="Losses\RegressionLosses\MeanSquared.cs" />
     <Compile Include="Losses\Loss.cs" />
     <Compile Include="Losses\Regularization.cs" />
     <Compile Include="Losses\BinaryLosses\BinaryLeastSquares.cs" />

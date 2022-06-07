@@ -4,22 +4,21 @@ using Numpy;
 
 namespace ML.Core.Losses
 {
-    public class MeanSquaredError : Loss
+    public class MeanAbsolutePercentage : Loss
     {
         /// <summary>
-        ///     最小二乘损失
-        ///     Computes the mean of squares of errors between labels and predictions.
-        ///     J(la)= square(y_true - y_pred)
+        ///     最小绝对值损失
+        ///     Computes the mean absolute percentage error between y_true and y_pred.
+        ///     J(la) = 100 * abs((y_true - y_pred) / y_true)
         /// </summary>
         /// <param name="lamdba"></param>
         /// <param name="regularization"></param>
-        public MeanSquaredError(
+        public MeanAbsolutePercentage(
             double lamdba = 1E-4,
             Regularization regularization = Regularization.None)
             : base(lamdba, regularization)
         {
         }
-
 
         internal override void checkLabels(NDarray y_true)
         {
@@ -27,15 +26,14 @@ namespace ML.Core.Losses
 
         internal override double calculateLoss(NDarray y_pred, NDarray y_true)
         {
-            var allAbdDetta = np.square(y_pred - y_true);
-            return 0.5 * np.average(allAbdDetta);
+            var allAbdDetta = np.abs((y_true - y_pred) / y_true);
+            return np.average(allAbdDetta);
         }
 
         internal override Term getModelLoss(TermMatrix y_pred, NDarray y_true)
         {
-            var lossTerm = (y_pred - y_true)
-                .Power(2)
-                .Average();
+            var per = (y_pred - y_true) / y_true;
+            var lossTerm = per.Power(2).Power(0.5).Average();
             return lossTerm;
         }
     }

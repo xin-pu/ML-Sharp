@@ -118,7 +118,7 @@ namespace ML.Core.Trainers
 
                     var trainMsg = new StringBuilder($"#{e + 1:D4}\t");
                     var train_loss = UpdateLossMetric(TrainDataset);
-                    trainMsg.Append($"Loss:{train_loss:F4}\t");
+                    trainMsg.Append($"[Loss]:{train_loss:F4}\t");
                     foreach (var metric in Metrics) trainMsg.Append($"{metric}\t");
 
                     if (ValDataset != null)

@@ -7,13 +7,13 @@ using ML.Core.Data;
 using ML.Core.Data.Loader;
 using ML.Core.Losses;
 using ML.Core.Metrics;
+using ML.Core.Metrics.Regression;
 using ML.Core.Models;
 using ML.Core.Optimizers;
 using ML.Core.Test.DataStructs;
 using ML.Core.Trainers;
 using Xunit;
 using Xunit.Abstractions;
-using MeanAbsoluteError = ML.Core.Metrics.Regression.MeanAbsoluteError;
 
 namespace ML.Core.Test
 {
@@ -44,9 +44,18 @@ namespace ML.Core.Test
                 TrainDataset = TextLoader<LinearData>.LoadDataSet(path, false).Shuffle(),
                 ModelGd = new MultipleLinearRegression<LinearData>(),
                 Optimizer = new Nesterov(1E-2),
-                Loss = new MeanSquaredError(1),
+                Loss = new MeanSquared(1),
                 TrainPlan = new TrainPlan {Epoch = 100, BatchSize = 25},
-                Metrics = new ObservableCollection<Metric> {new MeanAbsoluteError()},
+                Metrics = new ObservableCollection<Metric>
+                {
+                    new ExplainedVariance(),
+                    new LogCoshError(),
+                    new MeanAbsoluteError(),
+                    new MeanAbsolutePercentageError(),
+                    new MeanRelativeError(),
+                    new MeanSquaredError(),
+                    new RSquared()
+                },
                 Print = _testOutputHelper.WriteLine
             };
 
@@ -64,7 +73,7 @@ namespace ML.Core.Test
                 TrainDataset = TextLoader<LinearData>.LoadDataSet(path, false),
                 ModelGd = new PolynomialRegression<LinearData>(1),
                 Optimizer = new Momentum(1E-1),
-                Loss = new MeanSquaredError(),
+                Loss = new MeanSquared(),
                 TrainPlan = new TrainPlan {Epoch = 100, BatchSize = 50},
                 Metrics = new ObservableCollection<Metric> {new MeanAbsoluteError()},
                 Print = _testOutputHelper.WriteLine

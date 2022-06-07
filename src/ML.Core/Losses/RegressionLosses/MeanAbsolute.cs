@@ -4,7 +4,7 @@ using Numpy;
 
 namespace ML.Core.Losses
 {
-    public class MeanAbsoluteError : Loss
+    public class MeanAbsolute : Loss
     {
         /// <summary>
         ///     最小绝对值损失
@@ -13,7 +13,7 @@ namespace ML.Core.Losses
         /// </summary>
         /// <param name="lamdba"></param>
         /// <param name="regularization"></param>
-        public MeanAbsoluteError(
+        public MeanAbsolute(
             double lamdba = 1E-4,
             Regularization regularization = Regularization.None)
             : base(lamdba, regularization)
