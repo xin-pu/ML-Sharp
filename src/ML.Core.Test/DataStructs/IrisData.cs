@@ -19,6 +19,13 @@ namespace ML.Core.Test.DataStructs
 
         [LoadColumn(2)] public double SepalWidth;
 
+        /// <summary>
+        ///     Cons
+        /// </summary>
+        public IrisData()
+        {
+        }
+
 
         public override NDarray GetFeatureArray()
         {

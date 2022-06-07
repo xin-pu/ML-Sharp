@@ -22,6 +22,9 @@ namespace ML.Core.Models
             Classes = classes;
         }
 
+        public Perceptron()
+        {
+        }
 
         public int Classes { set; get; }
         public override string Description { get; }

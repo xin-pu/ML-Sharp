@@ -7,8 +7,13 @@ namespace ML.Core.Models
         where T : DataView
     {
         NDarray Weights { set; get; }
+        string WeightFile { get; }
         double[] GetWeightArray();
         NDarray Call(NDarray features);
         NDarray Call(T features);
+
+        void Save(string filename);
+
+        IModel<T> Load(string filename);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using System.Text;
 using AutoDiff;
 using FluentAssertions;
@@ -7,6 +8,8 @@ using ML.Core.Transform;
 using ML.Utility;
 using MvvmCross.ViewModels;
 using Numpy;
+using YAXLib;
+using YAXLib.Attributes;
 
 namespace ML.Core.Models
 {
@@ -25,6 +28,12 @@ namespace ML.Core.Models
 
         private WeightInitial _weightInitial;
         private NDarray _weights;
+
+        /// <summary>
+        /// </summary>
+        protected ModelGD()
+        {
+        }
 
         public string Name => GetType().Name;
 
@@ -45,14 +54,16 @@ namespace ML.Core.Models
             set => SetProperty(ref _weightInitial, value);
         }
 
+        public string WeightFile => $"{GetType().Name}.txt";
 
+        [YAXDontSerialize]
         public Variable[] Variables
         {
             get => _variables;
             set => SetProperty(ref _variables, value);
         }
 
-
+        [YAXDontSerialize]
         /// <summary>
         ///     [Labels,Features]
         /// </summary>
@@ -77,7 +88,7 @@ namespace ML.Core.Models
             var enumerable = Enumerable.Range(0, featureCount * labelCount);
 
             Variables = enumerable
-                .Select(i => new Variable())
+                .Select(_ => new Variable())
                 .ToArray();
 
 
@@ -121,6 +132,26 @@ namespace ML.Core.Models
         {
             var datas = new Dataset<T>(new[] {data});
             return Call(datas.ToDatasetNDarray().Feature)[0];
+        }
+
+        public void Save(string filename)
+        {
+            np.savetxt(WeightFile, Weights);
+            using var stream = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.Read);
+            var serializer = new YAXSerializer(typeof(ModelGD<T>));
+            using var textWriter = new StreamWriter(stream);
+            serializer.Serialize(this, textWriter);
+            textWriter.Flush();
+        }
+
+        public IModel<T> Load(string filename)
+        {
+            using var stream = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.Read);
+            var serializer = new YAXSerializer(typeof(ModelGD<T>));
+            using var textWriter = new StreamReader(stream);
+            var model = (IModelGD<T>) serializer.Deserialize(textWriter);
+            model.Weights = np.loadtxt(model.WeightFile);
+            return model;
         }
 
         public void UpdateWeights(NDarray weightNDarray)
