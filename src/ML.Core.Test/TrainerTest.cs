@@ -48,13 +48,7 @@ namespace ML.Core.Test
                 TrainPlan = new TrainPlan {Epoch = 100, BatchSize = 25},
                 Metrics = new ObservableCollection<Metric>
                 {
-                    new ExplainedVariance(),
-                    new LogCoshError(),
-                    new MeanAbsoluteError(),
-                    new MeanAbsolutePercentageError(),
-                    new MeanRelativeError(),
-                    new MeanSquaredError(),
-                    new RSquared()
+                    new MeanSquaredError()
                 },
                 Print = _testOutputHelper.WriteLine
             };
@@ -62,6 +56,7 @@ namespace ML.Core.Test
             await trainer.Fit();
             print(trainer.ModelGd);
         }
+
 
         [Fact]
         public async Task TestPolyRegression()

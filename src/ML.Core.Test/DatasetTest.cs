@@ -100,6 +100,15 @@ namespace ML.Core.Test
         }
 
         [Fact]
+        public void DataSetLoadIrisOneHot()
+        {
+            var path = Path.Combine(dataFolder, "iris-train.txt");
+            var dataset = TextLoader<IrisDataOneHot>.LoadDataSet(path, splitChar: '\t');
+            print(dataset);
+            print(dataset.ToDatasetNDarray().Label);
+        }
+
+        [Fact]
         public void DataSetLoadMultiIris()
         {
             var pathes = new[]

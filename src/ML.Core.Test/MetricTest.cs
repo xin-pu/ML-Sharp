@@ -1,5 +1,15 @@
-﻿using FluentAssertions;
+﻿using System.Collections.ObjectModel;
+using System.IO;
+using System.Threading.Tasks;
+using FluentAssertions;
+using ML.Core.Data.Loader;
+using ML.Core.Losses;
+using ML.Core.Metrics;
 using ML.Core.Metrics.Regression;
+using ML.Core.Models;
+using ML.Core.Optimizers;
+using ML.Core.Test.DataStructs;
+using ML.Core.Trainers;
 using Numpy;
 using Xunit;
 using Xunit.Abstractions;
@@ -91,6 +101,37 @@ namespace ML.Core.Test
                 np.array(1, 3, 2, 3),
                 np.array(2, 4, 6, 8));
             metrix.Should().Be(1.25);
+        }
+
+
+        [Fact]
+        public async Task TestMultiMetrics()
+        {
+            var dataFolder = @"..\..\..\..\..\data";
+            var path = Path.Combine(dataFolder, "data_singlevar.txt");
+
+            var trainer = new GDTrainer<LinearData>
+            {
+                TrainDataset = TextLoader<LinearData>.LoadDataSet(path, false).Shuffle(),
+                ModelGd = new MultipleLinearRegression<LinearData>(),
+                Optimizer = new Momentum(1E-1),
+                Loss = new MeanSquared(),
+                TrainPlan = new TrainPlan {Epoch = 50, BatchSize = 25},
+                Metrics = new ObservableCollection<Metric>
+                {
+                    new ExplainedVariance(),
+                    new LogCoshError(),
+                    new MeanAbsoluteError(),
+                    new MeanAbsolutePercentageError(),
+                    new MeanRelativeError(),
+                    new MeanSquaredError(),
+                    new RSquared()
+                },
+                Print = _testOutputHelper.WriteLine
+            };
+
+            await trainer.Fit();
+            print(trainer.ModelGd);
         }
     }
 }

@@ -5,7 +5,7 @@ using Numpy;
 
 namespace ML.Core.Models
 {
-    public interface IModelGD<T> : IModel
+    public interface IModelGD<T> : IModel<T>
         where T : DataView
     {
         Variable[] Variables { set; get; }

@@ -45,11 +45,13 @@ namespace ML.Core.Models
             set => SetProperty(ref _weightInitial, value);
         }
 
+
         public Variable[] Variables
         {
             get => _variables;
             set => SetProperty(ref _variables, value);
         }
+
 
         /// <summary>
         ///     [Labels,Features]
@@ -72,7 +74,7 @@ namespace ML.Core.Models
 
             var featureCount = transformNDarray.shape[1];
             var labelCount = dataview.Label.shape[1];
-            var enumerable = Enumerable.Range(0, featureCount);
+            var enumerable = Enumerable.Range(0, featureCount * labelCount);
 
             Variables = enumerable
                 .Select(i => new Variable())
@@ -114,6 +116,12 @@ namespace ML.Core.Models
         /// <param name="features">[batch size, ... ]</param>
         /// <returns>[batch size, labels]</returns>
         public abstract NDarray Call(NDarray features);
+
+        public NDarray Call(T data)
+        {
+            var datas = new Dataset<T>(new[] {data});
+            return Call(datas.ToDatasetNDarray().Feature)[0];
+        }
 
         public void UpdateWeights(NDarray weightNDarray)
         {
