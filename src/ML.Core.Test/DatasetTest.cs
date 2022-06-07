@@ -121,15 +121,6 @@ namespace ML.Core.Test
         }
 
 
-        //[Fact]
-        //public void DataSetLoadOptdigits()
-        //{
-        //    var path = Path.Combine(dataFolder, "optdigits-train.csv");
-        //    var dataset = TextLoader<OptdigitData>.LoadDataSet(path, splitChar: ',');
-        //    print(dataset);
-        //}
-
-
         [Fact]
         public void DataSetToNDarray()
         {
