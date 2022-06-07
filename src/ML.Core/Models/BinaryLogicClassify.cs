@@ -30,7 +30,6 @@ namespace ML.Core.Models
         public override NDarray Call(NDarray features)
         {
             var feature = Transformer.Call(features);
-
             var y_pred = nn.sigmoid(np.matmul(feature, Weights.T));
             return sign(y_pred);
         }

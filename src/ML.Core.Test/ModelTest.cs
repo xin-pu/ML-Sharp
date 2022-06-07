@@ -57,7 +57,7 @@ namespace ML.Core.Test
 
 
         [Fact]
-        public async Task TestBinaryLogicClassify()
+        public async Task TestPerceptron()
         {
             var trainDataset = GetIris("iris-train.txt");
             var valDataset = GetIris("iris-test.txt");
@@ -70,7 +70,7 @@ namespace ML.Core.Test
                 Optimizer = new Adam(1E-2),
                 Loss = new CategoricalCrossentropy(),
 
-                TrainPlan = new TrainPlan {Epoch = 100, BatchSize = 25},
+                TrainPlan = new TrainPlan {Epoch = 200, BatchSize = 10},
                 Metrics = new ObservableCollection<Metric> {new MeanAbsoluteError()},
 
                 Print = _testOutputHelper.WriteLine
