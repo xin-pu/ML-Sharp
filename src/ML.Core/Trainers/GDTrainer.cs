@@ -124,8 +124,9 @@ namespace ML.Core.Trainers
                     if (ValDataset != null)
                     {
                         var val_loss = UpdateLossMetric(ValDataset);
-                        trainMsg.Append($"Val_Loss:{val_loss:F4}\t");
-                        foreach (var metric in Metrics) trainMsg.Append($"Val-{metric}\t");
+                        trainMsg.Append("\tVal\t");
+                        trainMsg.Append($"[Loss]-V:{val_loss:F4}\t");
+                        foreach (var metric in Metrics) trainMsg.Append($"{metric}\t");
                     }
 
                     Print?.Invoke(trainMsg.ToString());

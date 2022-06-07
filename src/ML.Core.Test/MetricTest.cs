@@ -5,6 +5,7 @@ using FluentAssertions;
 using ML.Core.Data.Loader;
 using ML.Core.Losses;
 using ML.Core.Metrics;
+using ML.Core.Metrics.Categorical;
 using ML.Core.Metrics.Regression;
 using ML.Core.Models;
 using ML.Core.Optimizers;
@@ -132,6 +133,24 @@ namespace ML.Core.Test
 
             await trainer.Fit();
             print(trainer.ModelGd);
+        }
+
+        [Fact]
+        public void TestCategoricalAccuracy()
+        {
+            var y_true = np.array(new double[,] {{0, 0, 1}, {0, 1, 0}});
+            var y_pred = np.array(new[,] {{0.1, 0.9, 0.8}, {0.05, 0.95, 0}});
+            var metric = new CategoricalAccuracy().Call(y_true, y_pred);
+            print(metric);
+        }
+
+        [Fact]
+        public void TestCategoricalCrossentropy()
+        {
+            var y_true = np.array(new double[,] {{0, 1, 0}, {0, 0, 1}});
+            var y_pred = np.array(new[,] {{0.05, 0.95, 0}, {0.1, 0.8, 0.1}});
+            var metric = new CategoricalCrossentropy().Call(y_true, y_pred);
+            print(metric);
         }
     }
 }

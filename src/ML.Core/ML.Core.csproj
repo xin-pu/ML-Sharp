@@ -144,8 +144,8 @@
     <Compile Include="Losses\Regularization.cs" />
     <Compile Include="Losses\BinaryLosses\BinaryLeastSquares.cs" />
     <Compile Include="Losses\BinaryLosses\BinarySoftmax.cs" />
-    <Compile Include="Metrics\Categorical\Accuracy.cs" />
-    <Compile Include="Metrics\Categorical\ErrorRate.cs" />
+    <Compile Include="Metrics\Categorical\CategoricalAccuracy.cs" />
+    <Compile Include="Metrics\Categorical\CategoricalCrossentropy.cs" />
     <Compile Include="Metrics\Metric.cs" />
     <Compile Include="Metrics\Regression\ExplainedVariance.cs" />
     <Compile Include="Metrics\Regression\LogCoshError.cs" />

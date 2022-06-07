@@ -4,15 +4,15 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using ML.Core.Data;
 using ML.Core.Data.Loader;
-using ML.Core.Losses.CategoricalLosses;
 using ML.Core.Metrics;
-using ML.Core.Metrics.Regression;
+using ML.Core.Metrics.Categorical;
 using ML.Core.Models;
 using ML.Core.Optimizers;
 using ML.Core.Test.DataStructs;
 using ML.Core.Trainers;
 using Xunit;
 using Xunit.Abstractions;
+using CategoricalCrossentropy = ML.Core.Losses.CategoricalLosses.CategoricalCrossentropy;
 
 namespace ML.Core.Test
 {
@@ -67,11 +67,15 @@ namespace ML.Core.Test
                 TrainDataset = trainDataset.Shuffle(),
                 ValDataset = valDataset.Shuffle(),
                 ModelGd = new Perceptron<IrisDataOneHot>(3),
-                Optimizer = new Adam(1E-2),
+                Optimizer = new Nadam(1E-2),
                 Loss = new CategoricalCrossentropy(),
 
-                TrainPlan = new TrainPlan {Epoch = 200, BatchSize = 10},
-                Metrics = new ObservableCollection<Metric> {new MeanAbsoluteError()},
+                TrainPlan = new TrainPlan {Epoch = 100, BatchSize = 10},
+                Metrics = new ObservableCollection<Metric>
+                {
+                    new CategoricalAccuracy(),
+                    new Metrics.Categorical.CategoricalCrossentropy()
+                },
 
                 Print = _testOutputHelper.WriteLine
             };
