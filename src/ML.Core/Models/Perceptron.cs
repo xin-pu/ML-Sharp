@@ -27,7 +27,7 @@ namespace ML.Core.Models
         }
 
         public int Classes { set; get; }
-        public override string Description { get; }
+        public override string Description => "Perceptron";
 
         /// <summary>
         /// </summary>

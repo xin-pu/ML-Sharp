@@ -48,7 +48,7 @@ namespace ML.Core.Test
                 TrainPlan = new TrainPlan {Epoch = 100, BatchSize = 25},
                 Metrics = new ObservableCollection<Metric>
                 {
-                    new MeanSquaredError()
+                    new RSquared()
                 },
                 Print = _testOutputHelper.WriteLine
             };

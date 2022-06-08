@@ -24,6 +24,7 @@ namespace ML.Core.Models
         where T : DataView
     {
         private InitialWeigts _initialWeights = InitialWeigts.False;
+        private Transformer _transformer;
         private Variable[] _variables;
 
         private WeightInitial _weightInitial;
@@ -35,10 +36,15 @@ namespace ML.Core.Models
         {
         }
 
+        public abstract string Description { get; }
+
         public string Name => GetType().Name;
 
-        public Transformer Transformer { set; get; }
-
+        public Transformer Transformer
+        {
+            get => _transformer;
+            protected set => SetProperty(ref _transformer, value);
+        }
 
         public InitialWeigts InitialWeights
         {
@@ -46,15 +52,14 @@ namespace ML.Core.Models
             protected set => SetProperty(ref _initialWeights, value);
         }
 
-        public abstract string Description { get; }
-
         public WeightInitial WeightInitial
         {
             get => _weightInitial;
             set => SetProperty(ref _weightInitial, value);
         }
 
-        public string WeightFile => $"{GetType().Name}.txt";
+        public string WeightFile => $"{Name}.txt";
+
 
         [YAXDontSerialize]
         public Variable[] Variables
@@ -63,10 +68,10 @@ namespace ML.Core.Models
             set => SetProperty(ref _variables, value);
         }
 
-        [YAXDontSerialize]
         /// <summary>
         ///     [Labels,Features]
         /// </summary>
+        [YAXDontSerialize]
         public NDarray Weights
         {
             get => _weights;
@@ -91,7 +96,6 @@ namespace ML.Core.Models
                 .Select(_ => new Variable())
                 .ToArray();
 
-
             switch (WeightInitial)
             {
                 case WeightInitial.One:
@@ -109,17 +113,17 @@ namespace ML.Core.Models
             InitialWeights = InitialWeigts.True;
         }
 
+        public double[] GetWeightArray()
+        {
+            return Weights?.GetData<double>();
+        }
+
         /// <summary>
         /// </summary>
         /// <param name="features">[batch size, d1, d2, ... ]</param>
         /// <returns></returns>
         public abstract TermMatrix CallGraph(NDarray features);
 
-
-        public double[] GetWeightArray()
-        {
-            return Weights?.GetData<double>();
-        }
 
         /// <summary>
         ///     call by X*W
@@ -157,7 +161,6 @@ namespace ML.Core.Models
         public void UpdateWeights(NDarray weightNDarray)
         {
             weightNDarray.shape.Should().BeEquivalentTo(Weights.shape, "Weigts shape should keep.");
-
             Weights = weightNDarray;
         }
 
@@ -170,7 +173,7 @@ namespace ML.Core.Models
             if (InitialWeights == InitialWeigts.True)
             {
                 str.AppendLine($"ParaCount:\t{Variables.Length}");
-                str.AppendLine($"Weight:\t{Weights}");
+                str.AppendLine($"Weight:\r{Weights}");
             }
 
             return str.ToString();

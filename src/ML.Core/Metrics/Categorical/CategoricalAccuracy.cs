@@ -6,7 +6,7 @@ namespace ML.Core.Metrics.Categorical
     public class CategoricalAccuracy : Metric
     {
         /// <summary>
-        ///     Categorical Crossentropy
+        ///     Categorical Accuracy 多分类准确率
         ///     Calculates how often predictions match one-hot labels.
         /// </summary>
         public CategoricalAccuracy()

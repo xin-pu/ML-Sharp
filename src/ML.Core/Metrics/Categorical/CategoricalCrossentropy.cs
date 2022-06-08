@@ -4,6 +4,15 @@ namespace ML.Core.Metrics.Categorical
 {
     public class CategoricalCrossentropy : Metric
     {
+        /// <summary>
+        ///     Categorical Accuracy 多分类交叉熵
+        ///     Computes the cross entropy metric between the labels and predictions.
+        /// </summary>
+        /// </summary>
+        public CategoricalCrossentropy()
+        {
+        }
+
         public override string Describe =>
             "Computes the crossentropy metric between the labels and predictions.";
 
