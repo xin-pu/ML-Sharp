@@ -1,11 +1,11 @@
 ﻿using System.Text.RegularExpressions;
 using FluentAssertions;
-using MvvmCross.ViewModels;
+using GalaSoft.MvvmLight;
 using Numpy;
 
 namespace ML.Core.Metrics
 {
-    public abstract class Metric : MvxViewModel
+    public abstract class Metric : ViewModelBase
     {
         private string _logogram;
         private string _name;
@@ -22,7 +22,7 @@ namespace ML.Core.Metrics
         /// </summary>
         public double ValueError
         {
-            protected set => SetProperty(ref _valueError, value);
+            protected set => Set(ref _valueError, value);
             get => _valueError;
         }
 
@@ -31,7 +31,7 @@ namespace ML.Core.Metrics
         /// </summary>
         public string Name
         {
-            protected set => SetProperty(ref _name, value);
+            protected set => Set(ref _name, value);
             get => _name;
         }
 
@@ -40,7 +40,7 @@ namespace ML.Core.Metrics
         /// </summary>
         public string Logogram
         {
-            protected set => SetProperty(ref _logogram, value);
+            protected set => Set(ref _logogram, value);
             get => _logogram;
         }
 

@@ -24,7 +24,7 @@ namespace ML.Core.Transform
         public int Degree
         {
             get => _degree;
-            set => SetProperty(ref _degree, value);
+            set => Set(ref _degree, value);
         }
 
         public override NDarray Call(NDarray input)

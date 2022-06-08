@@ -3,10 +3,10 @@ using System.Linq;
 using System.Text;
 using AutoDiff;
 using FluentAssertions;
+using GalaSoft.MvvmLight;
 using ML.Core.Data;
 using ML.Core.Transform;
 using ML.Utility;
-using MvvmCross.ViewModels;
 using Numpy;
 using YAXLib;
 using YAXLib.Attributes;
@@ -20,7 +20,7 @@ namespace ML.Core.Models
     ///     需要定义转换器
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class ModelGD<T> : MvxViewModel, IModelGD<T>
+    public abstract class ModelGD<T> : ViewModelBase, IModelGD<T>
         where T : DataView
     {
         private InitialWeigts _initialWeights = InitialWeigts.False;
@@ -43,19 +43,19 @@ namespace ML.Core.Models
         public Transformer Transformer
         {
             get => _transformer;
-            protected set => SetProperty(ref _transformer, value);
+            protected set => Set(ref _transformer, value);
         }
 
         public InitialWeigts InitialWeights
         {
             get => _initialWeights;
-            protected set => SetProperty(ref _initialWeights, value);
+            protected set => Set(ref _initialWeights, value);
         }
 
         public WeightInitial WeightInitial
         {
             get => _weightInitial;
-            set => SetProperty(ref _weightInitial, value);
+            set => Set(ref _weightInitial, value);
         }
 
         public string WeightFile => $"{Name}.txt";
@@ -65,7 +65,7 @@ namespace ML.Core.Models
         public Variable[] Variables
         {
             get => _variables;
-            set => SetProperty(ref _variables, value);
+            set => Set(ref _variables, value);
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace ML.Core.Models
         public NDarray Weights
         {
             get => _weights;
-            set => SetProperty(ref _weights, value);
+            set => Set(ref _weights, value);
         }
 
 

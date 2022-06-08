@@ -30,13 +30,13 @@ namespace ML.Core.Transform
         public double Beta
         {
             get => _beta;
-            set => SetProperty(ref _beta, value);
+            set => Set(ref _beta, value);
         }
 
         public double Theta
         {
             get => _theta;
-            set => SetProperty(ref _theta, value);
+            set => Set(ref _theta, value);
         }
 
         public override NDarray Call(NDarray input)

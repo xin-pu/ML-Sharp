@@ -1,10 +1,10 @@
 ﻿using System;
-using MvvmCross.ViewModels;
+using GalaSoft.MvvmLight;
 using Numpy;
 
 namespace ML.Core.Optimizers
 {
-    public abstract class Optimizer : MvxViewModel
+    public abstract class Optimizer : ViewModelBase
     {
         internal const double epsilon = 1E-7;
 
@@ -35,19 +35,19 @@ namespace ML.Core.Optimizers
 
         public string Name
         {
-            protected set => SetProperty(ref _name, value);
+            protected set => Set(ref _name, value);
             get => _name;
         }
 
         public double WorkLearningRate
         {
-            protected set => SetProperty(ref _workLearningRate, value);
+            protected set => Set(ref _workLearningRate, value);
             get => _workLearningRate;
         }
 
         public double InitLearningRate
         {
-            protected set => SetProperty(ref _initLearningRate, value);
+            protected set => Set(ref _initLearningRate, value);
             get => _initLearningRate;
         }
 

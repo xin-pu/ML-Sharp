@@ -32,7 +32,7 @@ namespace ML.Core.Optimizers
         /// </summary>
         public double Rho
         {
-            set => SetProperty(ref _rho, value);
+            set => Set(ref _rho, value);
             get => _rho;
         }
 
@@ -45,7 +45,7 @@ namespace ML.Core.Optimizers
         /// </summary>
         public NDarray DeltaWeight
         {
-            protected set => SetProperty(ref _deltaWeight, value);
+            protected set => Set(ref _deltaWeight, value);
             get => _deltaWeight;
         }
 

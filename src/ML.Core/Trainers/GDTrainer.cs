@@ -5,17 +5,17 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoDiff;
 using FluentAssertions;
+using GalaSoft.MvvmLight;
 using ML.Core.Data;
 using ML.Core.Losses;
 using ML.Core.Metrics;
 using ML.Core.Models;
 using ML.Core.Optimizers;
-using MvvmCross.ViewModels;
 using Numpy;
 
 namespace ML.Core.Trainers
 {
-    public class GDTrainer<T> : MvxViewModel
+    public class GDTrainer<T> : ViewModelBase
         where T : DataView
     {
         private Loss _loss;
@@ -39,43 +39,43 @@ namespace ML.Core.Trainers
         public IModelGD<T> ModelGd
         {
             get => _modelGd;
-            set => SetProperty(ref _modelGd, value);
+            set => Set(ref _modelGd, value);
         }
 
         public Dataset<T> TrainDataset
         {
             get => _trainDataset;
-            set => SetProperty(ref _trainDataset, value);
+            set => Set(ref _trainDataset, value);
         }
 
         public Dataset<T> ValDataset
         {
             get => _valDataset;
-            set => SetProperty(ref _valDataset, value);
+            set => Set(ref _valDataset, value);
         }
 
         public Optimizer Optimizer
         {
             get => _optimizer;
-            set => SetProperty(ref _optimizer, value);
+            set => Set(ref _optimizer, value);
         }
 
         public Loss Loss
         {
             get => _loss;
-            set => SetProperty(ref _loss, value);
+            set => Set(ref _loss, value);
         }
 
         public ObservableCollection<Metric> Metrics
         {
             get => _metrics;
-            set => SetProperty(ref _metrics, value);
+            set => Set(ref _metrics, value);
         }
 
         public TrainPlan TrainPlan
         {
             get => _trainPlan;
-            set => SetProperty(ref _trainPlan, value);
+            set => Set(ref _trainPlan, value);
         }
 
         public async Task Fit()

@@ -34,7 +34,7 @@ namespace ML.Core.Optimizers
         /// </summary>
         public double Beta1
         {
-            set => SetProperty(ref _beta1, value);
+            set => Set(ref _beta1, value);
             get => _beta1;
         }
 
@@ -43,7 +43,7 @@ namespace ML.Core.Optimizers
         /// </summary>
         public double Beta2
         {
-            set => SetProperty(ref _beta2, value);
+            set => Set(ref _beta2, value);
             get => _beta2;
         }
 
@@ -52,7 +52,7 @@ namespace ML.Core.Optimizers
         /// </summary>
         public NDarray M
         {
-            protected set => SetProperty(ref _m, value);
+            protected set => Set(ref _m, value);
             get => _m;
         }
 
@@ -61,7 +61,7 @@ namespace ML.Core.Optimizers
         /// </summary>
         public NDarray G
         {
-            protected set => SetProperty(ref _g, value);
+            protected set => Set(ref _g, value);
             get => _g;
         }
 

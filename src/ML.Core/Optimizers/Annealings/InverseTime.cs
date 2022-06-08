@@ -24,7 +24,7 @@
 
         public double Beta
         {
-            set => SetProperty(ref _beta, value);
+            set => Set(ref _beta, value);
             get => _beta;
         }
 

@@ -1,9 +1,9 @@
 ﻿using System;
-using MvvmCross.ViewModels;
+using GalaSoft.MvvmLight;
 
 namespace ML.Core.Trainers
 {
-    public class TrainPlan : MvxViewModel
+    public class TrainPlan : ViewModelBase
     {
         private int _batchSize;
         private int _epoch;
@@ -13,13 +13,13 @@ namespace ML.Core.Trainers
         public int Epoch
         {
             get => _epoch;
-            set => SetProperty(ref _epoch, value);
+            set => Set(ref _epoch, value);
         }
 
         public int BatchSize
         {
             get => _batchSize;
-            set => SetProperty(ref _batchSize, value);
+            set => Set(ref _batchSize, value);
         }
 
         public void Check()

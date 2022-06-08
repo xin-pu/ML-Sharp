@@ -1,5 +1,5 @@
 ﻿using System.Text;
-using MvvmCross.ViewModels;
+using GalaSoft.MvvmLight;
 using Numpy;
 
 namespace ML.Core.Transform
@@ -7,7 +7,7 @@ namespace ML.Core.Transform
     /// <summary>
     ///     特征变换
     /// </summary>
-    public abstract class Transformer : MvxViewModel
+    public abstract class Transformer : ViewModelBase
     {
         public string Name => GetType().Name;
 

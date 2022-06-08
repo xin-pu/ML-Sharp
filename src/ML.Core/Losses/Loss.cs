@@ -2,13 +2,13 @@
 using System.Text;
 using AutoDiff;
 using FluentAssertions;
+using GalaSoft.MvvmLight;
 using ML.Utility;
-using MvvmCross.ViewModels;
 using Numpy;
 
 namespace ML.Core.Losses
 {
-    public abstract class Loss : MvxViewModel
+    public abstract class Loss : ViewModelBase
     {
         private double _lamdba;
         private Regularization _regularization;
@@ -36,7 +36,7 @@ namespace ML.Core.Losses
         public double Lamdba
         {
             get => _lamdba;
-            set => SetProperty(ref _lamdba, value);
+            set => Set(ref _lamdba, value);
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace ML.Core.Losses
         public Regularization Regularization
         {
             get => _regularization;
-            set => SetProperty(ref _regularization, value);
+            set => Set(ref _regularization, value);
         }
 
         public override string ToString()

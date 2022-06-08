@@ -24,7 +24,7 @@ namespace ML.Core.Transform
         public double Beta
         {
             get => _beta;
-            set => SetProperty(ref _beta, value);
+            set => Set(ref _beta, value);
         }
 
 

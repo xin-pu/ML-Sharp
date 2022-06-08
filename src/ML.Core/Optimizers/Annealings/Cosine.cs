@@ -27,7 +27,7 @@ namespace ML.Core.Optimizers
         /// </summary>
         public int TotalEpoch
         {
-            set => SetProperty(ref totalEpoch, value);
+            set => Set(ref totalEpoch, value);
             get => totalEpoch;
         }
 
