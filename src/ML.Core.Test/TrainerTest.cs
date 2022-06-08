@@ -43,7 +43,7 @@ namespace ML.Core.Test
                 TrainDataset = TextLoader<LinearData>.LoadDataSet(path, false).Shuffle(),
                 ModelGd = new MultipleLinearRegression(),
                 Optimizer = new Nesterov(1E-2),
-                Loss = new MeanSquared(1),
+                Loss = new MeanSquared(),
                 TrainPlan = new TrainPlan {Epoch = 100, BatchSize = 25},
                 Metrics = new ObservableCollection<Metric>
                 {

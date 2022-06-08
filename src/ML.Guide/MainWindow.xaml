@@ -52,15 +52,26 @@
                     Effect="{DynamicResource EffectShadow1}">
                 <TabControl TabStripPlacement="Right" DataContext="{Binding}">
                     <TabItem Header="TrainData" ToolTip="训练数据集" HorizontalAlignment="Left">
+                        <hc:PropertyGrid SelectedObject="{Binding TrainDataset}"/>
                     </TabItem>
-                    <TabItem Header="ValData" ToolTip="测试数据集" HorizontalAlignment="Left"></TabItem>
-                    <TabItem Header="Transform" ToolTip="特征变换" HorizontalAlignment="Left"></TabItem>
+                    <TabItem Header="ValData" ToolTip="测试数据集" HorizontalAlignment="Left">
+                        <hc:PropertyGrid SelectedObject="{Binding ValDataset}"/>
+                    </TabItem>
+                    <TabItem Header="Model" ToolTip="模型" HorizontalAlignment="Left">
+                        <hc:PropertyGrid SelectedObject="{Binding ModelGd}"/>
+                    </TabItem>
                     <TabItem Header="Optimizer" ToolTip="优化器" HorizontalAlignment="Left">
-                        <hc:PropertyGrid SelectedObject="{Binding Optimizer}"></hc:PropertyGrid>
+                        <hc:PropertyGrid SelectedObject="{Binding Optimizer}"/>
                     </TabItem>
-                    <TabItem Header="Loss" ToolTip="损失函数" HorizontalAlignment="Left"></TabItem>
-                    <TabItem Header="Metric" ToolTip="测试评估器" HorizontalAlignment="Left"></TabItem>
-                    <TabItem Header="TrainPlan" ToolTip="训练计划" HorizontalAlignment="Left"></TabItem>
+                    <TabItem Header="Loss" ToolTip="损失函数" HorizontalAlignment="Left">
+                        <hc:PropertyGrid SelectedObject="{Binding Loss}"/>
+                    </TabItem>
+                    <TabItem Header="Metric" ToolTip="测试评估器" HorizontalAlignment="Left">
+                        <ListView ItemsSource="{Binding Metrics}"></ListView>
+                    </TabItem>
+                    <TabItem Header="TrainPlan" ToolTip="训练计划" HorizontalAlignment="Left">
+                        <hc:PropertyGrid SelectedObject="{Binding TrainPlan}"/>
+                    </TabItem>
                 </TabControl>
             </Border>
         </Grid>

@@ -13,13 +13,12 @@ namespace ML.Core.Losses
         /// </summary>
         /// <param name="lamdba"></param>
         /// <param name="regularization"></param>
-        public MeanSquared(
-            double lamdba = 1E-4,
-            Regularization regularization = Regularization.None)
-            : base(lamdba, regularization)
+        public MeanSquared()
         {
         }
 
+        public override string Describe =>
+            "最小二乘损失\r\n J(la)= square(y_true - y_pred)";
 
         internal override void checkLabels(NDarray y_true)
         {

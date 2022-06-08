@@ -16,13 +16,11 @@ namespace ML.Core.Losses
         /// </summary>
         /// <param name="lamdba"></param>
         /// <param name="regularization"></param>
-        public BinaryLeastSquares(
-            LabelType labelType = LabelType.Probability,
-            double lamdba = 1E-4,
-            Regularization regularization = Regularization.None)
-            : base(labelType, lamdba, regularization)
+        public BinaryLeastSquares()
         {
         }
+
+        public override string Describe => "二分类最小二乘损失\r\nJ(la) = sigma((y_p-y_t)^2)";
 
         internal override void checkLabels(NDarray y_true)
         {

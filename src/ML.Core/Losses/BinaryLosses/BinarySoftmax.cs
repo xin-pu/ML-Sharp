@@ -14,13 +14,11 @@ namespace ML.Core.Losses
         /// </summary>
         /// <param name="lamdba"></param>
         /// <param name="regularization"></param>
-        public BinarySoftmax(
-            LabelType labelType = LabelType.Probability,
-            double lamdba = 1E-4,
-            Regularization regularization = Regularization.None)
-            : base(labelType, lamdba, regularization)
+        public BinarySoftmax()
         {
         }
+
+        public override string Describe => "二分类Softmax损失\r\nJ(la)= sigma ( log(1+e^(-y_t*y_p) )";
 
         internal override void checkLabels(NDarray y_true)
         {

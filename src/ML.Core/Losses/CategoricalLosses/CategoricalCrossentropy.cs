@@ -16,13 +16,12 @@ namespace ML.Core.Losses.CategoricalLosses
         /// </summary>
         /// <param name="lamdba"></param>
         /// <param name="regularization"></param>
-        public CategoricalCrossentropy(
-            double lamdba = 1E-4,
-            Regularization regularization = Regularization.None)
-            : base(lamdba, regularization)
+        public CategoricalCrossentropy()
         {
         }
 
+        public override string Describe =>
+            " 分类交叉熵损失（one-hot label)\r\nJ(la)= -sigma(log(e^y_t)/sigma(e^y))/P";
 
         internal override void checkLabels(NDarray y_true)
         {

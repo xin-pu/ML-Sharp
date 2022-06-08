@@ -13,13 +13,12 @@ namespace ML.Core.Losses
         /// </summary>
         /// <param name="lamdba"></param>
         /// <param name="regularization"></param>
-        public MeanAbsolute(
-            double lamdba = 1E-4,
-            Regularization regularization = Regularization.None)
-            : base(lamdba, regularization)
+        public MeanAbsolute()
         {
         }
 
+        public override string Describe =>
+            "最小绝对值损失(one-hot label)\r\nJ(la) = abs(y_true - y_pred)";
 
         internal override void checkLabels(NDarray y_true)
         {

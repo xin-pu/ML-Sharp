@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.ComponentModel;
 using GalaSoft.MvvmLight;
 
 namespace ML.Core.Trainers
@@ -8,27 +8,19 @@ namespace ML.Core.Trainers
         private int _batchSize;
         private int _epoch;
 
-        public Func<bool> EarlyStoping { set; get; } = () => false;
 
+        [Category("Configuration")]
         public int Epoch
         {
             get => _epoch;
             set => Set(ref _epoch, value);
         }
 
+        [Category("Configuration")]
         public int BatchSize
         {
             get => _batchSize;
             set => Set(ref _batchSize, value);
-        }
-
-        public void Check()
-        {
-        }
-
-        public void GiveEarlyStoping(Func<bool> func)
-        {
-            EarlyStoping = func;
         }
     }
 }

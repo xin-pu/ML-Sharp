@@ -14,13 +14,11 @@ namespace ML.Core.Losses
         /// </summary>
         /// <param name="lamdba"></param>
         /// <param name="regularization"></param>
-        public BinaryCrossentropy(
-            LabelType labelType = LabelType.Probability,
-            double lamdba = 1E-4,
-            Regularization regularization = Regularization.None)
-            : base(labelType, lamdba, regularization)
+        public BinaryCrossentropy()
         {
         }
+
+        public override string Describe => "二分类交叉熵损失\r\nJ(la) = -sigma (y_t*log(y_p)+(1-y_t)*log(1-y_p)";
 
         internal override void checkLabels(NDarray y_true)
         {

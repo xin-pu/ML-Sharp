@@ -1,11 +1,12 @@
-﻿using AutoDiff;
+﻿using System.ComponentModel;
+using AutoDiff;
 using Numpy;
 
 namespace ML.Core.Losses
 {
     public abstract class CategoricalLoss : Loss
     {
-        private LabelType _labelType;
+        private LabelType _labelType = LabelType.Probability;
 
         /// <summary>
         ///     分类损失抽象类
@@ -13,15 +14,11 @@ namespace ML.Core.Losses
         /// <param name="regularization1"></param>
         /// <param name="lamdba"></param>
         /// <param name="regularization"></param>
-        protected CategoricalLoss(
-            LabelType labelType = LabelType.Probability,
-            double lamdba = 1E-4,
-            Regularization regularization = Regularization.None)
-            : base(lamdba, regularization)
+        protected CategoricalLoss()
         {
-            LabelType = labelType;
         }
 
+        [Category("Configuration")]
         public LabelType LabelType
         {
             get => _labelType;

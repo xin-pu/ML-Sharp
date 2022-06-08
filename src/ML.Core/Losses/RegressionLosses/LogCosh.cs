@@ -13,12 +13,12 @@ namespace ML.Core.Losses
         /// </summary>
         /// <param name="lamdba"></param>
         /// <param name="regularization"></param>
-        public LogCosh(
-            double lamdba = 1E-4,
-            Regularization regularization = Regularization.None)
-            : base(lamdba, regularization)
+        public LogCosh()
         {
         }
+
+        public override string Describe =>
+            "最小绝对值损失（one-hot label)\r\n J(la)=log((exp(x)+exp(-x))/2), where x is the error y_pred - y_trueP";
 
         internal override void checkLabels(NDarray y_true)
         {

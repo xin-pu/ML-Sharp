@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.ComponentModel;
+using System.Linq;
 using System.Text;
 using AutoDiff;
 using FluentAssertions;
@@ -10,29 +11,25 @@ namespace ML.Core.Losses
 {
     public abstract class Loss : ViewModelBase
     {
-        private double _lamdba;
-        private Regularization _regularization;
+        private double _lamdba = 1E-4;
+        private Regularization _regularization = Regularization.None;
 
         /// <summary>
         ///     损失抽象类
         /// </summary>
         /// <param name="lamdba"></param>
         /// <param name="regularization">regularization type</param>
-        protected Loss(double lamdba = 1E-4,
-            Regularization regularization = Regularization.None)
+        protected Loss()
         {
-            Lamdba = lamdba;
-            Regularization = regularization;
         }
 
-        public string Name => GetType().Name;
-
-        public Term LossTerm { protected set; get; }
+        [Category("Tag")] public string Name => GetType().Name;
 
 
         /// <summary>
         ///     正则化，惩罚参数
         /// </summary>
+        [Category("Configuration")]
         public double Lamdba
         {
             get => _lamdba;
@@ -42,11 +39,14 @@ namespace ML.Core.Losses
         /// <summary>
         ///     正则模式，约束模式
         /// </summary>
+        [Category("Configuration")]
         public Regularization Regularization
         {
             get => _regularization;
             set => Set(ref _regularization, value);
         }
+
+        [Category("Tag")] public abstract string Describe { get; }
 
         public override string ToString()
         {
@@ -112,11 +112,11 @@ namespace ML.Core.Losses
         {
             switch (regularization)
             {
-                case Regularization.L1:
+                case Regularization.Lasso_L1:
                     return lamdba * getLassoLoss(variables);
-                case Regularization.L2:
+                case Regularization.Ridge_L2:
                     return lamdba * getRidgeLoss(variables) / 2;
-                case Regularization.LP:
+                case Regularization.ElasticNet_LP:
                     return (1 - lamdba) * getLassoLoss(variables) + lamdba * getRidgeLoss(variables);
                 case Regularization.None:
                 default:

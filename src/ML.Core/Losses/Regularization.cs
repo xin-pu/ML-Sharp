@@ -6,11 +6,8 @@
     public enum Regularization
     {
         None = 0,
-        L1 = 1,
-        L2 = 2,
-        LP = 3,
-        Ridge = 2,
-        Lasso = 1,
-        ElasticNet = 3
+        Lasso_L1 = 1,
+        Ridge_L2 = 2,
+        ElasticNet_LP = 3
     }
 }

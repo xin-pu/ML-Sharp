@@ -21,18 +21,17 @@ namespace ML.Guide
             DataContext = Data;
         }
 
-        public GDTrainer<DataView> Data { set; get; }
+        public GDTrainer Data { set; get; }
 
         private void Initial()
         {
-            Data = new GDTrainer<DataView>
+            Data = new GDTrainer
             {
                 TrainDataset = new Dataset<DataView>(new DataView[] { }),
                 ValDataset = new Dataset<DataView>(new DataView[] { }),
-                ModelGd = new BinaryLogicClassify<DataView>(),
+                ModelGd = new BinaryLogicClassify(),
                 Optimizer = new Nesterov(1E-2),
                 Loss = new BinaryCrossentropy(),
-
                 TrainPlan = new TrainPlan {Epoch = 100, BatchSize = 25},
                 Metrics = new ObservableCollection<Metric> {new MeanAbsoluteError()}
             };

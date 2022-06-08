@@ -61,7 +61,7 @@ namespace ML.Core.Test
             loss1.Should().Be(0);
 
             yPred = np.array(-18.6, 0.51, 2.94, -12.8);
-            var loss2 = new BinaryLeastSquares(LabelType.Logits).GetLoss(yPred, yTrue);
+            var loss2 = new BinaryLeastSquares {LabelType = LabelType.Logits}.GetLoss(yPred, yTrue);
             print(loss2);
         }
 
@@ -76,7 +76,7 @@ namespace ML.Core.Test
 
 
             yPred = np.array(-18.6, 0.51, 2.94, -12.8);
-            var loss2 = new BinaryLeastSquares(LabelType.Logits).GetLoss(yPred, yTrue);
+            var loss2 = new BinaryLeastSquares {LabelType = LabelType.Logits}.GetLoss(yPred, yTrue);
             print(loss2);
         }
 
@@ -90,7 +90,7 @@ namespace ML.Core.Test
             print(loss1);
 
             yPred = np.array(-18.6, 0.51, 2.94, -12.8);
-            var loss2 = new BinarySoftmax(LabelType.Logits).GetLoss(yPred, yTrue);
+            var loss2 = new BinarySoftmax {LabelType = LabelType.Logits}.GetLoss(yPred, yTrue);
             print(loss2);
         }
 

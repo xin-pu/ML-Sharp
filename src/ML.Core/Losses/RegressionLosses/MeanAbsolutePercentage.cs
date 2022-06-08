@@ -9,16 +9,16 @@ namespace ML.Core.Losses
         /// <summary>
         ///     最小绝对值损失
         ///     Computes the mean absolute percentage error between y_true and y_pred.
-        ///     J(la) = 100 * abs((y_true - y_pred) / y_true)
+        ///     J(la) = abs((y_true - y_pred) / y_true)
         /// </summary>
         /// <param name="lamdba"></param>
         /// <param name="regularization"></param>
-        public MeanAbsolutePercentage(
-            double lamdba = 1E-4,
-            Regularization regularization = Regularization.None)
-            : base(lamdba, regularization)
+        public MeanAbsolutePercentage()
         {
         }
+
+        public override string Describe =>
+            "最小绝对值损失\r\n J(la) = abs((y_true - y_pred) / y_true)";
 
         internal override void checkLabels(NDarray y_true)
         {
