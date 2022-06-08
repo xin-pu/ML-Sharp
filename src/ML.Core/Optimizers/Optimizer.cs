@@ -1,15 +1,21 @@
 ﻿using System;
+using MvvmCross.ViewModels;
 using Numpy;
 
 namespace ML.Core.Optimizers
 {
-    public abstract class Optimizer
+    public abstract class Optimizer : MvxViewModel
     {
         internal const double epsilon = 1E-7;
+
+        private double _initLearningRate;
+        private string _name;
+        private double _workLearningRate;
 
         public Action<string> AppendRecord;
 
         internal Func<NDarray, NDarray> CalGradient;
+
 
         /// <summary>
         ///     优化器
@@ -18,13 +24,32 @@ namespace ML.Core.Optimizers
         protected Optimizer(
             double learningrate)
         {
-            Name = GetType().Name;
             InitLearningRate = WorkLearningRate = learningrate;
         }
 
-        public string Name { protected set; get; }
-        public double WorkLearningRate { protected set; get; }
-        public double InitLearningRate { protected set; get; }
+        protected Optimizer()
+        {
+            Name = GetType().Name;
+            InitLearningRate = WorkLearningRate = 1E-3;
+        }
+
+        public string Name
+        {
+            protected set => SetProperty(ref _name, value);
+            get => _name;
+        }
+
+        public double WorkLearningRate
+        {
+            protected set => SetProperty(ref _workLearningRate, value);
+            get => _workLearningRate;
+        }
+
+        public double InitLearningRate
+        {
+            protected set => SetProperty(ref _initLearningRate, value);
+            get => _initLearningRate;
+        }
 
         /// <summary>
         ///     Core optimize function to update weights

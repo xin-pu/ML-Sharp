@@ -13,7 +13,7 @@ namespace ML.Core.Metrics.Regression
         {
         }
 
-        public override string Describe { get; } =
+        public override string Describe =>
             "R-Squared (R² or the coefficient of determination) is " +
             "a statistical measure in a regression model " +
             "that determines the proportion of variance in the dependent";

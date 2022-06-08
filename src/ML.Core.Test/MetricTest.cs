@@ -115,7 +115,7 @@ namespace ML.Core.Test
             {
                 TrainDataset = TextLoader<LinearData>.LoadDataSet(path, false).Shuffle(),
                 ModelGd = new MultipleLinearRegression<LinearData>(),
-                Optimizer = new Momentum(1E-1),
+                Optimizer = new Momentum(1E-2),
                 Loss = new MeanSquared(),
                 TrainPlan = new TrainPlan {Epoch = 50, BatchSize = 25},
                 Metrics = new ObservableCollection<Metric>

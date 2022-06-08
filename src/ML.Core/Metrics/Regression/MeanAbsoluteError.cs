@@ -12,7 +12,8 @@ namespace ML.Core.Metrics.Regression
         {
         }
 
-        public override string Describe => "Computes the mean absolute error between the labels and predictions.";
+        public override string Describe =>
+            "Computes the mean absolute error between the labels and predictions.";
 
         internal override double call(NDarray y_true, NDarray y_pred)
         {

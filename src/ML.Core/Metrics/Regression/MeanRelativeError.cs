@@ -12,7 +12,8 @@ namespace ML.Core.Metrics.Regression
         {
         }
 
-        public override string Describe => "Computes the mean relative error by normalizing with the given values.";
+        public override string Describe =>
+            "Computes the mean relative error by normalizing with the given values.";
 
         internal override double call(NDarray y_true, NDarray y_pred)
         {

@@ -6,12 +6,25 @@ namespace ML.Core.Optimizers
     /// </summary>
     public class AdaGrad : Optimizer
     {
+        private NDarray _g;
+
+        /// <summary>
+        ///     自适应学习率
+        ///     Adapter Gradient Algorithm
+        ///     每次迭代时自适应地调整每个参数的学习率
+        ///     初始学习率1E-3
+        /// </summary>
+        public AdaGrad()
+        {
+        }
+
+
         /// <summary>
         ///     自适应学习率
         ///     Adapter Gradient Algorithm
         ///     每次迭代时自适应地调整每个参数的学习率
         /// </summary>
-        /// <param name="beta">学习率</param>
+        /// <param name="workLearningRate"></param>
         public AdaGrad(double workLearningRate)
             : base(workLearningRate)
         {
@@ -20,7 +33,11 @@ namespace ML.Core.Optimizers
         /// <summary>
         ///     参数梯度平方的累计值
         /// </summary>
-        public NDarray G { protected set; get; }
+        public NDarray G
+        {
+            protected set => SetProperty(ref _g, value);
+            get => _g;
+        }
 
         internal override NDarray call(NDarray weight, int epoch)
         {

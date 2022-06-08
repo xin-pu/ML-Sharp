@@ -74,7 +74,7 @@ namespace ML.Core.Test
         [Fact]
         public void TestAdaDelta()
         {
-            var adaDelta = new AdaDelta(1E-1);
+            var adaDelta = new AdaDelta();
             var weight = Weight.copy();
 
             Enumerable.Range(0, 2).ToList().ForEach(_ =>

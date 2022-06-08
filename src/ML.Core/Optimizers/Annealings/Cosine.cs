@@ -4,17 +4,32 @@ namespace ML.Core.Optimizers
 {
     public class Cosine : Annealing
     {
+        private int totalEpoch = 100;
+
+
+        /// <summary>
+        ///     余弦衰减
+        /// </summary>
+        public Cosine()
+        {
+        }
+
         /// <summary>
         ///     余弦衰减
         /// </summary>
         /// <param name="learningrate">初始学习率</param>
-        /// <param name="totalepoch">迭代次数</param>
-        public Cosine(double learningrate, int totalepoch) : base(learningrate)
+        public Cosine(double learningrate) : base(learningrate)
         {
-            TotalEpoch = totalepoch;
         }
 
-        public int TotalEpoch { protected get; set; }
+        /// <summary>
+        ///     总迭代次数
+        /// </summary>
+        public int TotalEpoch
+        {
+            set => SetProperty(ref totalEpoch, value);
+            get => totalEpoch;
+        }
 
         internal override double UpdateLearningRate(int epoch)
         {

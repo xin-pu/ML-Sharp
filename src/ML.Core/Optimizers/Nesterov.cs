@@ -4,21 +4,37 @@ namespace ML.Core.Optimizers
 {
     public class Nesterov : Optimizer
     {
+        private NDarray _deltaWeight;
+        private double _rho = 0.9;
+
+
+        /// <summary>
+        ///     SGD with Nesterov Accelerated Gradient
+        ///     Nesterov 加速梯度
+        ///     初始学习率1E-3, Rho=0.9
+        /// </summary>
+        public Nesterov()
+        {
+        }
+
         /// <summary>
         ///     SGD with Nesterov Accelerated Gradient
         ///     Nesterov 加速梯度
         /// </summary>
-        /// <param name="learningrate"></param>
-        public Nesterov(double learningrate, double rho = 0.9)
+        /// <param name="learningrate">初始学习率</param>
+        public Nesterov(double learningrate)
             : base(learningrate)
         {
-            Rho = rho;
         }
 
         /// <summary>
         ///     动量因子
         /// </summary>
-        public double Rho { set; get; }
+        public double Rho
+        {
+            set => SetProperty(ref _rho, value);
+            get => _rho;
+        }
 
         /// <summary>
         ///     负梯度的加权移动平均 => 参数更新方向
@@ -27,7 +43,11 @@ namespace ML.Core.Optimizers
         ///     w=w+σθ
         ///     《神经网络与深度学习》 P167
         /// </summary>
-        public NDarray DeltaWeight { protected set; get; }
+        public NDarray DeltaWeight
+        {
+            protected set => SetProperty(ref _deltaWeight, value);
+            get => _deltaWeight;
+        }
 
         internal override NDarray call(NDarray weight, int epoch)
         {

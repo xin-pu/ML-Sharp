@@ -5,6 +5,13 @@
         /// <summary>
         ///     学习率退火
         /// </summary>
+        protected Annealing()
+        {
+        }
+
+        /// <summary>
+        ///     学习率退火
+        /// </summary>
         /// <param name="learningrate"></param>
         protected Annealing(double learningrate)
             : base(learningrate)

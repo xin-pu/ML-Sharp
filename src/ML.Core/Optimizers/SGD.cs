@@ -3,12 +3,27 @@
 namespace ML.Core.Optimizers
 {
     /// <summary>
-    ///     variables=variables-η*f'(variables)
     ///     一维梯度下降
     /// </summary>
     public class SGD : Optimizer
     {
-        public SGD(double workLearningRate) : base(workLearningRate)
+        /// <summary>
+        ///     随机梯度下降
+        ///     variables=variables-η*f'(variables)
+        ///     默认初始学习率1E-3
+        /// </summary>
+        public SGD()
+        {
+        }
+
+
+        /// <summary>
+        ///     随机梯度下降
+        ///     variables=variables-η*f'(variables)
+        /// </summary>
+        /// <param name="workLearningRate">初始学习率</param>
+        public SGD(double workLearningRate)
+            : base(workLearningRate)
         {
         }
 

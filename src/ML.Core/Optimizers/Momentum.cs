@@ -4,23 +4,37 @@ namespace ML.Core.Optimizers
 {
     public class Momentum : Optimizer
     {
+        private NDarray _deltaTheda;
+        private double _rho = 0.9;
+
+        /// <summary>
+        ///     SGD with Momentum
+        ///     动量法
+        ///     1.可以使用较大的学习率
+        /// </summary>
+        public Momentum()
+        {
+        }
+
         /// <summary>
         ///     SGD with Momentum
         ///     动量法
         ///     1.可以使用较大的学习率
         /// </summary>
         /// <param name="learningrate"></param>
-        /// <param name="rho"></param>
-        public Momentum(double learningrate, double rho = 0.9)
+        public Momentum(double learningrate)
             : base(learningrate)
         {
-            Rho = rho;
         }
 
         /// <summary>
         ///     动量因子
         /// </summary>
-        public double Rho { set; get; }
+        public double Rho
+        {
+            set => SetProperty(ref _rho, value);
+            get => _rho;
+        }
 
         /// <summary>
         ///     负梯度的加权移动平均 => 参数更新方向
@@ -28,7 +42,11 @@ namespace ML.Core.Optimizers
         ///     w=w+σθ
         ///     《神经网络与深度学习》 P167
         /// </summary>
-        public NDarray DeltaTheda { protected set; get; }
+        public NDarray DeltaTheda
+        {
+            protected set => SetProperty(ref _deltaTheda, value);
+            get => _deltaTheda;
+        }
 
         internal override NDarray call(NDarray weight, int epoch)
         {

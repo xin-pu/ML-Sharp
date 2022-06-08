@@ -4,18 +4,31 @@ namespace ML.Core.Optimizers
 {
     public class Exponential : Annealing
     {
+        private double _beta = 0.96;
+
+
         /// <summary>
         ///     学习率指数衰减
         /// </summary>
         /// <param name="learningrate">初始学习率</param>
-        /// <param name="beta">衰减率</param>
-        public Exponential(double learningrate, double beta = 0.96)
-            : base(learningrate)
+        public Exponential()
         {
-            Beta = beta;
         }
 
-        public double Beta { protected set; get; }
+        /// <summary>
+        ///     学习率指数衰减
+        /// </summary>
+        /// <param name="learningrate">初始学习率</param>
+        public Exponential(double learningrate)
+            : base(learningrate)
+        {
+        }
+
+        public double Beta
+        {
+            set => SetProperty(ref _beta, value);
+            get => _beta;
+        }
 
         internal override double UpdateLearningRate(int epoch)
         {

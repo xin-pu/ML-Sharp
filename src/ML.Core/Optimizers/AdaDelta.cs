@@ -4,42 +4,67 @@ namespace ML.Core.Optimizers
 {
     public class AdaDelta : Optimizer
     {
-        public AdaDelta(double beta = 0.9) : base(0)
+        private double _beta = 0.9;
+        private NDarray _g;
+        private NDarray _learningRate;
+        private NDarray _x;
+
+        /// <summary>
+        ///     Ada Delta
+        ///     初始学习率位动态计算的Sqrt(X)
+        /// </summary>
+        public AdaDelta()
         {
-            Beta = beta;
         }
 
         /// <summary>
         ///     衰减率
         /// </summary>
-        public double Beta { protected set; get; }
+        public double Beta
+        {
+            set => SetProperty(ref _beta, value);
+            get => _beta;
+        }
 
         /// <summary>
         ///     参数梯度平方的累计值
         /// </summary>
-        public NDarray G { protected set; get; }
+        public NDarray G
+        {
+            protected set => SetProperty(ref _g, value);
+            get => _g;
+        }
 
         /// <summary>
         ///     参数更新差值δθ的平方的指数衰减权移动平均
         /// </summary>
-        public NDarray Χ { protected set; get; }
+        public NDarray X
+        {
+            protected set => SetProperty(ref _x, value);
+            get => _x;
+        }
 
+        public NDarray LearningRate
+        {
+            protected set => SetProperty(ref _learningRate, value);
+            get => _learningRate;
+        }
 
         internal override NDarray call(NDarray weight, int epoch)
         {
             if (epoch == 0)
             {
                 G = np.zeros_like(weight);
-                Χ = np.zeros_like(weight);
+                X = np.zeros_like(weight);
             }
 
             var grad = CalGradient(weight);
             G = Beta * G + (1 - Beta) * np.square(grad);
 
-            var deltaGrad = np.multiply(np.sqrt((Χ + epsilon) / (G + epsilon)), grad);
+            var deltaGrad = np.multiply(np.sqrt((X + epsilon) / (G + epsilon)), grad);
 
-            Χ = Beta * Χ + (1 - Beta) * np.square(deltaGrad);
-
+            X = Beta * X + (1 - Beta) * np.square(deltaGrad);
+            LearningRate = np.sqrt(X);
             return weight - deltaGrad;
         }
     }

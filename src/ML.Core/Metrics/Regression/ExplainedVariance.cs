@@ -12,7 +12,7 @@ namespace ML.Core.Metrics.Regression
         {
         }
 
-        public override string Describe => "";
+        public override string Describe => "Explained Variance.";
 
         internal override double call(NDarray y_true, NDarray y_pred)
         {
