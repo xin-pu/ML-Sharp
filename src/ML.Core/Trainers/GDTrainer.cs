@@ -15,40 +15,39 @@ using Numpy;
 
 namespace ML.Core.Trainers
 {
-    public class GDTrainer<T> : ViewModelBase
-        where T : DataView
+    public class GDTrainer : ViewModelBase
     {
         private Loss _loss;
 
         private ObservableCollection<Metric> _metrics;
-        private IModelGD<T> _modelGd;
+        private IModelGD _modelGd;
         private Optimizer _optimizer;
-        private Dataset<T> _trainDataset;
+        private Dataset<DataView> _trainDataset;
 
         private TrainPlan _trainPlan;
-        private Dataset<T> _valDataset;
+        private Dataset<DataView> _valDataset;
 
-        public Action<GDTrainer<T>> AfterBatchPipeline;
-        public Action<GDTrainer<T>> AfterEpochPipeline;
+        public Action<GDTrainer> AfterBatchPipeline;
+        public Action<GDTrainer> AfterEpochPipeline;
 
-        public Action<GDTrainer<T>> BeforeBatchPipeline;
-        public Action<GDTrainer<T>> BeforeEpochPipeline;
+        public Action<GDTrainer> BeforeBatchPipeline;
+        public Action<GDTrainer> BeforeEpochPipeline;
         public Action<string> Print;
 
 
-        public IModelGD<T> ModelGd
+        public IModelGD ModelGd
         {
             get => _modelGd;
             set => Set(ref _modelGd, value);
         }
 
-        public Dataset<T> TrainDataset
+        public Dataset<DataView> TrainDataset
         {
             get => _trainDataset;
             set => Set(ref _trainDataset, value);
         }
 
-        public Dataset<T> ValDataset
+        public Dataset<DataView> ValDataset
         {
             get => _valDataset;
             set => Set(ref _valDataset, value);
@@ -92,7 +91,7 @@ namespace ML.Core.Trainers
                     var iEnumerator = TrainDataset.GetEnumerator(TrainPlan.BatchSize);
 
                     while (iEnumerator.MoveNext() &&
-                           iEnumerator.Current is Dataset<T> data)
+                           iEnumerator.Current is Dataset<DataView> data)
                     {
                         if (data.Count == 0)
                             continue;
@@ -138,7 +137,7 @@ namespace ML.Core.Trainers
             /// Print status of each epoch
         }
 
-        public double UpdateLossMetric(Dataset<T> dataset)
+        public double UpdateLossMetric(Dataset<DataView> dataset)
         {
             var dataview = dataset.ToDatasetNDarray();
             var y_pred = ModelGd.Call(dataview.Feature);

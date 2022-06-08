@@ -12,7 +12,7 @@ namespace ML.Core.Data.Loader
     /// </summary>
     public class TextLoader<T> where T : DataView
     {
-        public static Dataset<T> LoadDataSet(string path, bool hasHeader = true, char splitChar = ',')
+        public static Dataset<DataView> LoadDataSet(string path, bool hasHeader = true, char splitChar = ',')
         {
             /// Step 0 Precheck
             File.Exists(path).Should().BeTrue($"File {path} should exist.");
@@ -34,15 +34,15 @@ namespace ML.Core.Data.Loader
             var datas = alldata.Select(single => GetData(fieldDict, single)).ToArray();
 
             /// Step 3 Return Dataset 
-            return new Dataset<T>(datas);
+            return new Dataset<DataView>(datas);
         }
 
-        public static Dataset<T> LoadDataSet(string[] pathes, bool hasHeader = true, char splitChar = ',')
+        public static Dataset<DataView> LoadDataSet(string[] pathes, bool hasHeader = true, char splitChar = ',')
         {
             var datasets = pathes
                 .SelectMany(path => LoadDataSet(path, hasHeader, splitChar).Value)
                 .ToArray();
-            return new Dataset<T>(datasets);
+            return new Dataset<DataView>(datasets);
         }
 
         private static Dictionary<FieldInfo, Range> GetFieldDict(Type type)
@@ -57,7 +57,7 @@ namespace ML.Core.Data.Loader
             return dict;
         }
 
-        private static T GetData(Dictionary<FieldInfo, Range> dict, string[] array)
+        private static DataView GetData(Dictionary<FieldInfo, Range> dict, string[] array)
         {
             var obj = Activator.CreateInstance(typeof(T));
             dict.ToList().ForEach(p =>

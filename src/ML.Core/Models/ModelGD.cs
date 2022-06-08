@@ -20,8 +20,7 @@ namespace ML.Core.Models
     ///     需要定义转换器
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class ModelGD<T> : ViewModelBase, IModelGD<T>
-        where T : DataView
+    public abstract class ModelGD : ViewModelBase, IModelGD
     {
         private InitialWeigts _initialWeights = InitialWeigts.False;
         private Transformer _transformer;
@@ -83,7 +82,7 @@ namespace ML.Core.Models
         ///     1.通过传入数据集=>模型变换，确认参数数量
         /// </summary>
         /// <param name="dataset"></param>
-        public void PipelineDataSet(Dataset<T> dataset)
+        public void PipelineDataSet(Dataset<DataView> dataset)
         {
             var dataview = dataset.ToDatasetNDarray();
             var transformNDarray = Transformer.Call(dataview.Feature);
@@ -132,9 +131,9 @@ namespace ML.Core.Models
         /// <returns>[batch size, labels]</returns>
         public abstract NDarray Call(NDarray features);
 
-        public NDarray Call(T data)
+        public NDarray Call(DataView data)
         {
-            var datas = new Dataset<T>(new[] {data});
+            var datas = new Dataset<DataView>(new[] {data});
             return Call(datas.ToDatasetNDarray().Feature)[0];
         }
 
@@ -142,18 +141,18 @@ namespace ML.Core.Models
         {
             np.savetxt(WeightFile, Weights);
             using var stream = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.Read);
-            var serializer = new YAXSerializer(typeof(ModelGD<T>));
+            var serializer = new YAXSerializer(typeof(ModelGD));
             using var textWriter = new StreamWriter(stream);
             serializer.Serialize(this, textWriter);
             textWriter.Flush();
         }
 
-        public IModel<T> Load(string filename)
+        public IModel Load(string filename)
         {
             using var stream = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.Read);
-            var serializer = new YAXSerializer(typeof(ModelGD<T>));
+            var serializer = new YAXSerializer(typeof(ModelGD));
             using var textWriter = new StreamReader(stream);
-            var model = (IModelGD<T>) serializer.Deserialize(textWriter);
+            var model = (IModelGD) serializer.Deserialize(textWriter);
             model.Weights = np.loadtxt(model.WeightFile);
             return model;
         }

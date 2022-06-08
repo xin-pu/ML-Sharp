@@ -40,7 +40,7 @@ namespace ML.Core.Test.OptdigitTest
             print(dataset.ToDatasetNDarray().Label);
         }
 
-        private Dataset<OptdigitOneHot> GetOptdigitOnehot(string filename)
+        private Dataset<DataView> GetOptdigitOnehot(string filename)
         {
             var trainpath = Path.Combine(dataFolder, filename);
             var dataset = TextLoader<OptdigitOneHot>.LoadDataSet(trainpath);
@@ -53,19 +53,18 @@ namespace ML.Core.Test.OptdigitTest
             var trainDataset = GetOptdigitOnehot("optdigits-train.csv");
             var valDataset = GetOptdigitOnehot("optdigits-val.csv");
 
-            var trainer = new GDTrainer<OptdigitOneHot>
+            var trainer = new GDTrainer
             {
                 TrainDataset = trainDataset.Shuffle(),
                 ValDataset = valDataset.Shuffle(),
-                ModelGd = new Perceptron<OptdigitOneHot>(10),
+                ModelGd = new Perceptron(10),
                 Optimizer = new Nadam(1E-2),
                 Loss = new CategoricalCrossentropy(),
 
-                TrainPlan = new TrainPlan {Epoch = 10, BatchSize = 100},
+                TrainPlan = new TrainPlan {Epoch = 10, BatchSize = 50},
                 Metrics = new ObservableCollection<Metric>
                 {
-                    new CategoricalAccuracy(),
-                    new Metrics.Categorical.CategoricalCrossentropy()
+                    new CategoricalAccuracy()
                 },
 
                 Print = _testOutputHelper.WriteLine

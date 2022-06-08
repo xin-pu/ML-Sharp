@@ -28,7 +28,7 @@ namespace ML.Core.Test
         [Fact]
         public void TestCreateModel()
         {
-            var model = new MultipleLinearRegression<IrisData>();
+            var model = new MultipleLinearRegression();
             print(model);
             model.Weights.Should().BeNull();
         }
@@ -40,7 +40,7 @@ namespace ML.Core.Test
             var path = Path.Combine(dataFolder, "iris-train.txt");
             var data = TextLoader<IrisData>.LoadDataSet(path, splitChar: '\t');
 
-            var model = new MultipleLinearRegression<IrisData>();
+            var model = new MultipleLinearRegression();
             model.PipelineDataSet(data);
             print(model);
             model.Weights.Should().NotBeNull();
@@ -62,11 +62,11 @@ namespace ML.Core.Test
             var trainDataset = GetIris("iris-train.txt");
             var valDataset = GetIris("iris-test.txt");
 
-            var trainer = new GDTrainer<IrisDataOneHot>
+            var trainer = new GDTrainer
             {
                 TrainDataset = trainDataset.Shuffle(),
                 ValDataset = valDataset.Shuffle(),
-                ModelGd = new Perceptron<IrisDataOneHot>(3),
+                ModelGd = new Perceptron(3),
                 Optimizer = new Nadam(1E-2),
                 Loss = new CategoricalCrossentropy(),
 
@@ -115,11 +115,11 @@ namespace ML.Core.Test
             var trainDataset = GetIris("iris-train.txt");
             var valDataset = GetIris("iris-test.txt");
 
-            var trainer = new GDTrainer<IrisDataOneHot>
+            var trainer = new GDTrainer
             {
                 TrainDataset = trainDataset.Shuffle(),
                 ValDataset = valDataset.Shuffle(),
-                ModelGd = new Perceptron<IrisDataOneHot>(3),
+                ModelGd = new Perceptron(3),
                 Optimizer = new Nadam(1E-2),
                 Loss = new CategoricalCrossentropy(),
 
@@ -142,7 +142,7 @@ namespace ML.Core.Test
         [Fact]
         public void Load()
         {
-            var ModelGd = new Perceptron<IrisDataOneHot>();
+            var ModelGd = new Perceptron();
             var model = ModelGd.Load("model.txt");
 
 
@@ -172,7 +172,7 @@ namespace ML.Core.Test
         }
 
 
-        private Dataset<IrisDataOneHot> GetIris(string path)
+        private Dataset<DataView> GetIris(string path)
         {
             var trainpath = Path.Combine(dataFolder, path);
             var dataset = TextLoader<IrisDataOneHot>.LoadDataSet(trainpath, true, '\t');

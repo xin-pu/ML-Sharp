@@ -1,10 +1,8 @@
-﻿using ML.Core.Data;
-using ML.Core.Transform;
+﻿using ML.Core.Transform;
 
 namespace ML.Core.Models
 {
-    public class PolynomialRegression<T> : MultipleLinearRegression<T>
-        where T : DataView
+    public class PolynomialRegression : MultipleLinearRegression
     {
         /// <summary>
         ///     一元多项式回归

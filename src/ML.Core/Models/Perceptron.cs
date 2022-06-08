@@ -1,12 +1,10 @@
-﻿using ML.Core.Data;
-using ML.Core.Transform;
+﻿using ML.Core.Transform;
 using ML.Utility;
 using Numpy;
 
 namespace ML.Core.Models
 {
-    public class Perceptron<T> : ModelGD<T>
-        where T : DataView
+    public class Perceptron : ModelGD
     {
         /// <summary>
         ///     Y should be [Batch, One Hot]

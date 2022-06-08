@@ -1,12 +1,10 @@
-﻿using ML.Core.Data;
-using ML.Core.Transform;
+﻿using ML.Core.Transform;
 using ML.Utility;
 using Numpy;
 
 namespace ML.Core.Models
 {
-    public class BinaryLogicClassify<T> : ModelGD<T>
-        where T : DataView
+    public class BinaryLogicClassify : ModelGD
     {
         /// <summary>
         ///     多元线性逻辑回归模型

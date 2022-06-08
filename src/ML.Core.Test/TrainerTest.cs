@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -39,10 +38,10 @@ namespace ML.Core.Test
         {
             var path = Path.Combine(dataFolder, "data_singlevar.txt");
 
-            var trainer = new GDTrainer<LinearData>
+            var trainer = new GDTrainer
             {
                 TrainDataset = TextLoader<LinearData>.LoadDataSet(path, false).Shuffle(),
-                ModelGd = new MultipleLinearRegression<LinearData>(),
+                ModelGd = new MultipleLinearRegression(),
                 Optimizer = new Nesterov(1E-2),
                 Loss = new MeanSquared(1),
                 TrainPlan = new TrainPlan {Epoch = 100, BatchSize = 25},
@@ -63,10 +62,10 @@ namespace ML.Core.Test
         {
             var path = Path.Combine(dataFolder, "data_singlevar.txt");
 
-            var trainer = new GDTrainer<LinearData>
+            var trainer = new GDTrainer
             {
                 TrainDataset = TextLoader<LinearData>.LoadDataSet(path, false),
-                ModelGd = new PolynomialRegression<LinearData>(1),
+                ModelGd = new PolynomialRegression(1),
                 Optimizer = new Momentum(1E-1),
                 Loss = new MeanSquared(),
                 TrainPlan = new TrainPlan {Epoch = 100, BatchSize = 50},
@@ -85,11 +84,11 @@ namespace ML.Core.Test
             var trainDataset = GetBinaryIris("iris-train.txt");
             var valDataset = GetBinaryIris("iris-test.txt");
 
-            var trainer = new GDTrainer<IrisData>
+            var trainer = new GDTrainer
             {
                 TrainDataset = trainDataset.Shuffle(),
                 ValDataset = valDataset.Shuffle(),
-                ModelGd = new BinaryLogicClassify<IrisData>(),
+                ModelGd = new BinaryLogicClassify(),
                 Optimizer = new Nesterov(1E-2),
                 Loss = new BinaryCrossentropy(),
 
@@ -106,12 +105,12 @@ namespace ML.Core.Test
         }
 
 
-        private Dataset<IrisData> GetBinaryIris(string path)
+        private Dataset<DataView> GetBinaryIris(string path)
         {
             var trainpath = Path.Combine(dataFolder, path);
             var dataset = TextLoader<IrisData>.LoadDataSet(trainpath, true, '\t');
-            var some = dataset.Value.Where(a => a.Label == 0 || Math.Abs(a.Label - 1) < 0.1).ToList();
-            dataset = new Dataset<IrisData>(some);
+            var some = dataset.Value.ToList();
+            dataset = new Dataset<DataView>(some);
             return dataset;
         }
     }

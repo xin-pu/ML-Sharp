@@ -111,10 +111,10 @@ namespace ML.Core.Test
             var dataFolder = @"..\..\..\..\..\data";
             var path = Path.Combine(dataFolder, "data_singlevar.txt");
 
-            var trainer = new GDTrainer<LinearData>
+            var trainer = new GDTrainer
             {
                 TrainDataset = TextLoader<LinearData>.LoadDataSet(path, false).Shuffle(),
-                ModelGd = new MultipleLinearRegression<LinearData>(),
+                ModelGd = new MultipleLinearRegression(),
                 Optimizer = new Momentum(1E-2),
                 Loss = new MeanSquared(),
                 TrainPlan = new TrainPlan {Epoch = 50, BatchSize = 25},

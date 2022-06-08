@@ -5,12 +5,11 @@ using Numpy;
 
 namespace ML.Core.Models
 {
-    public interface IModelGD<T> : IModel<T>
-        where T : DataView
+    public interface IModelGD : IModel
     {
         Variable[] Variables { set; get; }
 
-        void PipelineDataSet(Dataset<T> dataset);
+        void PipelineDataSet(Dataset<DataView> dataset);
 
         /// <summary>
         /// </summary>

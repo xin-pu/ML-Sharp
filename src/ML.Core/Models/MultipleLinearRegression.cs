@@ -1,12 +1,10 @@
-﻿using ML.Core.Data;
-using ML.Core.Transform;
+﻿using ML.Core.Transform;
 using ML.Utility;
 using Numpy;
 
 namespace ML.Core.Models
 {
-    public class MultipleLinearRegression<T> : ModelGD<T>
-        where T : DataView
+    public class MultipleLinearRegression : ModelGD
     {
         /// <summary>
         ///     多元线性回归模型
