@@ -70,7 +70,7 @@ namespace ML.Core.Test
                 Optimizer = new Nadam(1E-2),
                 Loss = new CategoricalCrossentropy(),
 
-                TrainPlan = new TrainPlan {Epoch = 50, BatchSize = 10},
+                TrainPlan = new TrainPlan {Epoch = 20, BatchSize = 10},
                 Metrics = new ObservableCollection<Metric>
                 {
                     new CategoricalAccuracy(),
