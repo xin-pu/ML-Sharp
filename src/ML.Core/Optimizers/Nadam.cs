@@ -1,4 +1,5 @@
-﻿using Numpy;
+﻿using System.ComponentModel;
+using Numpy;
 
 namespace ML.Core.Optimizers
 {
@@ -22,16 +23,17 @@ namespace ML.Core.Optimizers
         ///     Adaptive Moment Estimation Algorithm
         ///     Momentum  + RMSProp
         /// </summary>
-        /// <param name="workLearningRate"></param>
+        /// <param name="learningrate"></param>
         public Nadam(
-            double workLearningRate)
-            : base(workLearningRate)
+            double learningrate)
+            : base(learningrate)
         {
         }
 
         /// <summary>
         ///     M 衰减率
         /// </summary>
+        [Category("Configuration")]
         public double Beta1
         {
             set => Set(ref _beta1, value);
@@ -41,6 +43,7 @@ namespace ML.Core.Optimizers
         /// <summary>
         ///     G 衰减率
         /// </summary>
+        [Category("Configuration")]
         public double Beta2
         {
             set => Set(ref _beta2, value);
@@ -50,6 +53,7 @@ namespace ML.Core.Optimizers
         /// <summary>
         ///     梯度平方的指数加权平均
         /// </summary>
+        [Category("State")]
         public NDarray M
         {
             protected set => Set(ref _m, value);
@@ -59,6 +63,7 @@ namespace ML.Core.Optimizers
         /// <summary>
         ///     梯度的指数加权平均
         /// </summary>
+        [Category("State")]
         public NDarray G
         {
             protected set => Set(ref _g, value);

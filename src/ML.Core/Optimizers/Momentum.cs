@@ -1,4 +1,5 @@
-﻿using Numpy;
+﻿using System.ComponentModel;
+using Numpy;
 
 namespace ML.Core.Optimizers
 {
@@ -30,6 +31,7 @@ namespace ML.Core.Optimizers
         /// <summary>
         ///     动量因子
         /// </summary>
+        [Category("Configuration")]
         public double Rho
         {
             set => Set(ref _rho, value);
@@ -42,6 +44,7 @@ namespace ML.Core.Optimizers
         ///     w=w+σθ
         ///     《神经网络与深度学习》 P167
         /// </summary>
+        [Category("State")]
         public NDarray DeltaTheda
         {
             protected set => Set(ref _deltaTheda, value);

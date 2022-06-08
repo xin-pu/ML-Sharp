@@ -1,12 +1,68 @@
-﻿<Window x:Class="ML.Guide.MainWindow"
+﻿<hc:Window x:Class="ML.Guide.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ML.Guide"
+        xmlns:hc="https://handyorg.github.io/handycontrol"
         mc:Ignorable="d"
-        Title="MainWindow" Height="760" Width="1366">
+        Title="ML.Guide" Height="760" Width="1366">
+    <hc:Window.NonClientAreaContent>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel  VerticalAlignment="Stretch" 
+                         Orientation="Horizontal">
+               
+            </StackPanel>
+        </Grid>
+    </hc:Window.NonClientAreaContent>
     <DockPanel>
-        
+        <StatusBar DockPanel.Dock="Top" Height="60"></StatusBar>
+        <StatusBar DockPanel.Dock="Bottom" Height="60"></StatusBar>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="400"
+                                  MaxWidth="500"
+                                  MinWidth="0"/>
+            </Grid.ColumnDefinitions>
+
+
+            <Border Grid.Column="0">
+               
+                <Grid>
+              
+                </Grid>
+
+            </Border>
+            <GridSplitter Grid.Column="0" 
+                          Width="3" 
+                          Background="{DynamicResource PrimaryBrush}"
+                          Margin="2"/>
+            <Border Width="Auto" 
+                    Grid.Column="1"
+                    Margin="2"
+                    BorderThickness="1" 
+                    BorderBrush="{DynamicResource PrimaryBrush}"
+                    Background="White"
+                    Effect="{DynamicResource EffectShadow1}">
+                <TabControl TabStripPlacement="Right" DataContext="{Binding}">
+                    <TabItem Header="TrainData" ToolTip="训练数据集" HorizontalAlignment="Left">
+                    </TabItem>
+                    <TabItem Header="ValData" ToolTip="测试数据集" HorizontalAlignment="Left"></TabItem>
+                    <TabItem Header="Transform" ToolTip="特征变换" HorizontalAlignment="Left"></TabItem>
+                    <TabItem Header="Optimizer" ToolTip="优化器" HorizontalAlignment="Left">
+                        <hc:PropertyGrid SelectedObject="{Binding Optimizer}"></hc:PropertyGrid>
+                    </TabItem>
+                    <TabItem Header="Loss" ToolTip="损失函数" HorizontalAlignment="Left"></TabItem>
+                    <TabItem Header="Metric" ToolTip="测试评估器" HorizontalAlignment="Left"></TabItem>
+                    <TabItem Header="TrainPlan" ToolTip="训练计划" HorizontalAlignment="Left"></TabItem>
+                </TabControl>
+            </Border>
+        </Grid>
     </DockPanel>
-</Window>
+</hc:Window>

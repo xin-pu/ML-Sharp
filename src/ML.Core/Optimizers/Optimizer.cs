@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using GalaSoft.MvvmLight;
 using Numpy;
 
@@ -24,6 +25,7 @@ namespace ML.Core.Optimizers
         protected Optimizer(
             double learningrate)
         {
+            Name = GetType().Name;
             InitLearningRate = WorkLearningRate = learningrate;
         }
 
@@ -33,18 +35,22 @@ namespace ML.Core.Optimizers
             InitLearningRate = WorkLearningRate = 1E-3;
         }
 
+        [Category("Tag")]
         public string Name
         {
             protected set => Set(ref _name, value);
             get => _name;
         }
 
+
+        [Category("State")]
         public double WorkLearningRate
         {
-            protected set => Set(ref _workLearningRate, value);
+            set => Set(ref _workLearningRate, value);
             get => _workLearningRate;
         }
 
+        [Category("Configuration")]
         public double InitLearningRate
         {
             protected set => Set(ref _initLearningRate, value);

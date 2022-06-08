@@ -1,4 +1,5 @@
-﻿using Numpy;
+﻿using System.ComponentModel;
+using Numpy;
 
 namespace ML.Core.Optimizers
 {
@@ -18,9 +19,9 @@ namespace ML.Core.Optimizers
         /// <summary>
         ///     自适应学习率
         /// </summary>
-        /// <param name="workLearningRate">初始学习率</param>
-        public RMSProp(double workLearningRate)
-            : base(workLearningRate)
+        /// <param name="learningrate">初始学习率</param>
+        public RMSProp(double learningrate)
+            : base(learningrate)
         {
         }
 
@@ -28,6 +29,7 @@ namespace ML.Core.Optimizers
         /// <summary>
         ///     衰减率
         /// </summary>
+        [Category("Configuration")]
         public double Beta
         {
             set => Set(ref _beta, value);
@@ -37,6 +39,7 @@ namespace ML.Core.Optimizers
         /// <summary>
         ///     参数梯度平方的累计值
         /// </summary>
+        [Category("State")]
         public NDarray G
         {
             protected set => Set(ref _g, value);

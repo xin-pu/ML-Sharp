@@ -1,4 +1,5 @@
-﻿using Numpy;
+﻿using System.ComponentModel;
+using Numpy;
 
 namespace ML.Core.Optimizers
 {
@@ -24,15 +25,16 @@ namespace ML.Core.Optimizers
         ///     Adapter Gradient Algorithm
         ///     每次迭代时自适应地调整每个参数的学习率
         /// </summary>
-        /// <param name="workLearningRate"></param>
-        public AdaGrad(double workLearningRate)
-            : base(workLearningRate)
+        /// <param name="learningrate"></param>
+        public AdaGrad(double learningrate)
+            : base(learningrate)
         {
         }
 
         /// <summary>
         ///     参数梯度平方的累计值
         /// </summary>
+        [Category("State")]
         public NDarray G
         {
             protected set => Set(ref _g, value);

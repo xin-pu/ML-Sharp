@@ -1,4 +1,5 @@
-﻿using Numpy;
+﻿using System.ComponentModel;
+using Numpy;
 
 namespace ML.Core.Optimizers
 {
@@ -20,6 +21,7 @@ namespace ML.Core.Optimizers
         /// <summary>
         ///     衰减率
         /// </summary>
+        [Category("Configuration")]
         public double Beta
         {
             set => Set(ref _beta, value);
@@ -29,6 +31,7 @@ namespace ML.Core.Optimizers
         /// <summary>
         ///     参数梯度平方的累计值
         /// </summary>
+        [Category("State")]
         public NDarray G
         {
             protected set => Set(ref _g, value);
@@ -38,12 +41,14 @@ namespace ML.Core.Optimizers
         /// <summary>
         ///     参数更新差值δθ的平方的指数衰减权移动平均
         /// </summary>
+        [Category("State")]
         public NDarray X
         {
             protected set => Set(ref _x, value);
             get => _x;
         }
 
+        [Category("State")]
         public NDarray LearningRate
         {
             protected set => Set(ref _learningRate, value);

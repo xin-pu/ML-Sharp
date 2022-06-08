@@ -21,9 +21,9 @@ namespace ML.Core.Optimizers
         ///     随机梯度下降
         ///     variables=variables-η*f'(variables)
         /// </summary>
-        /// <param name="workLearningRate">初始学习率</param>
-        public SGD(double workLearningRate)
-            : base(workLearningRate)
+        /// <param name="learningrate">初始学习率</param>
+        public SGD(double learningrate)
+            : base(learningrate)
         {
         }
 
