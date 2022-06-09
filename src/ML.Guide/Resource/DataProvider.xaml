@@ -1,0 +1,13 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:dataProvider="clr-namespace:ML.Guide.DataProvider">
+
+
+
+    <ObjectDataProvider MethodName="GetMerticTypes"
+                        ObjectType="{x:Type dataProvider:DataProvider}"
+                        x:Key="MerticTypes">
+    </ObjectDataProvider>
+
+
+</ResourceDictionary>

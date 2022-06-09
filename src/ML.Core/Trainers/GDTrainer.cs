@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoDiff;
 using FluentAssertions;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
 using ML.Core.Data;
 using ML.Core.Losses;
 using ML.Core.Metrics;
@@ -32,6 +33,7 @@ namespace ML.Core.Trainers
 
         public Action<GDTrainer> BeforeBatchPipeline;
         public Action<GDTrainer> BeforeEpochPipeline;
+
         public Action<string> Print;
 
 
@@ -76,6 +78,7 @@ namespace ML.Core.Trainers
             get => _trainPlan;
             set => Set(ref _trainPlan, value);
         }
+
 
         public async Task Fit()
         {
@@ -149,5 +152,71 @@ namespace ML.Core.Trainers
 
             return loss;
         }
+
+        #region DataSet Command
+
+        #endregion
+
+        #region Loss Command
+
+        public RelayCommand ChangeLossCommand => new(ChangeLossCommand_Execute);
+
+
+        private void ChangeLossCommand_Execute()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #region Optimizer Command
+
+        public RelayCommand ChangeOptimizerCommand => new(ChangeOptimizerCommand_Execute);
+
+
+        private void ChangeOptimizerCommand_Execute()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #region Metric Command
+
+        public RelayCommand<Metric> RemoveMetricCommand => new(metric => RemoveMetricCommand_Execute(metric));
+
+        public RelayCommand<Type> AddMetricCommand => new(metricTYpe => AddMetricCommand_Execute(metricTYpe));
+
+        public RelayCommand ClearMetricCommand => new(ClearMetricCommand_Execute);
+
+        private void ClearMetricCommand_Execute()
+        {
+            Metrics.Clear();
+        }
+
+        private void RemoveMetricCommand_Execute(Metric metric)
+        {
+            if (Metrics.Contains(metric)) Metrics.Remove(metric);
+        }
+
+        private void AddMetricCommand_Execute(Type metricType)
+        {
+            var metric = Activator.CreateInstance(metricType) as Metric;
+            Metrics.Add(metric);
+        }
+
+        #endregion
+
+        #region Control Command
+
+        #endregion
+
+        #region Model Save Load Command
+
+        #endregion
+
+        #region Plan Save Load Command
+
+        #endregion
     }
 }

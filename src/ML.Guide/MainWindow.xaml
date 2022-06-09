@@ -5,6 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ML.Guide"
         xmlns:hc="https://handyorg.github.io/handycontrol"
+        xmlns:metrics="clr-namespace:ML.Core.Metrics;assembly=ML.Core"
+        xmlns:trainers="clr-namespace:ML.Core.Trainers;assembly=ML.Core"
         mc:Ignorable="d"
         Title="ML.Guide" Height="760" Width="1366">
     <hc:Window.NonClientAreaContent>
@@ -20,7 +22,21 @@
         </Grid>
     </hc:Window.NonClientAreaContent>
     <DockPanel>
-        <StatusBar DockPanel.Dock="Top" Height="60"></StatusBar>
+        <StatusBar DockPanel.Dock="Top" Height="60">
+            <Button Content="Clear Metric" 
+                    Style="{DynamicResource ButtonDashedWarning}"
+                    Command="{Binding ClearMetricCommand}"/>
+            <Button Content="Add Metric" 
+                    Style="{DynamicResource ButtonDashedSuccess}"
+                    Command="{Binding AddMetricCommand}"
+                    CommandParameter="{Binding ElementName=MetricType,Path=SelectedValue}"/>
+            <ComboBox ItemsSource="{Binding Source={StaticResource MerticTypes}}" 
+                      Focusable="True"
+                      Name="MetricType"
+                      DisplayMemberPath="Name"
+                      Style="{DynamicResource ComboBoxExtendBaseStyle}"
+                      Width="200"/>
+        </StatusBar>
         <StatusBar DockPanel.Dock="Bottom" Height="60"></StatusBar>
 
         <Grid>
@@ -67,7 +83,28 @@
                         <hc:PropertyGrid SelectedObject="{Binding Loss}"/>
                     </TabItem>
                     <TabItem Header="Metric" ToolTip="测试评估器" HorizontalAlignment="Left">
-                        <ListView ItemsSource="{Binding Metrics}"></ListView>
+                        <ListBox  ItemsSource="{Binding Metrics}"
+                                  Style="{DynamicResource StackPanelVerticalListBox}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate DataType="metrics:Metric">
+                                    <Border BorderThickness="1" BorderBrush="{DynamicResource PrimaryBrush}" 
+                                            Margin="1"
+                                            ToolTip="{Binding Describe}"
+                                            Height="50">
+                                        <DockPanel LastChildFill="True" ToolTip="{Binding}" VerticalAlignment="Center">
+                                            <Path DockPanel.Dock="Left" Fill="{DynamicResource DarkPrimaryBrush}" 
+                                                  Width="20" Margin="10,0,10,0" 
+                                                  HorizontalAlignment="Center" 
+                                                  Data="{DynamicResource BubbleTailGeometry}"></Path>
+                                            <hc:Shield Subject="metric" Status="{Binding Logogram}" Color="#1182c3"/>
+                                            <TextBlock Padding="10" Text="{Binding Name}"/>
+                                            <TextBlock Padding="10" Text="{Binding ValueError,StringFormat='{}{0:F2}'}"/>
+                                      
+                                        </DockPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
                     </TabItem>
                     <TabItem Header="TrainPlan" ToolTip="训练计划" HorizontalAlignment="Left">
                         <hc:PropertyGrid SelectedObject="{Binding TrainPlan}"/>
