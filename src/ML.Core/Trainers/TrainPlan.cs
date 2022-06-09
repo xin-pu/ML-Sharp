@@ -8,6 +8,12 @@ namespace ML.Core.Trainers
         private int _batchSize;
         private int _epoch;
 
+        public TrainPlan()
+        {
+            BatchSize = 0;
+            Epoch = 100;
+        }
+
 
         [Category("Configuration")]
         public int Epoch

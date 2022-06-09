@@ -7,12 +7,10 @@ using System.Threading.Tasks;
 using AutoDiff;
 using FluentAssertions;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
-using Microsoft.Win32;
 using ML.Core.Data;
-using ML.Core.Data.Loader;
 using ML.Core.Losses;
 using ML.Core.Metrics;
+using ML.Core.Metrics.Regression;
 using ML.Core.Models;
 using ML.Core.Optimizers;
 using Numpy;
@@ -21,16 +19,25 @@ namespace ML.Core.Trainers
 {
     public class GDTrainer : ViewModelBase
     {
-        private Loss _loss = new MeanSquared();
-        private ObservableCollection<Metric> _metrics = new();
-        private IModelGD _modelGd = new MultipleLinearRegression();
-        private Optimizer _optimizer = new SGD();
+        private Loss _loss;
+        private ObservableCollection<Metric> _metrics;
+        private IModelGD _modelGd;
+        private Optimizer _optimizer;
         private Dataset<DataView> _trainDataset;
-        private TrainPlan _trainPlan = new();
+        private TrainPlan _trainPlan;
         private Dataset<DataView> _valDataset;
 
 
         public Action<string> Print;
+
+        public GDTrainer()
+        {
+            ModelGd = new MultipleLinearRegression();
+            Optimizer = new Adam();
+            Loss = new MeanSquared();
+            Metrics = new ObservableCollection<Metric> {new MeanSquaredError(), new RSquared()};
+            TrainPlan = new TrainPlan();
+        }
 
 
         public IModelGD ModelGd
@@ -75,67 +82,7 @@ namespace ML.Core.Trainers
             set => Set(ref _trainPlan, value);
         }
 
-
-        #region DataSet Command
-
-        public RelayCommand<Type> LoadTrainDatasetCommand => new(datatype => LoadTrainDatasetCommand_Execute(datatype));
-
-        public RelayCommand<Type> LoadValDatasetCommand => new(datatype => LoadValDatasetCommand_Execute(datatype));
-
-        private void LoadTrainDatasetCommand_Execute(Type datatype)
-        {
-            var openFileDialog = new OpenFileDialog
-            {
-                Filter = @"txt(*.txt)|*.txt"
-            };
-            var res = openFileDialog.ShowDialog();
-            if (res != true || openFileDialog.FileName == "")
-                return;
-            TrainDataset = TextLoader.LoadDataSet(openFileDialog.FileName, datatype, false);
-        }
-
-        private void LoadValDatasetCommand_Execute(Type datatype)
-        {
-            var openFileDialog = new OpenFileDialog
-            {
-                Filter = @"txt(*.txt)|*.txt"
-            };
-            var res = openFileDialog.ShowDialog();
-            if (res != true || openFileDialog.FileName == "")
-                return;
-            ValDataset = TextLoader.LoadDataSet(openFileDialog.FileName, datatype, false);
-        }
-
-        #endregion
-
-
-        #region Control Command
-
-        public RelayCommand TrainCommand => new(() => TrainCommand_Execute());
-        public RelayCommand CancelCommand => new(() => CancelCommand_Execute());
-        public CancellationTokenSource CancellationTokenSource { internal set; get; } = new();
-
-        private async void TrainCommand_Execute()
-        {
-            CancellationTokenSource = new CancellationTokenSource();
-
-            try
-            {
-                PreCheck();
-                await Fit();
-            }
-            catch (Exception ex)
-            {
-                // ignored
-            }
-        }
-
-
-        public void PreCheck()
-        {
-        }
-
-        public async Task Fit()
+        public async Task Fit(CancellationTokenSource cancellation = null)
         {
             await Task.Run(() =>
             {
@@ -145,7 +92,7 @@ namespace ML.Core.Trainers
 
                 foreach (var e in Enumerable.Range(0, TrainPlan.Epoch))
                 {
-                    if (CancellationTokenSource.IsCancellationRequested)
+                    if (cancellation?.IsCancellationRequested == true)
                         return;
 
 
@@ -154,7 +101,7 @@ namespace ML.Core.Trainers
                     while (iEnumerator.MoveNext() &&
                            iEnumerator.Current is Dataset<DataView> data)
                     {
-                        if (CancellationTokenSource.IsCancellationRequested)
+                        if (cancellation?.IsCancellationRequested == true)
                             return;
 
                         if (data.Count == 0)
@@ -196,7 +143,7 @@ namespace ML.Core.Trainers
             });
         }
 
-        public double UpdateLossMetric(Dataset<DataView> dataset)
+        private double UpdateLossMetric(Dataset<DataView> dataset)
         {
             var dataview = dataset.ToDatasetNDarray();
             var y_pred = ModelGd.Call(dataview.Feature);
@@ -208,12 +155,5 @@ namespace ML.Core.Trainers
 
             return loss;
         }
-
-        private void CancelCommand_Execute()
-        {
-            CancellationTokenSource.Cancel();
-        }
-
-        #endregion
     }
 }

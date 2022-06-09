@@ -22,8 +22,8 @@
         </Grid>
     </hc:Window.NonClientAreaContent>
     <DockPanel>
+
         <views:MenuView DockPanel.Dock="Top"/>
-    
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
@@ -75,11 +75,23 @@
                                             Height="50"
                                             Name="BD_Collector"
                                             CornerRadius="5">
+                                        <Border.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Header="Remove"
+                                                          Command="{Binding Source={StaticResource Locator},Path=MenuOption.RemoveMetricCommand}"
+                                                          CommandParameter="{Binding}"/>
+                                                <MenuItem Header="Clear All"
+                                                          Command="{Binding Source={StaticResource Locator},Path=MenuOption.ClearMetricCommand}"
+                                                          CommandParameter="{Binding}"/>
+                                            </ContextMenu>
+                                           
+                                        </Border.ContextMenu>
                                         <Grid ToolTip="{Binding}" VerticalAlignment="Center">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="80"/>
                                                 <ColumnDefinition/>
                                                 <ColumnDefinition/>
+
                                             </Grid.ColumnDefinitions>
                                             <hc:Shield Grid.Column="0" Subject="MET" 
                                                        Status="{Binding Logogram}" 
@@ -87,6 +99,7 @@
                                                        Margin="5,0"/>
                                             <TextBlock Grid.Column="1" Padding="10" Text="{Binding Name}"/>
                                             <TextBlock Grid.Column="2" Padding="10" Text="{Binding ValueError,StringFormat='{}{0:F2}'}"/>
+                                           
 
                                         </Grid>
                                     </Border>

@@ -46,14 +46,14 @@ namespace ML.Core.Optimizers
         [Category("State")]
         public double WorkLearningRate
         {
-            set => Set(ref _workLearningRate, value);
+            protected set => Set(ref _workLearningRate, value);
             get => _workLearningRate;
         }
 
         [Category("Configuration")]
         public double InitLearningRate
         {
-            protected set => Set(ref _initLearningRate, value);
+            set => Set(ref _initLearningRate, value);
             get => _initLearningRate;
         }
 
