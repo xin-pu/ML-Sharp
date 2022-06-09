@@ -2,12 +2,12 @@
 using System.IO;
 using System.Threading.Tasks;
 using ML.Core.Data;
+using ML.Core.Data.DataStructs;
 using ML.Core.Data.Loader;
 using ML.Core.Metrics;
 using ML.Core.Metrics.Categorical;
 using ML.Core.Models;
 using ML.Core.Optimizers;
-using ML.Core.Test.DataStructs;
 using ML.Core.Trainers;
 using Xunit;
 using Xunit.Abstractions;

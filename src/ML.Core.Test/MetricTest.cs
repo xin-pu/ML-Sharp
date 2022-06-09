@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using FluentAssertions;
+using ML.Core.Data.DataStructs;
 using ML.Core.Data.Loader;
 using ML.Core.Losses;
 using ML.Core.Metrics;
@@ -9,7 +10,6 @@ using ML.Core.Metrics.Categorical;
 using ML.Core.Metrics.Regression;
 using ML.Core.Models;
 using ML.Core.Optimizers;
-using ML.Core.Test.DataStructs;
 using ML.Core.Trainers;
 using Numpy;
 using Xunit;
@@ -115,6 +115,7 @@ namespace ML.Core.Test
             var trainer = new GDTrainer
             {
                 TrainDataset = TextLoader.LoadDataSet<LinearData>(path, false).Shuffle(),
+                ValDataset = TextLoader.LoadDataSet<LinearData>(path, false).Shuffle(),
                 ModelGd = new MultipleLinearRegression(),
                 Optimizer = new Momentum(1E-2),
                 Loss = new MeanSquared(),

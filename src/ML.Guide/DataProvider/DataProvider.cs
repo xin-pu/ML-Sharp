@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using ML.Core.Data;
 using ML.Core.Losses;
 using ML.Core.Metrics;
 using ML.Core.Models;
@@ -10,6 +11,11 @@ namespace ML.Guide.DataProvider
 {
     public class DataProvider
     {
+        public Type[] GetDataViewTypes()
+        {
+            return GetSubType(typeof(DataView));
+        }
+
         /// <summary>
         ///     Get All GDModels
         /// </summary>

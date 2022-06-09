@@ -22,6 +22,28 @@
     <DockPanel>
         <StatusBar DockPanel.Dock="Top" Height="100">
 
+            <Button Content="Train" 
+                    Command="{Binding TrainCommand}"
+                    CommandParameter="{Binding ElementName=DataViewList,Path=SelectedValue}"
+                    Style="{DynamicResource ButtonDashed}"/>
+            <Separator/>
+            <Button Content="Load Train" 
+                    Command="{Binding LoadTrainDatasetCommand}"
+                    CommandParameter="{Binding ElementName=DataViewList,Path=SelectedValue}"
+                    Style="{DynamicResource ButtonDashed}"/>
+            <Button Content="Load val" 
+                    Command="{Binding LoadValDatasetCommand}"
+                    CommandParameter="{Binding ElementName=DataViewList,Path=SelectedValue}"
+                    Style="{DynamicResource ButtonDashed}"/>
+            <ComboBox ItemsSource="{Binding Source={StaticResource DataViewTypes}}"
+                      hc:ScrollViewer.IsPenetrating="True"
+                      DisplayMemberPath="Name"
+                      HorizontalContentAlignment="Left"
+                      Name="DataViewList"
+                      Style="{DynamicResource ComboBoxExtendBaseStyle}"
+                      Width="150">
+            </ComboBox>
+            <Separator/>
             <ComboBox ItemsSource="{Binding Source={StaticResource GDModelTypes}}"
                       hc:ScrollViewer.IsPenetrating="True"
                       DisplayMemberPath="Name"
@@ -40,7 +62,7 @@
             <Button Content="Save" Command="{Binding SaveModelCommand}"
                     Style="{DynamicResource ButtonDashed}"/>
             <Button Content="Load" Command="{Binding LoadModelCommand}"
-                    Style="{DynamicResource ButtonDashed}"></Button>
+                    Style="{DynamicResource ButtonDashed}"/>
             <Separator/>
 
             <ComboBox ItemsSource="{Binding Source={StaticResource OptimizerTypes}}"

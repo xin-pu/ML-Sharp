@@ -1,9 +1,8 @@
 using System;
-using ML.Core.Data;
 using ML.Core.Data.Loader;
 using Numpy;
 
-namespace ML.Core.Test.DataStructs
+namespace ML.Core.Data.DataStructs
 {
     [Serializable]
     public class OptdigitData : DataView
@@ -16,7 +15,7 @@ namespace ML.Core.Test.DataStructs
         public override string ToString()
         {
             return
-                $"Label:{Label}\tPixel:{string.Join(',', Pixel)}";
+                $"Label:{Label}\tPixel:{string.Join(",", Pixel)}";
         }
 
 

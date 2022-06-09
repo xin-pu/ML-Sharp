@@ -1,8 +1,7 @@
-﻿using ML.Core.Data;
-using ML.Core.Data.Loader;
+﻿using ML.Core.Data.Loader;
 using Numpy;
 
-namespace ML.Core.Test.DataStructs
+namespace ML.Core.Data.DataStructs
 {
     public class LinearData : DataView
     {

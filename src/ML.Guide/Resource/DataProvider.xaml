@@ -3,6 +3,11 @@
                     xmlns:dataProvider="clr-namespace:ML.Guide.DataProvider">
 
 
+    <ObjectDataProvider MethodName="GetDataViewTypes"
+                        ObjectType="{x:Type dataProvider:DataProvider}"
+                        x:Key="DataViewTypes"/>
+
+
     <ObjectDataProvider MethodName="GetGDModelTypes"
                         ObjectType="{x:Type dataProvider:DataProvider}"
                         x:Key="GDModelTypes"/>

@@ -3,8 +3,8 @@ using System.IO;
 using System.Linq;
 using FluentAssertions;
 using ML.Core.Data;
+using ML.Core.Data.DataStructs;
 using ML.Core.Data.Loader;
-using ML.Core.Test.DataStructs;
 using Xunit;
 using Xunit.Abstractions;
 

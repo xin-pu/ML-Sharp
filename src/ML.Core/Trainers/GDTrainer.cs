@@ -85,11 +85,11 @@ namespace ML.Core.Trainers
 
         #region DataSet Command
 
-        public RelayCommand LoadTrainDatasetCommand => new(() => LoadTrainDatasetCommand_Execute());
+        public RelayCommand<Type> LoadTrainDatasetCommand => new(datatype => LoadTrainDatasetCommand_Execute(datatype));
 
-        public RelayCommand LoadValDatasetCommand => new(() => LoadValDatasetCommand_Execute());
+        public RelayCommand<Type> LoadValDatasetCommand => new(datatype => LoadValDatasetCommand_Execute(datatype));
 
-        private void LoadValDatasetCommand_Execute()
+        private void LoadValDatasetCommand_Execute(Type datatype)
         {
             var openFileDialog = new OpenFileDialog
             {
@@ -98,11 +98,19 @@ namespace ML.Core.Trainers
             var res = openFileDialog.ShowDialog();
             if (res != true || openFileDialog.FileName == "")
                 return;
-            TrainDataset = TextLoader.LoadDataSet<DataView>(openFileDialog.FileName);
+            TrainDataset = TextLoader.LoadDataSet(openFileDialog.FileName, datatype);
         }
 
-        private void LoadTrainDatasetCommand_Execute()
+        private void LoadTrainDatasetCommand_Execute(Type datatype)
         {
+            var openFileDialog = new OpenFileDialog
+            {
+                Filter = @"txt(*.txt)|*.txt"
+            };
+            var res = openFileDialog.ShowDialog();
+            if (res != true || openFileDialog.FileName == "")
+                return;
+            ValDataset = TextLoader.LoadDataSet(openFileDialog.FileName, datatype);
         }
 
         #endregion
@@ -207,21 +215,36 @@ namespace ML.Core.Trainers
         private async void TrainCommand_Execute()
         {
             CancellationTokenSource = new CancellationTokenSource();
-
             try
             {
-                PreCheck();
-                await Fit();
+                var a = np.array(1);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // ignored
+                ;
             }
+            //try
+            //{
+            //    PreCheck();
+            //    await Fit();
+            //}
+            //catch (Exception ex)
+            //{
+            //    ;
+            //}
         }
 
 
         public void PreCheck()
         {
+            try
+            {
+                var a = np.array(1);
+            }
+            catch (Exception ex)
+            {
+                ;
+            }
         }
 
         public async Task Fit()

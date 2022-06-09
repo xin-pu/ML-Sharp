@@ -1,7 +1,7 @@
 using System;
 using Numpy;
 
-namespace ML.Core.Test.DataStructs
+namespace ML.Core.Data.DataStructs
 {
     [Serializable]
     public class IrisDataOneHot : IrisData
