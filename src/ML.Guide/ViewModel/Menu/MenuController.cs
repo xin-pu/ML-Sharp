@@ -18,6 +18,7 @@ namespace ML.Guide.ViewModel.Menu
 
         public RelayCommand<Type> LoadValDatasetCommand => new(datatype => LoadValDatasetCommand_Execute(datatype));
 
+
         private void LoadTrainDatasetCommand_Execute(Type datatype)
         {
             var openFileDialog = new OpenFileDialog
@@ -27,7 +28,9 @@ namespace ML.Guide.ViewModel.Menu
             var res = openFileDialog.ShowDialog();
             if (res != true || openFileDialog.FileName == "")
                 return;
-            GDTrainer.TrainDataset = TextLoader.LoadDataSet(openFileDialog.FileName, datatype, false);
+            var alldataset = TextLoader.LoadDataSet(openFileDialog.FileName, datatype, false);
+            (GDTrainer.TrainDataset, GDTrainer.ValDataset) =
+                SplitTrainAndVal ? alldataset.Split(SplitRatio) : alldataset.Split(0);
         }
 
         private void LoadValDatasetCommand_Execute(Type datatype)
@@ -40,6 +43,22 @@ namespace ML.Guide.ViewModel.Menu
             if (res != true || openFileDialog.FileName == "")
                 return;
             GDTrainer.ValDataset = TextLoader.LoadDataSet(openFileDialog.FileName, datatype, false);
+        }
+
+        private bool _splitTrainAndVal = true;
+        private double _splitRatio = 0.8;
+
+        public bool SplitTrainAndVal
+        {
+            get => _splitTrainAndVal;
+            set => Set(ref _splitTrainAndVal, value);
+        }
+
+
+        public double SplitRatio
+        {
+            get => _splitRatio;
+            set => Set(ref _splitRatio, value);
         }
 
         #endregion

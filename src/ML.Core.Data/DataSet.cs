@@ -169,7 +169,7 @@ namespace ML.Core.Data
         /// <returns></returns>
         public Dataset<T> Take(int count)
         {
-            count.Should().BePositive();
+            count.Should().BeGreaterOrEqualTo(0);
             count.Should().BeLessOrEqualTo(Count);
 
             var data = Value.Take(count).ToArray();

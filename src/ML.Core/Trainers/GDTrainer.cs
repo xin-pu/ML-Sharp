@@ -19,6 +19,8 @@ namespace ML.Core.Trainers
 {
     public class GDTrainer : ViewModelBase
     {
+        private int _currentBatchIndex;
+        private int _currentEpoch;
         private Loss _loss;
         private ObservableCollection<Metric> _metrics;
         private IModelGD _modelGd;
@@ -82,8 +84,23 @@ namespace ML.Core.Trainers
             set => Set(ref _trainPlan, value);
         }
 
+        public int CurrentEpoch
+        {
+            get => _currentEpoch;
+            set => Set(ref _currentEpoch, value);
+        }
+
+        public int CurrentBatchIndex
+        {
+            get => _currentBatchIndex;
+            set => Set(ref _currentBatchIndex, value);
+        }
+
+
         public async Task Fit(CancellationTokenSource cancellation = null)
         {
+            CurrentEpoch = 0;
+            CurrentBatchIndex = 0;
             await Task.Run(() =>
             {
                 TrainDataset.Should().NotBeNull("dataset should not ne null");
@@ -92,6 +109,7 @@ namespace ML.Core.Trainers
 
                 foreach (var e in Enumerable.Range(0, TrainPlan.Epoch))
                 {
+                    CurrentEpoch = e;
                     if (cancellation?.IsCancellationRequested == true)
                         return;
 
@@ -137,9 +155,6 @@ namespace ML.Core.Trainers
 
                     Print?.Invoke(trainMsg.ToString());
                 }
-
-                /// early stoping
-                /// Print status of each epoch
             });
         }
 
