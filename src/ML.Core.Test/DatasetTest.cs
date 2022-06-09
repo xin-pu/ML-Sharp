@@ -95,7 +95,7 @@ namespace ML.Core.Test
         public void DataSetLoadIris()
         {
             var path = Path.Combine(dataFolder, "iris-train.txt");
-            var dataset = TextLoader<IrisData>.LoadDataSet(path, splitChar: '\t');
+            var dataset = TextLoader.LoadDataSet<IrisData>(path, splitChar: '\t');
             print(dataset);
         }
 
@@ -103,21 +103,9 @@ namespace ML.Core.Test
         public void DataSetLoadIrisOneHot()
         {
             var path = Path.Combine(dataFolder, "iris-train.txt");
-            var dataset = TextLoader<IrisDataOneHot>.LoadDataSet(path, splitChar: '\t');
+            var dataset = TextLoader.LoadDataSet<IrisDataOneHot>(path, splitChar: '\t');
             print(dataset);
             print(dataset.ToDatasetNDarray().Label);
-        }
-
-        [Fact]
-        public void DataSetLoadMultiIris()
-        {
-            var pathes = new[]
-            {
-                Path.Combine(dataFolder, "iris-train.txt"),
-                Path.Combine(dataFolder, "iris-test.txt")
-            };
-            var dataset = TextLoader<IrisData>.LoadDataSet(pathes, splitChar: '\t');
-            print(dataset);
         }
 
 
@@ -134,7 +122,7 @@ namespace ML.Core.Test
         public void DataSetIteration()
         {
             var path = Path.Combine(dataFolder, "iris-train.txt");
-            var dataset = TextLoader<IrisData>.LoadDataSet(path, splitChar: '\t');
+            var dataset = TextLoader.LoadDataSet<IrisData>(path, splitChar: '\t');
 
             var i = dataset.GetEnumerator();
             while (true)

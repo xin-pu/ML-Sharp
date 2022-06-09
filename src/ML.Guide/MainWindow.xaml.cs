@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using GalaSoft.MvvmLight.CommandWpf;
 using ML.Core.Data;
 using ML.Core.Losses;
 using ML.Core.Metrics;
@@ -36,5 +38,31 @@ namespace ML.Guide
                 Metrics = new ObservableCollection<Metric> {new MeanAbsoluteError()}
             };
         }
+
+
+        #region Plan Save Load Command
+
+        public RelayCommand CreateTrainPlanCommand => new(() => CreateTrainPlanCommand_Execute());
+
+        private void CreateTrainPlanCommand_Execute()
+        {
+            throw new NotImplementedException();
+        }
+
+        public RelayCommand LoadTrainPlanCommand => new(() => LoadTrainPlanCommand_Execute());
+
+        private void LoadTrainPlanCommand_Execute()
+        {
+            throw new NotImplementedException();
+        }
+
+        public RelayCommand SaveTrainPlanCommand => new(() => SaveTrainPlanCommand_Execute());
+
+        private void SaveTrainPlanCommand_Execute()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
 }

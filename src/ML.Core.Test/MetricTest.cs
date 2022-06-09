@@ -114,7 +114,7 @@ namespace ML.Core.Test
 
             var trainer = new GDTrainer
             {
-                TrainDataset = TextLoader<LinearData>.LoadDataSet(path, false).Shuffle(),
+                TrainDataset = TextLoader.LoadDataSet<LinearData>(path, false).Shuffle(),
                 ModelGd = new MultipleLinearRegression(),
                 Optimizer = new Momentum(1E-2),
                 Loss = new MeanSquared(),

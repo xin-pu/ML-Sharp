@@ -29,7 +29,7 @@ namespace ML.Core.Test
         public void TestDataSet()
         {
             var path = Path.Combine(dataFolder, "data_singlevar.txt");
-            var Dataset = TextLoader<LinearData>.LoadDataSet(path, false);
+            var Dataset = TextLoader.LoadDataSet<LinearData>(path, false);
             print(Dataset);
         }
 
@@ -40,7 +40,7 @@ namespace ML.Core.Test
 
             var trainer = new GDTrainer
             {
-                TrainDataset = TextLoader<LinearData>.LoadDataSet(path, false).Shuffle(),
+                TrainDataset = TextLoader.LoadDataSet<LinearData>(path, false).Shuffle(),
                 ModelGd = new MultipleLinearRegression(),
                 Optimizer = new Nesterov(1E-2),
                 Loss = new MeanSquared(),
@@ -64,7 +64,7 @@ namespace ML.Core.Test
 
             var trainer = new GDTrainer
             {
-                TrainDataset = TextLoader<LinearData>.LoadDataSet(path, false),
+                TrainDataset = TextLoader.LoadDataSet<LinearData>(path, false),
                 ModelGd = new PolynomialRegression(),
                 Optimizer = new Momentum(1E-1),
                 Loss = new MeanSquared(),
@@ -108,7 +108,7 @@ namespace ML.Core.Test
         private Dataset<DataView> GetBinaryIris(string path)
         {
             var trainpath = Path.Combine(dataFolder, path);
-            var dataset = TextLoader<IrisData>.LoadDataSet(trainpath, true, '\t');
+            var dataset = TextLoader.LoadDataSet<IrisData>(trainpath, true, '\t');
             var some = dataset.Value.ToList();
             dataset = new Dataset<DataView>(some);
             return dataset;

@@ -10,9 +10,10 @@ namespace ML.Core.Data.Loader
     /// <summary>
     ///     A text loader for get IEnum<T> from txt file.
     /// </summary>
-    public class TextLoader<T> where T : DataView
+    public class TextLoader
     {
-        public static Dataset<DataView> LoadDataSet(string path, bool hasHeader = true, char splitChar = ',')
+        public static Dataset<DataView> LoadDataSet<T>(string path, bool hasHeader = true, char splitChar = ',')
+            where T : DataView
         {
             /// Step 0 Precheck
             File.Exists(path).Should().BeTrue($"File {path} should exist.");
@@ -31,18 +32,36 @@ namespace ML.Core.Data.Loader
             var fieldDict = GetFieldDict(typeof(T));
 
             /// Step 2 According LoadColumnAttribute Change to Data
-            var datas = alldata.Select(single => GetData(fieldDict, single)).ToArray();
+            var datas = alldata.Select(single => GetData(typeof(T), fieldDict, single)).ToArray();
 
             /// Step 3 Return Dataset 
             return new Dataset<DataView>(datas);
         }
 
-        public static Dataset<DataView> LoadDataSet(string[] pathes, bool hasHeader = true, char splitChar = ',')
+
+        public static Dataset<DataView> LoadDataSet(string path, Type type, bool hasHeader = true, char splitChar = ',')
         {
-            var datasets = pathes
-                .SelectMany(path => LoadDataSet(path, hasHeader, splitChar).Value)
-                .ToArray();
-            return new Dataset<DataView>(datasets);
+            /// Step 0 Precheck
+            File.Exists(path).Should().BeTrue($"File {path} should exist.");
+
+            /// Step 1 Read Stream to DataTable or Array
+            using var stream = new StreamReader(path);
+            var allline = stream.ReadToEnd()
+                .Split('\r', '\n')
+                .Where(a => !string.IsNullOrEmpty(a))
+                .ToList();
+            if (hasHeader)
+                allline.RemoveAt(0);
+            var alldata = allline.Select(l => l.Split(splitChar).ToArray()).ToArray();
+
+            /// Step 2 Get Field Dict which have LoadColumn
+            var fieldDict = GetFieldDict(type);
+
+            /// Step 2 According LoadColumnAttribute Change to Data
+            var datas = alldata.Select(single => GetData(type, fieldDict, single)).ToArray();
+
+            /// Step 3 Return Dataset 
+            return new Dataset<DataView>(datas);
         }
 
         private static Dictionary<FieldInfo, Range> GetFieldDict(Type type)
@@ -57,9 +76,10 @@ namespace ML.Core.Data.Loader
             return dict;
         }
 
-        private static DataView GetData(Dictionary<FieldInfo, Range> dict, string[] array)
+
+        private static DataView GetData(Type classType, Dictionary<FieldInfo, Range> dict, string[] array)
         {
-            var obj = Activator.CreateInstance(typeof(T));
+            var obj = Activator.CreateInstance(classType);
             dict.ToList().ForEach(p =>
             {
                 var fieldInfo = p.Key;
@@ -84,7 +104,7 @@ namespace ML.Core.Data.Loader
                 }
             });
 
-            return (T) obj;
+            return (DataView) obj;
         }
     }
 }

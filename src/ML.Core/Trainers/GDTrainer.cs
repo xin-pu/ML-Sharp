@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoDiff;
 using FluentAssertions;
@@ -9,6 +10,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Microsoft.Win32;
 using ML.Core.Data;
+using ML.Core.Data.Loader;
 using ML.Core.Losses;
 using ML.Core.Metrics;
 using ML.Core.Models;
@@ -81,80 +83,27 @@ namespace ML.Core.Trainers
         }
 
 
-        public async Task Fit()
-        {
-            TrainDataset.Should().NotBeNull("dataset should not ne null");
-
-            ModelGd.PipelineDataSet(TrainDataset);
-
-            foreach (var e in Enumerable.Range(0, TrainPlan.Epoch))
-                await Task.Run(() =>
-                {
-                    BeforeEpochPipeline?.Invoke(this);
-
-                    var iEnumerator = TrainDataset.GetEnumerator(TrainPlan.BatchSize);
-
-                    while (iEnumerator.MoveNext() &&
-                           iEnumerator.Current is Dataset<DataView> data)
-                    {
-                        if (data.Count == 0)
-                            continue;
-
-                        BeforeBatchPipeline?.Invoke(this);
-                        var batchdataSet = data.ToDatasetNDarray();
-
-                        var predTerms = ModelGd.CallGraph(batchdataSet.Feature);
-                        var lossTerm = Loss.GetLossTerm(predTerms, batchdataSet.Label, ModelGd.Variables);
-
-
-                        NDarray GetGradient(NDarray weight)
-                        {
-                            var gradientArray = lossTerm.Differentiate(ModelGd.Variables, weight.GetData<double>());
-                            var g = np.array(gradientArray);
-                            return np.reshape(g, weight.shape);
-                        }
-
-                        ModelGd.Weights = Optimizer.Call(ModelGd.Weights, GetGradient, e);
-
-                        AfterBatchPipeline?.Invoke(this);
-                    }
-
-                    var trainMsg = new StringBuilder($"#{e + 1:D4}\t");
-                    var train_loss = UpdateLossMetric(TrainDataset);
-                    trainMsg.Append($"[Loss]:{train_loss:F4}\t");
-                    foreach (var metric in Metrics) trainMsg.Append($"{metric}\t");
-
-                    if (ValDataset != null)
-                    {
-                        var val_loss = UpdateLossMetric(ValDataset);
-                        trainMsg.Append("\tVal\t");
-                        trainMsg.Append($"[Loss]:{val_loss:F4}\t");
-                        foreach (var metric in Metrics) trainMsg.Append($"{metric}\t");
-                    }
-
-                    Print?.Invoke(trainMsg.ToString());
-
-                    AfterEpochPipeline?.Invoke(this);
-                });
-
-            /// early stoping
-            /// Print status of each epoch
-        }
-
-        public double UpdateLossMetric(Dataset<DataView> dataset)
-        {
-            var dataview = dataset.ToDatasetNDarray();
-            var y_pred = ModelGd.Call(dataview.Feature);
-            var y_true = dataview.Label;
-            var predterms = ModelGd.CallGraph(dataview.Feature);
-            var lossTerm = Loss.GetLossTerm(predterms, dataview.Label, ModelGd.Variables);
-            var loss = lossTerm.Evaluate(ModelGd.Variables, ModelGd.GetWeightArray());
-            Metrics.ToList().ForEach(m => m.Call(y_pred, y_true));
-
-            return loss;
-        }
-
         #region DataSet Command
+
+        public RelayCommand LoadTrainDatasetCommand => new(() => LoadTrainDatasetCommand_Execute());
+
+        public RelayCommand LoadValDatasetCommand => new(() => LoadValDatasetCommand_Execute());
+
+        private void LoadValDatasetCommand_Execute()
+        {
+            var openFileDialog = new OpenFileDialog
+            {
+                Filter = @"txt(*.txt)|*.txt"
+            };
+            var res = openFileDialog.ShowDialog();
+            if (res != true || openFileDialog.FileName == "")
+                return;
+            TrainDataset = TextLoader.LoadDataSet<DataView>(openFileDialog.FileName);
+        }
+
+        private void LoadTrainDatasetCommand_Execute()
+        {
+        }
 
         #endregion
 
@@ -187,7 +136,7 @@ namespace ML.Core.Trainers
         {
             var openFileDialog = new OpenFileDialog
             {
-                Filter = @"aries(*.ar)|*.ar"
+                Filter = @"XML(*.xml)|*.xml"
             };
             var res = openFileDialog.ShowDialog();
             if (res != true || openFileDialog.FileName == "")
@@ -251,10 +200,111 @@ namespace ML.Core.Trainers
 
         #region Control Command
 
-        #endregion
+        public RelayCommand TrainCommand => new(() => TrainCommand_Execute());
+        public RelayCommand CancelCommand => new(() => CancelCommand_Execute());
+        public CancellationTokenSource CancellationTokenSource { internal set; get; } = new();
+
+        private async void TrainCommand_Execute()
+        {
+            CancellationTokenSource = new CancellationTokenSource();
+
+            try
+            {
+                PreCheck();
+                await Fit();
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+        }
 
 
-        #region Plan Save Load Command
+        public void PreCheck()
+        {
+        }
+
+        public async Task Fit()
+        {
+            TrainDataset.Should().NotBeNull("dataset should not ne null");
+
+            ModelGd.PipelineDataSet(TrainDataset);
+
+            foreach (var e in Enumerable.Range(0, TrainPlan.Epoch))
+                await Task.Run(() =>
+                {
+                    if (CancellationTokenSource.IsCancellationRequested)
+                        return;
+                    BeforeEpochPipeline?.Invoke(this);
+
+                    var iEnumerator = TrainDataset.GetEnumerator(TrainPlan.BatchSize);
+
+                    while (iEnumerator.MoveNext() &&
+                           iEnumerator.Current is Dataset<DataView> data)
+                    {
+                        if (CancellationTokenSource.IsCancellationRequested)
+                            return;
+
+                        if (data.Count == 0)
+                            continue;
+
+                        BeforeBatchPipeline?.Invoke(this);
+                        var batchdataSet = data.ToDatasetNDarray();
+
+                        var predTerms = ModelGd.CallGraph(batchdataSet.Feature);
+                        var lossTerm = Loss.GetLossTerm(predTerms, batchdataSet.Label, ModelGd.Variables);
+
+
+                        NDarray GetGradient(NDarray weight)
+                        {
+                            var gradientArray = lossTerm.Differentiate(ModelGd.Variables, weight.GetData<double>());
+                            var g = np.array(gradientArray);
+                            return np.reshape(g, weight.shape);
+                        }
+
+                        ModelGd.Weights = Optimizer.Call(ModelGd.Weights, GetGradient, e);
+
+                        AfterBatchPipeline?.Invoke(this);
+                    }
+
+                    var trainMsg = new StringBuilder($"#{e + 1:D4}\t");
+                    var train_loss = UpdateLossMetric(TrainDataset);
+                    trainMsg.Append($"[Loss]:{train_loss:F4}\t");
+
+                    if (ValDataset != null)
+                    {
+                        var val_loss = UpdateLossMetric(ValDataset);
+                        trainMsg.Append("\tVal\t");
+                        trainMsg.Append($"[Loss]:{val_loss:F4}\t");
+                        foreach (var metric in Metrics) trainMsg.Append($"{metric}\t");
+                    }
+
+                    Print?.Invoke(trainMsg.ToString());
+
+                    AfterEpochPipeline?.Invoke(this);
+                });
+
+            /// early stoping
+            /// Print status of each epoch
+        }
+
+        public double UpdateLossMetric(Dataset<DataView> dataset)
+        {
+            var dataview = dataset.ToDatasetNDarray();
+            var y_pred = ModelGd.Call(dataview.Feature);
+            var y_true = dataview.Label;
+            var predterms = ModelGd.CallGraph(dataview.Feature);
+            var lossTerm = Loss.GetLossTerm(predterms, dataview.Label, ModelGd.Variables);
+            var loss = lossTerm.Evaluate(ModelGd.Variables, ModelGd.GetWeightArray());
+            Metrics.ToList().ForEach(m => m.Call(y_pred, y_true));
+
+            return loss;
+        }
+
+        private void CancelCommand_Execute()
+        {
+            CancellationTokenSource.Cancel();
+        }
 
         #endregion
     }
