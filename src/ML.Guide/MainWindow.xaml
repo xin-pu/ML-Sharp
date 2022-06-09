@@ -26,6 +26,9 @@
                     Command="{Binding TrainCommand}"
                     CommandParameter="{Binding ElementName=DataViewList,Path=SelectedValue}"
                     Style="{DynamicResource ButtonDashed}"/>
+            <Button Content="Train" 
+                    Command="{Binding CancelCommand}"
+                    Style="{DynamicResource ButtonDashed}"/>
             <Separator/>
             <Button Content="Load Train" 
                     Command="{Binding LoadTrainDatasetCommand}"

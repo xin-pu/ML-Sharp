@@ -31,11 +31,6 @@ namespace ML.Core.Trainers
         private TrainPlan _trainPlan;
         private Dataset<DataView> _valDataset;
 
-        public Action<GDTrainer> AfterBatchPipeline;
-        public Action<GDTrainer> AfterEpochPipeline;
-
-        public Action<GDTrainer> BeforeBatchPipeline;
-        public Action<GDTrainer> BeforeEpochPipeline;
 
         public Action<string> Print;
 
@@ -89,18 +84,6 @@ namespace ML.Core.Trainers
 
         public RelayCommand<Type> LoadValDatasetCommand => new(datatype => LoadValDatasetCommand_Execute(datatype));
 
-        private void LoadValDatasetCommand_Execute(Type datatype)
-        {
-            var openFileDialog = new OpenFileDialog
-            {
-                Filter = @"txt(*.txt)|*.txt"
-            };
-            var res = openFileDialog.ShowDialog();
-            if (res != true || openFileDialog.FileName == "")
-                return;
-            TrainDataset = TextLoader.LoadDataSet(openFileDialog.FileName, datatype);
-        }
-
         private void LoadTrainDatasetCommand_Execute(Type datatype)
         {
             var openFileDialog = new OpenFileDialog
@@ -110,7 +93,19 @@ namespace ML.Core.Trainers
             var res = openFileDialog.ShowDialog();
             if (res != true || openFileDialog.FileName == "")
                 return;
-            ValDataset = TextLoader.LoadDataSet(openFileDialog.FileName, datatype);
+            TrainDataset = TextLoader.LoadDataSet(openFileDialog.FileName, datatype, false);
+        }
+
+        private void LoadValDatasetCommand_Execute(Type datatype)
+        {
+            var openFileDialog = new OpenFileDialog
+            {
+                Filter = @"txt(*.txt)|*.txt"
+            };
+            var res = openFileDialog.ShowDialog();
+            if (res != true || openFileDialog.FileName == "")
+                return;
+            ValDataset = TextLoader.LoadDataSet(openFileDialog.FileName, datatype, false);
         }
 
         #endregion
@@ -215,50 +210,36 @@ namespace ML.Core.Trainers
         private async void TrainCommand_Execute()
         {
             CancellationTokenSource = new CancellationTokenSource();
+
             try
             {
-                var a = np.array(1);
+                PreCheck();
+                await Fit();
             }
             catch (Exception ex)
             {
-                ;
+                // ignored
             }
-            //try
-            //{
-            //    PreCheck();
-            //    await Fit();
-            //}
-            //catch (Exception ex)
-            //{
-            //    ;
-            //}
         }
 
 
         public void PreCheck()
         {
-            try
-            {
-                var a = np.array(1);
-            }
-            catch (Exception ex)
-            {
-                ;
-            }
         }
 
         public async Task Fit()
         {
-            TrainDataset.Should().NotBeNull("dataset should not ne null");
+            await Task.Run(() =>
+            {
+                TrainDataset.Should().NotBeNull("dataset should not ne null");
 
-            ModelGd.PipelineDataSet(TrainDataset);
+                ModelGd.PipelineDataSet(TrainDataset);
 
-            foreach (var e in Enumerable.Range(0, TrainPlan.Epoch))
-                await Task.Run(() =>
+                foreach (var e in Enumerable.Range(0, TrainPlan.Epoch))
                 {
                     if (CancellationTokenSource.IsCancellationRequested)
                         return;
-                    BeforeEpochPipeline?.Invoke(this);
+
 
                     var iEnumerator = TrainDataset.GetEnumerator(TrainPlan.BatchSize);
 
@@ -271,7 +252,6 @@ namespace ML.Core.Trainers
                         if (data.Count == 0)
                             continue;
 
-                        BeforeBatchPipeline?.Invoke(this);
                         var batchdataSet = data.ToDatasetNDarray();
 
                         var predTerms = ModelGd.CallGraph(batchdataSet.Feature);
@@ -286,15 +266,13 @@ namespace ML.Core.Trainers
                         }
 
                         ModelGd.Weights = Optimizer.Call(ModelGd.Weights, GetGradient, e);
-
-                        AfterBatchPipeline?.Invoke(this);
                     }
 
                     var trainMsg = new StringBuilder($"#{e + 1:D4}\t");
                     var train_loss = UpdateLossMetric(TrainDataset);
                     trainMsg.Append($"[Loss]:{train_loss:F4}\t");
 
-                    if (ValDataset != null)
+                    if (ValDataset != null && (ValDataset != null || ValDataset.Value != null))
                     {
                         var val_loss = UpdateLossMetric(ValDataset);
                         trainMsg.Append("\tVal\t");
@@ -303,12 +281,11 @@ namespace ML.Core.Trainers
                     }
 
                     Print?.Invoke(trainMsg.ToString());
+                }
 
-                    AfterEpochPipeline?.Invoke(this);
-                });
-
-            /// early stoping
-            /// Print status of each epoch
+                /// early stoping
+                /// Print status of each epoch
+            });
         }
 
         public double UpdateLossMetric(Dataset<DataView> dataset)
