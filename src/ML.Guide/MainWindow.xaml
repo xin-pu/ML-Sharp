@@ -132,12 +132,9 @@
                                   MinWidth="0"/>
             </Grid.ColumnDefinitions>
 
+            <Border Grid.Column="0" Background="{DynamicResource CloudGroundBrush}">
 
-            <Border Grid.Column="0">
-
-                <Grid>
-
-                </Grid>
+               
 
             </Border>
             <GridSplitter Grid.Column="0" 

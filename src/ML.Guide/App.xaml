@@ -21,6 +21,9 @@
                  </ResourceDictionary>
 
                  <ResourceDictionary Source="Resource/DataProvider.xaml"/>
+                 <ResourceDictionary Source="Resource/Style/ButtonStyle.xaml"/>
+                 <ResourceDictionary Source="Resource/Style/TextBlockStyle.xaml"/>
+                <ResourceDictionary Source="Resource/BrushResource.xaml"/>
 
             </ResourceDictionary.MergedDictionaries>
 
