@@ -77,7 +77,18 @@
     </ApplicationDefinition>
     <Compile Include="Controls\Basic\TopTabButton.cs" />
     <Compile Include="DataProvider\DataProvider.cs" />
-    <Compile Include="ViewModelLocator.cs" />
+    <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="Views\MenuOptionView.xaml.cs">
+      <DependentUpon>MenuOptionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MenuRunnerView.xaml.cs">
+      <DependentUpon>MenuRunnerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MenuView.xaml.cs">
+      <DependentUpon>MenuView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel\Menu\MenuController.cs" />
+    <Compile Include="ViewModel\Menu\MenuOption.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -105,6 +116,18 @@
     <Page Include="Resource\Style\TextBlockStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MenuOptionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MenuRunnerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MenuView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -135,10 +158,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ViewModel\" />
-    <Folder Include="Views\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\ML.Core.Data\ML.Core.Data.csproj">
       <Project>{06eac257-2a85-4c34-98bb-de114b37e0cc}</Project>

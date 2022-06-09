@@ -1,0 +1,112 @@
+﻿<StatusBar x:Class="ML.Guide.Views.MenuOptionView"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+           xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+           xmlns:hc="https://handyorg.github.io/handycontrol"
+           xmlns:basic="clr-namespace:ML.Guide.Controls.Basic"
+           mc:Ignorable="d" 
+           Background="{DynamicResource LightPrimaryBrush}"
+           DataContext="{Binding MenuOption,Source={StaticResource Locator}}"
+           d:DesignHeight="80" d:DesignWidth="1366"
+           Height="80">
+
+    <StatusBarItem VerticalContentAlignment="Stretch"
+                   HorizontalContentAlignment="Stretch">
+        <DockPanel>
+            <TextBlock DockPanel.Dock="Bottom" Text="模型"
+                       FontSize="11"
+                       HorizontalAlignment="Center"/>
+            <hc:ComboBox SelectedIndex="0" Width="200" 
+                         Name="GDModelList"
+                         VerticalAlignment="Center"
+                         DisplayMemberPath="Name"
+                         ItemsSource="{Binding Source={StaticResource  GDModelTypes}}">
+                <hc:Interaction.Triggers>
+                    <hc:EventTrigger EventName="SelectionChanged">
+                        <hc:InvokeCommandAction Command="{Binding ChangeModelCommand}"
+                                                CommandParameter="{Binding ElementName=GDModelList,Path=SelectedValue}"/>
+                    </hc:EventTrigger>
+                </hc:Interaction.Triggers>
+            </hc:ComboBox>
+        </DockPanel>
+
+    </StatusBarItem>
+    <hc:Divider LineStrokeThickness="1" 
+                LineStroke="{DynamicResource DarkPrimaryBrush}" 
+                Orientation="Vertical"/>
+    <StatusBarItem VerticalContentAlignment="Stretch"
+                   HorizontalContentAlignment="Stretch">
+        <DockPanel >
+            <TextBlock DockPanel.Dock="Bottom" Text="优化器"
+                       FontSize="11"
+                       HorizontalAlignment="Center"/>
+            <hc:ComboBox SelectedIndex="0" Width="150" 
+                         Name="OptimizerList"
+                         VerticalAlignment="Center"
+                         DisplayMemberPath="Name"
+                         ItemsSource="{Binding Source={StaticResource  OptimizerTypes}}">
+                <hc:Interaction.Triggers>
+                    <hc:EventTrigger EventName="SelectionChanged">
+                        <hc:InvokeCommandAction Command="{Binding ChangeOptimizerCommand}"
+                                                CommandParameter="{Binding ElementName=OptimizerList,Path=SelectedValue}"/>
+                    </hc:EventTrigger>
+                </hc:Interaction.Triggers>
+            </hc:ComboBox>
+        </DockPanel>
+        
+    </StatusBarItem>
+    <hc:Divider LineStrokeThickness="1" 
+                LineStroke="{DynamicResource DarkPrimaryBrush}" 
+                Orientation="Vertical"/>
+    <StatusBarItem VerticalContentAlignment="Stretch"
+                   HorizontalContentAlignment="Stretch">
+        <DockPanel >
+            <TextBlock DockPanel.Dock="Bottom" Text="损失函数"
+                       FontSize="11"
+                       HorizontalAlignment="Center"/>
+            <hc:ComboBox SelectedIndex="0"  Width="200"
+                         Name="LossList"
+                         VerticalAlignment="Center"
+                         DisplayMemberPath="Name"
+                         ItemsSource="{Binding Source={StaticResource  LossTypes}}">
+                <hc:Interaction.Triggers>
+                    <hc:EventTrigger EventName="SelectionChanged">
+                        <hc:InvokeCommandAction Command="{Binding ChangeLossCommand}"
+                                                CommandParameter="{Binding ElementName=LossList,Path=SelectedValue}"/>
+                    </hc:EventTrigger>
+                </hc:Interaction.Triggers>
+            </hc:ComboBox>
+        </DockPanel>
+      
+    </StatusBarItem>
+    <hc:Divider LineStrokeThickness="1" 
+                LineStroke="{DynamicResource DarkPrimaryBrush}" 
+                Orientation="Vertical"/>
+    <StatusBarItem VerticalContentAlignment="Stretch"
+                   HorizontalContentAlignment="Stretch">
+        <DockPanel >
+            <TextBlock DockPanel.Dock="Bottom" Text="评估指标"
+                       FontSize="11"
+                       HorizontalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal" DataContext="{Binding}">
+              
+                <basic:TopTabButton Content="Add" Icon="&#xf0a6;"
+                                       Command="{Binding AddMetricCommand}"
+                                       CommandParameter="{Binding ElementName=MetricTypeCombo,Path=SelectedValue}"/>
+                <hc:ComboBox SelectedIndex="0"  Width="200" 
+                             Name="MetricTypeCombo"
+                             DisplayMemberPath="Name"
+                             VerticalAlignment="Center"
+                             ItemsSource="{Binding Source={StaticResource  MetricTypes}}"/>
+                <basic:TopTabButton Content="Clear" Icon="&#xf0a6;"
+                                    Command="{Binding  ClearMetricCommand}"/>
+
+            </StackPanel>
+        </DockPanel>
+     
+    </StatusBarItem>
+    <hc:Divider LineStrokeThickness="1" 
+                LineStroke="{DynamicResource DarkPrimaryBrush}" 
+                Orientation="Vertical"/>
+</StatusBar>

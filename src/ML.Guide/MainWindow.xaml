@@ -5,8 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:hc="https://handyorg.github.io/handycontrol"
         xmlns:metrics="clr-namespace:ML.Core.Metrics;assembly=ML.Core"
+        xmlns:views="clr-namespace:ML.Guide.Views"
         mc:Ignorable="d"
-        Title="ML.Guide" Height="760" Width="1366">
+        Title="ML.Guide" Height="760" Width="1366"
+        DataContext="{Binding GDTrainner,Source={StaticResource Locator}}">
     <hc:Window.NonClientAreaContent>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -20,110 +22,8 @@
         </Grid>
     </hc:Window.NonClientAreaContent>
     <DockPanel>
-        <StatusBar DockPanel.Dock="Top" Height="100">
-
-            <Button Content="Train" 
-                    Command="{Binding TrainCommand}"
-                    CommandParameter="{Binding ElementName=DataViewList,Path=SelectedValue}"
-                    Style="{DynamicResource ButtonDashed}"/>
-            <Button Content="Train" 
-                    Command="{Binding CancelCommand}"
-                    Style="{DynamicResource ButtonDashed}"/>
-            <Separator/>
-            <Button Content="Load Train" 
-                    Command="{Binding LoadTrainDatasetCommand}"
-                    CommandParameter="{Binding ElementName=DataViewList,Path=SelectedValue}"
-                    Style="{DynamicResource ButtonDashed}"/>
-            <Button Content="Load val" 
-                    Command="{Binding LoadValDatasetCommand}"
-                    CommandParameter="{Binding ElementName=DataViewList,Path=SelectedValue}"
-                    Style="{DynamicResource ButtonDashed}"/>
-            <ComboBox ItemsSource="{Binding Source={StaticResource DataViewTypes}}"
-                      hc:ScrollViewer.IsPenetrating="True"
-                      DisplayMemberPath="Name"
-                      HorizontalContentAlignment="Left"
-                      Name="DataViewList"
-                      Style="{DynamicResource ComboBoxExtendBaseStyle}"
-                      Width="150">
-            </ComboBox>
-            <Separator/>
-            <ComboBox ItemsSource="{Binding Source={StaticResource GDModelTypes}}"
-                      hc:ScrollViewer.IsPenetrating="True"
-                      DisplayMemberPath="Name"
-                      HorizontalContentAlignment="Left"
-                      Name="GDModelList"
-                      Style="{DynamicResource ComboBoxExtendBaseStyle}"
-                      Width="150">
-                <hc:Interaction.Triggers>
-                    <hc:EventTrigger EventName="SelectionChanged">
-                        <hc:InvokeCommandAction Command="{Binding ChangeModelCommand}"
-                                                CommandParameter="{Binding ElementName=GDModelList,Path=SelectedValue}"/>
-                    </hc:EventTrigger>
-                </hc:Interaction.Triggers>
-            </ComboBox>
-
-            <Button Content="Save" Command="{Binding SaveModelCommand}"
-                    Style="{DynamicResource ButtonDashed}"/>
-            <Button Content="Load" Command="{Binding LoadModelCommand}"
-                    Style="{DynamicResource ButtonDashed}"/>
-            <Separator/>
-
-            <ComboBox ItemsSource="{Binding Source={StaticResource OptimizerTypes}}"
-                      hc:ScrollViewer.IsPenetrating="True"
-                      DisplayMemberPath="Name"
-                      HorizontalContentAlignment="Left"
-                      Name="OptimizerList"
-                      Style="{DynamicResource ComboBoxExtendBaseStyle}"
-                      Width="150">
-                <hc:Interaction.Triggers>
-                    <hc:EventTrigger EventName="SelectionChanged">
-                        <hc:InvokeCommandAction Command="{Binding ChangeOptimizerCommand}"
-                                                CommandParameter="{Binding ElementName=OptimizerList,Path=SelectedValue}"/>
-                    </hc:EventTrigger>
-                </hc:Interaction.Triggers>
-            </ComboBox>
-
-            <Separator/>
-
-            <ComboBox ItemsSource="{Binding Source={StaticResource LossTypes}}"
-                      hc:ScrollViewer.IsPenetrating="True"
-                     DisplayMemberPath="Name"
-                     Name="LossList"
-                     HorizontalContentAlignment="Left"
-                     Style="{DynamicResource ComboBoxExtendBaseStyle}"
-                      Width="150">
-                <hc:Interaction.Triggers>
-                    <hc:EventTrigger EventName="SelectionChanged">
-                        <hc:InvokeCommandAction Command="{Binding ChangeLossCommand}"
-                                                CommandParameter="{Binding ElementName=LossList,Path=SelectedValue}"/>
-
-                    </hc:EventTrigger>
-                </hc:Interaction.Triggers>
-
-            </ComboBox>
-            <Separator/>
-            <Button Content="Clear Metric" 
-                    Style="{DynamicResource ButtonDashedWarning}"
-                    Command="{Binding ClearMetricCommand}"/>
-            <Button Content="Add Metric" 
-                    Style="{DynamicResource ButtonDashedSuccess}"
-                    Command="{Binding AddMetricCommand}"
-                    CommandParameter="{Binding ElementName=MetricType,Path=SelectedValue}"/>
-            <ComboBox ItemsSource="{Binding Source={StaticResource MetricTypes}}" 
-                      Focusable="True"
-                      Name="MetricType"
-                      DisplayMemberPath="Name"
-                      Style="{DynamicResource ComboBoxExtendBaseStyle}"
-                      Width="200"/>
-
-            <Separator/>
-            <StackPanel>
-
-            </StackPanel>
-
-        </StatusBar>
-        <StatusBar DockPanel.Dock="Bottom" Height="60"></StatusBar>
-
+        <views:MenuView DockPanel.Dock="Top"/>
+    
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>

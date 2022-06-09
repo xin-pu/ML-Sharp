@@ -1,18 +1,19 @@
 ﻿<Application x:Class="ML.Guide.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:ML.Guide"
+             xmlns:viewModel="clr-namespace:ML.Guide.ViewModel"
+
              StartupUri="MainWindow.xaml">
     <Application.Resources>
          <ResourceDictionary>
              <ResourceDictionary.MergedDictionaries>
 
-                 <ResourceDictionary>
-                     <ResourceDictionary.MergedDictionaries>
-                         <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/skindefault.xaml"/>
-                         <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/theme.xaml"/>
-                     </ResourceDictionary.MergedDictionaries>
-                 </ResourceDictionary>
+                <ResourceDictionary>
+                    <ResourceDictionary.MergedDictionaries>
+                        <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/skindefault.xaml"/>
+                        <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/theme.xaml"/>
+                    </ResourceDictionary.MergedDictionaries>
+                </ResourceDictionary>
                  <ResourceDictionary>
                      <ResourceDictionary.MergedDictionaries>
                          <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/skinviolet.xaml"/>
@@ -23,11 +24,11 @@
                  <ResourceDictionary Source="Resource/DataProvider.xaml"/>
                  <ResourceDictionary Source="Resource/Style/ButtonStyle.xaml"/>
                  <ResourceDictionary Source="Resource/Style/TextBlockStyle.xaml"/>
-                <ResourceDictionary Source="Resource/BrushResource.xaml"/>
+                 <ResourceDictionary Source="Resource/BrushResource.xaml"/>
 
             </ResourceDictionary.MergedDictionaries>
 
-
+            <viewModel:ViewModelLocator x:Key="Locator" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

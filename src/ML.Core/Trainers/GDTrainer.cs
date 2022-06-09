@@ -21,14 +21,12 @@ namespace ML.Core.Trainers
 {
     public class GDTrainer : ViewModelBase
     {
-        private Loss _loss;
-
-        private ObservableCollection<Metric> _metrics;
-        private IModelGD _modelGd;
-        private Optimizer _optimizer;
+        private Loss _loss = new MeanSquared();
+        private ObservableCollection<Metric> _metrics = new();
+        private IModelGD _modelGd = new MultipleLinearRegression();
+        private Optimizer _optimizer = new SGD();
         private Dataset<DataView> _trainDataset;
-
-        private TrainPlan _trainPlan;
+        private TrainPlan _trainPlan = new();
         private Dataset<DataView> _valDataset;
 
 
@@ -110,96 +108,6 @@ namespace ML.Core.Trainers
 
         #endregion
 
-        #region Model Command
-
-        public RelayCommand<Type> ChangeModelCommand => new(modelType => ChangeModelTypeCommand_Execute(modelType));
-
-        private void ChangeModelTypeCommand_Execute(Type modelType)
-        {
-            ModelGd = Activator.CreateInstance(modelType) as ModelGD;
-        }
-
-        public RelayCommand SaveModelCommand => new(() => SaveModelCommand_Execute());
-
-        private void SaveModelCommand_Execute()
-        {
-            var saveDialog = new SaveFileDialog
-            {
-                Filter = @"XML(*.xml)|*.xml"
-            };
-            var res = saveDialog.ShowDialog();
-            if (res != true || saveDialog.FileName == "") return;
-
-            ModelGd.Save(saveDialog.FileName);
-        }
-
-        public RelayCommand LoadModelCommand => new(() => LoadModelCommand_Execute());
-
-        private void LoadModelCommand_Execute()
-        {
-            var openFileDialog = new OpenFileDialog
-            {
-                Filter = @"XML(*.xml)|*.xml"
-            };
-            var res = openFileDialog.ShowDialog();
-            if (res != true || openFileDialog.FileName == "")
-                return;
-
-            ModelGd = ModelGD.Load(openFileDialog.FileName);
-        }
-
-        #endregion
-
-        #region Loss Command
-
-        public RelayCommand<Type> ChangeLossCommand => new(lossType => ChangeLossCommand_Execute(lossType));
-
-
-        private void ChangeLossCommand_Execute(Type lossType)
-        {
-            Loss = Activator.CreateInstance(lossType) as Loss;
-        }
-
-        #endregion
-
-        #region Optimizer Command
-
-        public RelayCommand<Type> ChangeOptimizerCommand =>
-            new(optimizerType => ChangeOptimizerCommand_Execute(optimizerType));
-
-
-        private void ChangeOptimizerCommand_Execute(Type optimizerType)
-        {
-            Optimizer = Activator.CreateInstance(optimizerType) as Optimizer;
-        }
-
-        #endregion
-
-        #region Metric Command
-
-        public RelayCommand<Metric> RemoveMetricCommand => new(metric => RemoveMetricCommand_Execute(metric));
-
-        public RelayCommand<Type> AddMetricCommand => new(metricTYpe => AddMetricCommand_Execute(metricTYpe));
-
-        public RelayCommand ClearMetricCommand => new(ClearMetricCommand_Execute);
-
-        private void ClearMetricCommand_Execute()
-        {
-            Metrics.Clear();
-        }
-
-        private void RemoveMetricCommand_Execute(Metric metric)
-        {
-            if (Metrics.Contains(metric)) Metrics.Remove(metric);
-        }
-
-        private void AddMetricCommand_Execute(Type metricType)
-        {
-            var metric = Activator.CreateInstance(metricType) as Metric;
-            Metrics.Add(metric);
-        }
-
-        #endregion
 
         #region Control Command
 
