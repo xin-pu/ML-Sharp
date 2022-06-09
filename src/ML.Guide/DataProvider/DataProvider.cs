@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using ML.Core.Losses;
 using ML.Core.Metrics;
+using ML.Core.Models;
 using ML.Core.Optimizers;
 
 namespace ML.Guide.DataProvider
@@ -10,22 +11,39 @@ namespace ML.Guide.DataProvider
     public class DataProvider
     {
         /// <summary>
+        ///     Get All GDModels
+        /// </summary>
+        /// <returns></returns>
+        public Type[] GetGDModelTypes()
+        {
+            return GetSubType(typeof(ModelGD));
+        }
+
+        /// <summary>
+        ///     Get All Optimizer
+        /// </summary>
+        /// <returns></returns>
+        public Type[] GetOptimizerTypes()
+        {
+            return GetSubType(typeof(Optimizer));
+        }
+
+        /// <summary>
+        ///     Get All Loss Function
+        /// </summary>
+        /// <returns></returns>
+        public Type[] GetLossTypes()
+        {
+            return GetSubType(typeof(Loss));
+        }
+
+        /// <summary>
         ///     Get All Metric Type
         /// </summary>
         /// <returns></returns>
         public Type[] GetMerticTypes()
         {
             return GetSubType(typeof(Metric));
-        }
-
-        public Type[] GetOptimizerTypes()
-        {
-            return GetSubType(typeof(Optimizer));
-        }
-
-        public Type[] GetLossTypes()
-        {
-            return GetSubType(typeof(Loss));
         }
 
         internal Type[] GetSubType(Type type)

@@ -22,6 +22,26 @@
     <DockPanel>
         <StatusBar DockPanel.Dock="Top" Height="100">
 
+            <ComboBox ItemsSource="{Binding Source={StaticResource GDModelTypes}}"
+                      hc:ScrollViewer.IsPenetrating="True"
+                      DisplayMemberPath="Name"
+                      HorizontalContentAlignment="Left"
+                      Name="GDModelList"
+                      Style="{DynamicResource ComboBoxExtendBaseStyle}"
+                      Width="150">
+                <hc:Interaction.Triggers>
+                    <hc:EventTrigger EventName="SelectionChanged">
+                        <hc:InvokeCommandAction Command="{Binding ChangeModelCommand}"
+                                                CommandParameter="{Binding ElementName=GDModelList,Path=SelectedValue}"/>
+                    </hc:EventTrigger>
+                </hc:Interaction.Triggers>
+            </ComboBox>
+
+            <Button Content="Save" Command="{Binding SaveModelCommand}"
+                    Style="{DynamicResource ButtonDashed}"/>
+            <Button Content="Load" Command="{Binding LoadModelCommand}"
+                    Style="{DynamicResource ButtonDashed}"></Button>
+            <Separator/>
 
             <ComboBox ItemsSource="{Binding Source={StaticResource OptimizerTypes}}"
                       hc:ScrollViewer.IsPenetrating="True"

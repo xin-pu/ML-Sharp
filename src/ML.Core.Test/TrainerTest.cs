@@ -65,7 +65,7 @@ namespace ML.Core.Test
             var trainer = new GDTrainer
             {
                 TrainDataset = TextLoader<LinearData>.LoadDataSet(path, false),
-                ModelGd = new PolynomialRegression(1),
+                ModelGd = new PolynomialRegression(),
                 Optimizer = new Momentum(1E-1),
                 Loss = new MeanSquared(),
                 TrainPlan = new TrainPlan {Epoch = 100, BatchSize = 50},

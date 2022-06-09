@@ -7,6 +7,7 @@ using AutoDiff;
 using FluentAssertions;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using Microsoft.Win32;
 using ML.Core.Data;
 using ML.Core.Losses;
 using ML.Core.Metrics;
@@ -157,6 +158,46 @@ namespace ML.Core.Trainers
 
         #endregion
 
+        #region Model Command
+
+        public RelayCommand<Type> ChangeModelCommand => new(modelType => ChangeModelTypeCommand_Execute(modelType));
+
+        private void ChangeModelTypeCommand_Execute(Type modelType)
+        {
+            ModelGd = Activator.CreateInstance(modelType) as ModelGD;
+        }
+
+        public RelayCommand SaveModelCommand => new(() => SaveModelCommand_Execute());
+
+        private void SaveModelCommand_Execute()
+        {
+            var saveDialog = new SaveFileDialog
+            {
+                Filter = @"XML(*.xml)|*.xml"
+            };
+            var res = saveDialog.ShowDialog();
+            if (res != true || saveDialog.FileName == "") return;
+
+            ModelGd.Save(saveDialog.FileName);
+        }
+
+        public RelayCommand LoadModelCommand => new(() => LoadModelCommand_Execute());
+
+        private void LoadModelCommand_Execute()
+        {
+            var openFileDialog = new OpenFileDialog
+            {
+                Filter = @"aries(*.ar)|*.ar"
+            };
+            var res = openFileDialog.ShowDialog();
+            if (res != true || openFileDialog.FileName == "")
+                return;
+
+            ModelGd = ModelGD.Load(openFileDialog.FileName);
+        }
+
+        #endregion
+
         #region Loss Command
 
         public RelayCommand<Type> ChangeLossCommand => new(lossType => ChangeLossCommand_Execute(lossType));
@@ -212,9 +253,6 @@ namespace ML.Core.Trainers
 
         #endregion
 
-        #region Model Save Load Command
-
-        #endregion
 
         #region Plan Save Load Command
 

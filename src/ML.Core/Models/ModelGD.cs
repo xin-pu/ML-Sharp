@@ -147,7 +147,7 @@ namespace ML.Core.Models
             textWriter.Flush();
         }
 
-        public IModel Load(string filename)
+        public static IModelGD Load(string filename)
         {
             using var stream = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.Read);
             var serializer = new YAXSerializer(typeof(ModelGD));

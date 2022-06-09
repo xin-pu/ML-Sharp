@@ -3,20 +3,20 @@
                     xmlns:dataProvider="clr-namespace:ML.Guide.DataProvider">
 
 
-
+    <ObjectDataProvider MethodName="GetGDModelTypes"
+                        ObjectType="{x:Type dataProvider:DataProvider}"
+                        x:Key="GDModelTypes"/>
 
     <ObjectDataProvider MethodName="GetOptimizerTypes"
                         ObjectType="{x:Type dataProvider:DataProvider}"
-                        x:Key="OptimizerTypes">
-    </ObjectDataProvider>
+                        x:Key="OptimizerTypes"/>
+
     <ObjectDataProvider MethodName="GetLossTypes"
                         ObjectType="{x:Type dataProvider:DataProvider}"
-                        x:Key="LossTypes">
-    </ObjectDataProvider>
+                        x:Key="LossTypes"/>
 
     <ObjectDataProvider MethodName="GetMerticTypes"
                         ObjectType="{x:Type dataProvider:DataProvider}"
-                        x:Key="MetricTypes">
-    </ObjectDataProvider>
+                        x:Key="MetricTypes"/>
 
 </ResourceDictionary>

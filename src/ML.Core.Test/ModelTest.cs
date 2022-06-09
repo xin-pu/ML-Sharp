@@ -142,8 +142,7 @@ namespace ML.Core.Test
         [Fact]
         public void Load()
         {
-            var ModelGd = new Perceptron();
-            var model = ModelGd.Load("model.txt");
+            var model = ModelGD.Load("model.txt");
 
 
             var Iris1 = new IrisDataOneHot

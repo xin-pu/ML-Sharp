@@ -12,7 +12,5 @@ namespace ML.Core.Models
         NDarray Call(DataView features);
 
         void Save(string filename);
-
-        IModel Load(string filename);
     }
 }
