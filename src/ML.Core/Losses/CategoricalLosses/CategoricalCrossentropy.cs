@@ -6,7 +6,7 @@ using FluentAssertions;
 using ML.Utility;
 using Numpy;
 
-namespace ML.Core.Losses.CategoricalLosses
+namespace ML.Core.Losses
 {
     public class CategoricalCrossentropy : Loss
     {

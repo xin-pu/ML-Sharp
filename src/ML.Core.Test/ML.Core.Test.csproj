@@ -29,6 +29,7 @@
     <ProjectReference Include="..\ML.Core.Data\ML.Core.Data.csproj" />
     <ProjectReference Include="..\ML.Core.Transform\ML.Core.Transform.csproj" />
     <ProjectReference Include="..\ML.Core\ML.Core.csproj" />
+    <ProjectReference Include="..\ML.Guide\ML.Guide.csproj" />
   </ItemGroup>
 
 </Project>

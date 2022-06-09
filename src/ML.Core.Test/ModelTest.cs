@@ -12,7 +12,7 @@ using ML.Core.Test.DataStructs;
 using ML.Core.Trainers;
 using Xunit;
 using Xunit.Abstractions;
-using CategoricalCrossentropy = ML.Core.Losses.CategoricalLosses.CategoricalCrossentropy;
+using CategoricalCrossentropy = ML.Core.Losses.CategoricalCrossentropy;
 
 namespace ML.Core.Test
 {

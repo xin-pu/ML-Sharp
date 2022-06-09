@@ -3,10 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ML.Guide"
         xmlns:hc="https://handyorg.github.io/handycontrol"
         xmlns:metrics="clr-namespace:ML.Core.Metrics;assembly=ML.Core"
-        xmlns:trainers="clr-namespace:ML.Core.Trainers;assembly=ML.Core"
         mc:Ignorable="d"
         Title="ML.Guide" Height="760" Width="1366">
     <hc:Window.NonClientAreaContent>
@@ -17,12 +15,48 @@
             </Grid.ColumnDefinitions>
             <StackPanel  VerticalAlignment="Stretch" 
                          Orientation="Horizontal">
-               
+
             </StackPanel>
         </Grid>
     </hc:Window.NonClientAreaContent>
     <DockPanel>
-        <StatusBar DockPanel.Dock="Top" Height="60">
+        <StatusBar DockPanel.Dock="Top" Height="100">
+
+
+            <ComboBox ItemsSource="{Binding Source={StaticResource OptimizerTypes}}"
+                      hc:ScrollViewer.IsPenetrating="True"
+                      DisplayMemberPath="Name"
+                      HorizontalContentAlignment="Left"
+                      Name="OptimizerList"
+                      Style="{DynamicResource ComboBoxExtendBaseStyle}"
+                      Width="150">
+                <hc:Interaction.Triggers>
+                    <hc:EventTrigger EventName="SelectionChanged">
+                        <hc:InvokeCommandAction Command="{Binding ChangeOptimizerCommand}"
+                                                CommandParameter="{Binding ElementName=OptimizerList,Path=SelectedValue}"/>
+                    </hc:EventTrigger>
+                </hc:Interaction.Triggers>
+            </ComboBox>
+
+            <Separator/>
+
+            <ComboBox ItemsSource="{Binding Source={StaticResource LossTypes}}"
+                      hc:ScrollViewer.IsPenetrating="True"
+                     DisplayMemberPath="Name"
+                     Name="LossList"
+                     HorizontalContentAlignment="Left"
+                     Style="{DynamicResource ComboBoxExtendBaseStyle}"
+                      Width="150">
+                <hc:Interaction.Triggers>
+                    <hc:EventTrigger EventName="SelectionChanged">
+                        <hc:InvokeCommandAction Command="{Binding ChangeLossCommand}"
+                                                CommandParameter="{Binding ElementName=LossList,Path=SelectedValue}"/>
+
+                    </hc:EventTrigger>
+                </hc:Interaction.Triggers>
+
+            </ComboBox>
+            <Separator/>
             <Button Content="Clear Metric" 
                     Style="{DynamicResource ButtonDashedWarning}"
                     Command="{Binding ClearMetricCommand}"/>
@@ -30,12 +64,18 @@
                     Style="{DynamicResource ButtonDashedSuccess}"
                     Command="{Binding AddMetricCommand}"
                     CommandParameter="{Binding ElementName=MetricType,Path=SelectedValue}"/>
-            <ComboBox ItemsSource="{Binding Source={StaticResource MerticTypes}}" 
+            <ComboBox ItemsSource="{Binding Source={StaticResource MetricTypes}}" 
                       Focusable="True"
                       Name="MetricType"
                       DisplayMemberPath="Name"
                       Style="{DynamicResource ComboBoxExtendBaseStyle}"
                       Width="200"/>
+
+            <Separator/>
+            <StackPanel>
+
+            </StackPanel>
+
         </StatusBar>
         <StatusBar DockPanel.Dock="Bottom" Height="60"></StatusBar>
 
@@ -49,9 +89,9 @@
 
 
             <Border Grid.Column="0">
-               
+
                 <Grid>
-              
+
                 </Grid>
 
             </Border>
@@ -90,18 +130,30 @@
                                     <Border BorderThickness="1" BorderBrush="{DynamicResource PrimaryBrush}" 
                                             Margin="1"
                                             ToolTip="{Binding Describe}"
-                                            Height="50">
-                                        <DockPanel LastChildFill="True" ToolTip="{Binding}" VerticalAlignment="Center">
-                                            <Path DockPanel.Dock="Left" Fill="{DynamicResource DarkPrimaryBrush}" 
-                                                  Width="20" Margin="10,0,10,0" 
-                                                  HorizontalAlignment="Center" 
-                                                  Data="{DynamicResource BubbleTailGeometry}"></Path>
-                                            <hc:Shield Subject="metric" Status="{Binding Logogram}" Color="#1182c3"/>
-                                            <TextBlock Padding="10" Text="{Binding Name}"/>
-                                            <TextBlock Padding="10" Text="{Binding ValueError,StringFormat='{}{0:F2}'}"/>
-                                      
-                                        </DockPanel>
+                                            Height="50"
+                                            Name="BD_Collector"
+                                            CornerRadius="5">
+                                        <Grid ToolTip="{Binding}" VerticalAlignment="Center">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="80"/>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
+                                            <hc:Shield Grid.Column="0" Subject="MET" 
+                                                       Status="{Binding Logogram}" 
+                                                       Color="{StaticResource PrimaryBrush}"
+                                                       Margin="5,0"/>
+                                            <TextBlock Grid.Column="1" Padding="10" Text="{Binding Name}"/>
+                                            <TextBlock Grid.Column="2" Padding="10" Text="{Binding ValueError,StringFormat='{}{0:F2}'}"/>
+
+                                        </Grid>
                                     </Border>
+                                    <DataTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="BD_Collector" Property="BorderBrush" Value="Gray" />
+                                            <Setter TargetName="BD_Collector" Property="Background" Value="LightGoldenrodYellow" />
+                                        </Trigger>
+                                    </DataTemplate.Triggers>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>

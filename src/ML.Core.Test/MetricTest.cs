@@ -14,6 +14,7 @@ using ML.Core.Trainers;
 using Numpy;
 using Xunit;
 using Xunit.Abstractions;
+using CategoricalCrossentropy = ML.Core.Metrics.Categorical.CategoricalCrossentropy;
 
 namespace ML.Core.Test
 {

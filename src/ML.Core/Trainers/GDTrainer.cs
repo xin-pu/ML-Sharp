@@ -159,24 +159,25 @@ namespace ML.Core.Trainers
 
         #region Loss Command
 
-        public RelayCommand ChangeLossCommand => new(ChangeLossCommand_Execute);
+        public RelayCommand<Type> ChangeLossCommand => new(lossType => ChangeLossCommand_Execute(lossType));
 
 
-        private void ChangeLossCommand_Execute()
+        private void ChangeLossCommand_Execute(Type lossType)
         {
-            throw new NotImplementedException();
+            Loss = Activator.CreateInstance(lossType) as Loss;
         }
 
         #endregion
 
         #region Optimizer Command
 
-        public RelayCommand ChangeOptimizerCommand => new(ChangeOptimizerCommand_Execute);
+        public RelayCommand<Type> ChangeOptimizerCommand =>
+            new(optimizerType => ChangeOptimizerCommand_Execute(optimizerType));
 
 
-        private void ChangeOptimizerCommand_Execute()
+        private void ChangeOptimizerCommand_Execute(Type optimizerType)
         {
-            throw new NotImplementedException();
+            Optimizer = Activator.CreateInstance(optimizerType) as Optimizer;
         }
 
         #endregion

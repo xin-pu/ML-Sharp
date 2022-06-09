@@ -4,10 +4,19 @@
 
 
 
-    <ObjectDataProvider MethodName="GetMerticTypes"
+
+    <ObjectDataProvider MethodName="GetOptimizerTypes"
                         ObjectType="{x:Type dataProvider:DataProvider}"
-                        x:Key="MerticTypes">
+                        x:Key="OptimizerTypes">
+    </ObjectDataProvider>
+    <ObjectDataProvider MethodName="GetLossTypes"
+                        ObjectType="{x:Type dataProvider:DataProvider}"
+                        x:Key="LossTypes">
     </ObjectDataProvider>
 
+    <ObjectDataProvider MethodName="GetMerticTypes"
+                        ObjectType="{x:Type dataProvider:DataProvider}"
+                        x:Key="MetricTypes">
+    </ObjectDataProvider>
 
 </ResourceDictionary>
