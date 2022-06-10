@@ -45,13 +45,13 @@ namespace ML.Core.Losses
             var exp = np.exp(y_pred);
             var div = exp / np.sum(exp, -1, keepdims: true);
 
-            var loss = -Enumerable.Range(0, batchsize).Select(b =>
+            var loss = Enumerable.Range(0, batchsize).Select(b =>
             {
                 var label_true = y_true_index[b].GetData<int>()[0];
-                return np.log(div[b, label_true]).GetData<double>()[0];
-            }).Average();
+                return np.log(div[b]).GetData<double>()[label_true];
+            }).ToList();
 
-            return loss;
+            return -loss.Average();
         }
 
         /// <summary>
