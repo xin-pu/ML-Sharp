@@ -30,6 +30,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{09B8763D-6
 		data\iris-train.txt = data\iris-train.txt
 		data\optdigits-train.csv = data\optdigits-train.csv
 		data\optdigits-val.csv = data\optdigits-val.csv
+		data\winequality-red.csv = data\winequality-red.csv
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ML.Core.Transform", "src\ML.Core.Transform\ML.Core.Transform.csproj", "{1F2E8D74-C66B-4F76-AF56-44CDFEC3210E}"

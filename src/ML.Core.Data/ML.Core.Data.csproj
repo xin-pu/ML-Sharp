@@ -142,6 +142,7 @@
     <Compile Include="DataStructs\LinearData.cs" />
     <Compile Include="DataStructs\OptdigitData.cs" />
     <Compile Include="DataStructs\OptdigitOneHot.cs" />
+    <Compile Include="DataStructs\Winequality.cs" />
     <Compile Include="DataView.cs" />
     <Compile Include="Loader\ImageLoader.cs" />
     <Compile Include="Loader\LoadColumnAttribute.cs" />
