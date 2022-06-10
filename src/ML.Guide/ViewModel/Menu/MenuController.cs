@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Windows;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Microsoft.Win32;
@@ -11,6 +12,8 @@ namespace ML.Guide.ViewModel.Menu
     public class MenuController : ViewModelBase
     {
         public GDTrainer GDTrainer => ViewModelLocator.Instance.GDTrainner;
+
+        public LoadConfig LoadConfig { set; get; } = new();
 
         #region DataSet Command
 
@@ -28,9 +31,10 @@ namespace ML.Guide.ViewModel.Menu
             var res = openFileDialog.ShowDialog();
             if (res != true || openFileDialog.FileName == "")
                 return;
-            var alldataset = TextLoader.LoadDataSet(openFileDialog.FileName, datatype, false);
+            var alldataset = TextLoader.LoadDataSet(openFileDialog.FileName, datatype,
+                LoadConfig.SplitChar.ToCharArray(), LoadConfig.HasHead);
             (GDTrainer.TrainDataset, GDTrainer.ValDataset) =
-                SplitTrainAndVal ? alldataset.Split(SplitRatio) : alldataset.Split(0);
+                LoadConfig.SplitTrainAndVal ? alldataset.Split(LoadConfig.SplitRatio) : alldataset.Split(1);
         }
 
         private void LoadValDatasetCommand_Execute(Type datatype)
@@ -42,23 +46,8 @@ namespace ML.Guide.ViewModel.Menu
             var res = openFileDialog.ShowDialog();
             if (res != true || openFileDialog.FileName == "")
                 return;
-            GDTrainer.ValDataset = TextLoader.LoadDataSet(openFileDialog.FileName, datatype, false);
-        }
-
-        private bool _splitTrainAndVal = true;
-        private double _splitRatio = 0.8;
-
-        public bool SplitTrainAndVal
-        {
-            get => _splitTrainAndVal;
-            set => Set(ref _splitTrainAndVal, value);
-        }
-
-
-        public double SplitRatio
-        {
-            get => _splitRatio;
-            set => Set(ref _splitRatio, value);
+            GDTrainer.ValDataset = TextLoader.LoadDataSet(openFileDialog.FileName, datatype,
+                LoadConfig.SplitChar.ToCharArray(), LoadConfig.HasHead);
         }
 
         #endregion
@@ -74,14 +63,16 @@ namespace ML.Guide.ViewModel.Menu
         {
             CancellationTokenSource = new CancellationTokenSource();
 
+
             try
             {
                 PreCheck();
-                await GDTrainer.Fit(CancellationTokenSource);
+                await Application.Current.Dispatcher.InvokeAsync(async () =>
+                    await GDTrainer.Fit(CancellationTokenSource));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // ignored
+                ;
             }
         }
 

@@ -22,6 +22,7 @@ namespace ML.Core.Models
 
         public Perceptron()
         {
+            Transformer = new LinearFirstorder();
         }
 
         public int Classes { set; get; }

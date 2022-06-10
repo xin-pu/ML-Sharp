@@ -38,7 +38,7 @@ namespace ML.Core.Test
         public void TestModel()
         {
             var path = Path.Combine(dataFolder, "iris-train.txt");
-            var data = TextLoader.LoadDataSet<IrisData>(path, splitChar: '\t');
+            var data = TextLoader.LoadDataSet<IrisData>(path, new[] {'\t'});
 
             var model = new MultipleLinearRegression();
             model.PipelineDataSet(data);
@@ -174,7 +174,7 @@ namespace ML.Core.Test
         private Dataset<DataView> GetIris(string path)
         {
             var trainpath = Path.Combine(dataFolder, path);
-            var dataset = TextLoader.LoadDataSet<IrisDataOneHot>(trainpath, true, '\t');
+            var dataset = TextLoader.LoadDataSet<IrisDataOneHot>(trainpath, new[] {'\t'});
             return dataset;
         }
     }

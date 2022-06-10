@@ -21,10 +21,13 @@ namespace ML.Core.Trainers
     {
         private int _currentBatchIndex;
         private int _currentEpoch;
+
+
         private Loss _loss;
         private ObservableCollection<Metric> _metrics;
         private IModelGD _modelGd;
         private Optimizer _optimizer;
+
         private Dataset<DataView> _trainDataset;
         private TrainPlan _trainPlan;
         private Dataset<DataView> _valDataset;
@@ -138,7 +141,7 @@ namespace ML.Core.Trainers
                             return np.reshape(g, weight.shape);
                         }
 
-                        ModelGd.Weights = Optimizer.Call(ModelGd.Weights, GetGradient, e);
+                        ModelGd.Weights = Optimizer.Call(ModelGd.Weights.copy(), GetGradient, e);
                     }
 
                     var trainMsg = new StringBuilder($"#{e + 1:D4}\t");

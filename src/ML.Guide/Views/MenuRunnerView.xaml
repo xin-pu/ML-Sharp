@@ -50,25 +50,33 @@
                              hc:TitleElement.Title="Template:">
                 </hc:ComboBox>
                 <StackPanel VerticalAlignment="Center" Margin="5,0">
-                    <CheckBox Content="Split" IsChecked="{Binding SplitTrainAndVal}"
+                    <CheckBox Content="Split" IsChecked="{Binding LoadConfig.SplitTrainAndVal}"
                               Name="SplitType" Margin="2"/>
-
+                    <CheckBox Content="HasHead" IsChecked="{Binding LoadConfig.HasHead}" Margin="2"/>
                 </StackPanel>
-             
 
-                <basic:TopTabButton Content="LoadDataSet" Icon="&#xefca;" 
+                <basic:TopTabButton Content="Train" Icon="&#xefca;" 
                                     Command="{Binding LoadTrainDatasetCommand}"
                                     CommandParameter="{Binding ElementName=OptimizerList,Path=SelectedValue}"/>
 
-                <hc:NumericUpDown Value="{Binding SplitRatio}" 
-                                  Minimum="0" Maximum="1" DecimalPlaces="2"
-                                  Visibility="{Binding SplitTrainAndVal,
-                    Converter={StaticResource Boolean2VisibilityConverter}}"/>
-
-                <basic:TopTabButton Content="Cancel" Icon="&#xefca;" 
+                <basic:TopTabButton Content="Val" Icon="&#xefca;" 
                                     Command="{Binding LoadValDatasetCommand}"
-                                    Visibility="{Binding SplitTrainAndVal,
+                                    CommandParameter="{Binding ElementName=OptimizerList,Path=SelectedValue}"
+                                    Visibility="{Binding LoadConfig.SplitTrainAndVal,
                     Converter={StaticResource Boolean2VisibilityReConverter}}"/>
+
+
+                <StackPanel Orientation="Horizontal" Height="40">
+                    <hc:NumericUpDown Value="{Binding LoadConfig.SplitRatio}" 
+                                      Minimum="0" Maximum="1" DecimalPlaces="2"
+                                      Height="40"
+                                      Visibility="{Binding LoadConfig.SplitTrainAndVal,
+                    Converter={StaticResource Boolean2VisibilityConverter}}"/>
+                    <TextBox Text="{Binding LoadConfig.SplitChar}"  
+                             Margin="2"/>
+                </StackPanel>
+
+               
             </StackPanel>
 
         </DockPanel>

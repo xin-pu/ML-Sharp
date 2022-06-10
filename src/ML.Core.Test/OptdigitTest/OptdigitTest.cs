@@ -28,7 +28,7 @@ namespace ML.Core.Test.OptdigitTest
         public void TestLoadData()
         {
             var path = Path.Combine(dataFolder, "optdigits-train.csv");
-            var dataset = TextLoader.LoadDataSet<OptdigitOneHot>(path, splitChar: ',');
+            var dataset = TextLoader.LoadDataSet<OptdigitOneHot>(path, ',', false);
             print(dataset);
         }
 
@@ -36,14 +36,14 @@ namespace ML.Core.Test.OptdigitTest
         public void TestToOneHot()
         {
             var path = Path.Combine(dataFolder, "optdigits-train.csv");
-            var dataset = TextLoader.LoadDataSet<OptdigitOneHot>(path, splitChar: ',');
+            var dataset = TextLoader.LoadDataSet<OptdigitOneHot>(path, ',', false);
             print(dataset.ToDatasetNDarray().Label);
         }
 
         private Dataset<DataView> GetOptdigitOnehot(string filename)
         {
             var trainpath = Path.Combine(dataFolder, filename);
-            var dataset = TextLoader.LoadDataSet<OptdigitOneHot>(trainpath);
+            var dataset = TextLoader.LoadDataSet<OptdigitOneHot>(trainpath, ',', false);
             return dataset;
         }
 
@@ -61,7 +61,7 @@ namespace ML.Core.Test.OptdigitTest
                 Optimizer = new Nadam(1E-2),
                 Loss = new CategoricalCrossentropy(),
 
-                TrainPlan = new TrainPlan {Epoch = 10, BatchSize = 50},
+                TrainPlan = new TrainPlan {Epoch = 2, BatchSize = 50},
                 Metrics = new ObservableCollection<Metric>
                 {
                     new CategoricalAccuracy()

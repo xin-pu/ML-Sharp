@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using ML.Core.Data;
 using ML.Core.Data.DataStructs;
@@ -29,7 +28,7 @@ namespace ML.Core.Test
         public void TestDataSet()
         {
             var path = Path.Combine(dataFolder, "data_singlevar.txt");
-            var Dataset = TextLoader.LoadDataSet<LinearData>(path, false);
+            var Dataset = TextLoader.LoadDataSet<LinearData>(path, ',', false);
             print(Dataset);
         }
 
@@ -40,7 +39,7 @@ namespace ML.Core.Test
 
             var trainer = new GDTrainer
             {
-                TrainDataset = TextLoader.LoadDataSet<LinearData>(path, false).Shuffle(),
+                TrainDataset = TextLoader.LoadDataSet<LinearData>(path, ',', false).Shuffle(),
                 ModelGd = new MultipleLinearRegression(),
                 Optimizer = new Nesterov(1E-2),
                 Loss = new MeanSquared(),
@@ -64,7 +63,7 @@ namespace ML.Core.Test
 
             var trainer = new GDTrainer
             {
-                TrainDataset = TextLoader.LoadDataSet<LinearData>(path, false),
+                TrainDataset = TextLoader.LoadDataSet<LinearData>(path, ',', false),
                 ModelGd = new PolynomialRegression(),
                 Optimizer = new Momentum(1E-1),
                 Loss = new MeanSquared(),
@@ -89,7 +88,7 @@ namespace ML.Core.Test
                 TrainDataset = trainDataset.Shuffle(),
                 ValDataset = valDataset.Shuffle(),
                 ModelGd = new BinaryLogicClassify(),
-                Optimizer = new Nesterov(1E-2),
+                Optimizer = new Momentum(1E-1),
                 Loss = new BinaryCrossentropy(),
 
                 TrainPlan = new TrainPlan {Epoch = 100, BatchSize = 25},
@@ -108,8 +107,8 @@ namespace ML.Core.Test
         private Dataset<DataView> GetBinaryIris(string path)
         {
             var trainpath = Path.Combine(dataFolder, path);
-            var dataset = TextLoader.LoadDataSet<IrisData>(trainpath, true, '\t');
-            var some = dataset.Value.ToList();
+            var dataset = TextLoader.LoadDataSet<IrisData>(trainpath, '\t');
+            var some = dataset.Value;
             dataset = new Dataset<DataView>(some);
             return dataset;
         }

@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using FluentAssertions;
-using GalaSoft.MvvmLight.CommandWpf;
 using MathNet.Numerics.Random;
-using Microsoft.Win32;
-using ML.Core.Data.Loader;
 using Numpy;
 
 namespace ML.Core.Data
@@ -38,20 +34,6 @@ namespace ML.Core.Data
         public T[] Value { internal set; get; }
 
         public int Count => Value.Length;
-
-        [Category("Command")] public RelayCommand LoadDatasetCommand => new(() => LoadValDatasetCommand_Execute());
-
-        private void LoadValDatasetCommand_Execute()
-        {
-            var openFileDialog = new OpenFileDialog
-            {
-                Filter = @"txt(*.txt)|*.txt"
-            };
-            var res = openFileDialog.ShowDialog();
-            if (res != true || openFileDialog.FileName == "")
-                return;
-            Value = TextLoader.LoadDataSet(openFileDialog.FileName, Type).Value as T[];
-        }
 
 
         public override string ToString()

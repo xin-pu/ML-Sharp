@@ -12,7 +12,7 @@ namespace ML.Core.Data.Loader
     /// </summary>
     public class TextLoader
     {
-        public static Dataset<DataView> LoadDataSet<T>(string path, bool hasHeader = true, char splitChar = ',')
+        public static Dataset<DataView> LoadDataSet<T>(string path, char[] splitChar, bool hasHeader = true)
             where T : DataView
         {
             /// Step 0 Precheck
@@ -38,8 +38,13 @@ namespace ML.Core.Data.Loader
             return new Dataset<DataView>(datas);
         }
 
+        public static Dataset<DataView> LoadDataSet<T>(string path, char splitChar, bool hasHeader = true)
+            where T : DataView
+        {
+            return LoadDataSet<T>(path, new[] {splitChar}, hasHeader);
+        }
 
-        public static Dataset<DataView> LoadDataSet(string path, Type type, bool hasHeader = true, char splitChar = ',')
+        public static Dataset<DataView> LoadDataSet(string path, Type type, char[] splitChar, bool hasHeader)
         {
             /// Step 0 Precheck
             File.Exists(path).Should().BeTrue($"File {path} should exist.");
