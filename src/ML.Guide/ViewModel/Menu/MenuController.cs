@@ -29,7 +29,7 @@ namespace ML.Guide.ViewModel.Menu
         {
             var openFileDialog = new OpenFileDialog
             {
-                Filter = @"txt(*.txt)|*.txt"
+                Filter = @"txt(*.txt)|*.txt|csv(*.csv)|*.csv"
             };
             var res = openFileDialog.ShowDialog();
             if (res != true || openFileDialog.FileName == "")
@@ -51,7 +51,7 @@ namespace ML.Guide.ViewModel.Menu
         {
             var openFileDialog = new OpenFileDialog
             {
-                Filter = @"txt(*.txt)|*.txt"
+                Filter = @"txt(*.txt)|*.txt|csv(*.csv)|*.csv"
             };
             var res = openFileDialog.ShowDialog();
             if (res != true || openFileDialog.FileName == "")

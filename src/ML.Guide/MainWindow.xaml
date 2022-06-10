@@ -41,6 +41,9 @@
                     <ProgressBar Value="{Binding CurrentEpoch}"
                                  Maximum="{Binding TrainPlan.Epoch}"
                                  DockPanel.Dock="Bottom"/>
+                    <ProgressBar Value="{Binding CurrentBatchIndex}"
+                                 Maximum="{Binding TrainPlan.BatchSize}"
+                                 DockPanel.Dock="Bottom"/>
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition></RowDefinition>

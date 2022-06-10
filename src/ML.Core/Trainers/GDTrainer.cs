@@ -103,7 +103,7 @@ namespace ML.Core.Trainers
         public async Task Fit(CancellationTokenSource cancellation = null)
         {
             CurrentEpoch = 0;
-            CurrentBatchIndex = 0;
+
             TrainDataset.Should().NotBeNull("dataset should not ne null");
 
             ModelGd.PipelineDataSet(TrainDataset);
@@ -111,6 +111,7 @@ namespace ML.Core.Trainers
             foreach (var e in Enumerable.Range(1, TrainPlan.Epoch))
             {
                 CurrentEpoch = e;
+                CurrentBatchIndex = 0;
                 if (cancellation?.IsCancellationRequested == true)
                     return;
 
@@ -127,6 +128,7 @@ namespace ML.Core.Trainers
                     if (data.Count == 0)
                         continue;
 
+                    CurrentBatchIndex++;
                     var batchdataSet = data.ToDatasetNDarray();
 
                     var predTerms = ModelGd.CallGraph(batchdataSet.Feature);
