@@ -36,14 +36,25 @@
             <Border Grid.Column="0" Background="{DynamicResource CloudGroundBrush}"
                     hc:Growl.GrowlParent="True">
 
-               <DockPanel>
+                <DockPanel>
 
-                   <ProgressBar Value="{Binding CurrentEpoch}"
-                                Maximum="{Binding TrainPlan.Epoch}"
-                                DockPanel.Dock="Bottom"/>
-                    <views:RecordView></views:RecordView>
+                    <ProgressBar Value="{Binding CurrentEpoch}"
+                                 Maximum="{Binding TrainPlan.Epoch}"
+                                 DockPanel.Dock="Bottom"/>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
 
-               </DockPanel>
+                        <views:RecordView Grid.Row="0" DataContext="{Binding Source={StaticResource Locator}, Path=LossRecorder}"
+                                          Margin="2"/>
+                        <views:RecordView Grid.Row="1" DataContext="{Binding Source={StaticResource Locator}, Path=MetricRecorder}"
+                                          Margin="2"/>
+                    </Grid>
+
+
+                </DockPanel>
 
             </Border>
             <GridSplitter Grid.Column="0" 

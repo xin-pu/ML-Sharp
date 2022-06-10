@@ -16,6 +16,7 @@ namespace ML.Guide.ViewModel
             SimpleIoc.Default.Register(() => new MenuController());
             SimpleIoc.Default.Register(() => new MenuOption());
             SimpleIoc.Default.Register(() => new LossRecorder());
+            SimpleIoc.Default.Register(() => new MetricRecorder());
         }
 
         public static ViewModelLocator Instance => new Lazy<ViewModelLocator>(() =>
@@ -26,5 +27,6 @@ namespace ML.Guide.ViewModel
         public MenuOption MenuOption => SimpleIoc.Default.GetInstance<MenuOption>();
         public MenuController MenuController => SimpleIoc.Default.GetInstance<MenuController>();
         public LossRecorder LossRecorder => SimpleIoc.Default.GetInstance<LossRecorder>();
+        public MetricRecorder MetricRecorder => SimpleIoc.Default.GetInstance<MetricRecorder>();
     }
 }

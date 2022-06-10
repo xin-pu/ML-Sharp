@@ -1,11 +1,12 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 using FluentAssertions;
 using GalaSoft.MvvmLight;
 using Numpy;
 
 namespace ML.Core.Metrics
 {
-    public abstract class Metric : ViewModelBase
+    public abstract class Metric : ViewModelBase, IRecorder
     {
         private string _logogram;
         private string _name;
@@ -49,6 +50,8 @@ namespace ML.Core.Metrics
             get => _name;
         }
 
+        public Action<double> ReportToRecorder { get; set; }
+
 
         internal virtual void precheck(NDarray y_true, NDarray y_pred)
         {
@@ -60,6 +63,7 @@ namespace ML.Core.Metrics
         public double Call(NDarray y_true, NDarray y_pred)
         {
             ValueError = call(y_true, y_pred);
+            ReportToRecorder?.Invoke(ValueError);
             return ValueError;
         }
 

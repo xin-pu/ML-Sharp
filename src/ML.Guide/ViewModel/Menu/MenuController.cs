@@ -14,8 +14,8 @@ namespace ML.Guide.ViewModel.Menu
     {
         public GDTrainer GDTrainer => ViewModelLocator.Instance.GDTrainner;
 
+        public MetricRecorder MetricRecorder => ViewModelLocator.Instance.MetricRecorder;
         public LossRecorder LossRecorder => ViewModelLocator.Instance.LossRecorder;
-
         public LoadConfig LoadConfig { set; get; } = new();
 
         #region DataSet Command
@@ -99,6 +99,7 @@ namespace ML.Guide.ViewModel.Menu
         public void RegisterRecord()
         {
             LossRecorder.RegiserModel(GDTrainer);
+            MetricRecorder.RegiserModel(GDTrainer);
         }
 
         public void PreCheck()

@@ -157,8 +157,7 @@ namespace ML.Core.Trainers
                     continue;
 
                 var val_loss = UpdateLossMetric(ValDataset, false);
-                trainMsg.Append("\tVal\t");
-                trainMsg.Append($"[Loss]:{val_loss:F4}\t");
+                trainMsg.Append($"\tVal\t[Loss]:{val_loss:F4}\t");
                 foreach (var metric in Metrics) trainMsg.Append($"{metric}\t");
 
 

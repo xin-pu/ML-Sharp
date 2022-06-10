@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight;
+﻿using System.Linq;
+using GalaSoft.MvvmLight;
 using LiveCharts;
 using LiveCharts.Wpf;
 using ML.Core;
@@ -38,6 +39,36 @@ namespace ML.Guide.ViewModel
                     Name = vallossRecord.Name
                 }
             };
+        }
+    }
+
+    public class MetricRecorder : ViewModelBase
+    {
+        private SeriesCollection _series;
+
+        public MetricRecorder()
+        {
+            Series = new SeriesCollection();
+        }
+
+        public SeriesCollection Series
+        {
+            get => _series;
+            set => Set(ref _series, value);
+        }
+
+        public void RegiserModel(GDTrainer gdTrainer)
+        {
+            var mertrics = gdTrainer.Metrics;
+            var series = mertrics
+                .Select(m => new Recorder(m))
+                .Select(m => new StackedAreaSeries
+                {
+                    Values = m.Values,
+                    Name = m.Name
+                }).ToArray();
+            Series = new SeriesCollection();
+            Series.AddRange(series);
         }
     }
 
