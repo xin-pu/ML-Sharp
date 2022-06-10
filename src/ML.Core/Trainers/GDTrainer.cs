@@ -146,7 +146,7 @@ namespace ML.Core.Trainers
 
 
                 var trainMsg = new StringBuilder($"#{e:D4}\t");
-                var train_loss = UpdateLossMetric(TrainDataset);
+                var train_loss = UpdateLossMetric(TrainDataset, true);
                 trainMsg.Append($"[Loss]:{train_loss:F4}\t");
 
                 if (ValDataset == null)
@@ -156,7 +156,7 @@ namespace ML.Core.Trainers
                 if (ValDataset.Value.Length == 0)
                     continue;
 
-                var val_loss = UpdateLossMetric(ValDataset);
+                var val_loss = UpdateLossMetric(ValDataset, false);
                 trainMsg.Append("\tVal\t");
                 trainMsg.Append($"[Loss]:{val_loss:F4}\t");
                 foreach (var metric in Metrics) trainMsg.Append($"{metric}\t");
@@ -166,15 +166,14 @@ namespace ML.Core.Trainers
             }
         }
 
-        private double UpdateLossMetric(Dataset<DataView> dataset)
+        private double UpdateLossMetric(Dataset<DataView> dataset, bool isTrain)
         {
             var dataview = dataset.ToDatasetNDarray();
             var y_pred = ModelGd.Call(dataview.Feature);
             var y_true = dataview.Label;
-            var predterms = ModelGd.CallGraph(dataview.Feature);
-            var lossTerm = Loss.GetLossTerm(predterms, dataview.Label, ModelGd.Variables);
-            var loss = lossTerm.Evaluate(ModelGd.Variables, ModelGd.GetWeightArray());
-            Metrics.ToList().ForEach(m => m.Call(y_pred, y_true));
+
+            var loss = Loss.GetLoss(y_pred, y_true);
+            Metrics.ToList().ForEach(m => m.Call(y_true, y_pred));
 
             return loss;
         }

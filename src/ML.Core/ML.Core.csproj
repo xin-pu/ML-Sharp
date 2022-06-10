@@ -151,6 +151,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IRecorder.cs" />
     <Compile Include="Losses\BinaryLosses\BinaryCrossentropy.cs" />
     <Compile Include="Losses\CategoricalLosses\CategoricalCrossentropy.cs" />
     <Compile Include="Losses\CategoricalLoss.cs" />
@@ -195,6 +196,7 @@
     <Compile Include="Optimizers\RMSProp.cs" />
     <Compile Include="Optimizers\SGD.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Recorders\Recorder.cs" />
     <Compile Include="Trainers\TrainPlan.cs" />
     <Compile Include="Trainers\GDTrainer.cs" />
   </ItemGroup>

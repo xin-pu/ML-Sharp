@@ -14,6 +14,8 @@ namespace ML.Guide.ViewModel.Menu
     {
         public GDTrainer GDTrainer => ViewModelLocator.Instance.GDTrainner;
 
+        public LossRecorder LossRecorder => ViewModelLocator.Instance.LossRecorder;
+
         public LoadConfig LoadConfig { set; get; } = new();
 
         #region DataSet Command
@@ -81,6 +83,8 @@ namespace ML.Guide.ViewModel.Menu
 
             try
             {
+                RegisterRecord();
+
                 PreCheck();
 
                 await Application.Current.Dispatcher.InvokeAsync(async () =>
@@ -92,6 +96,10 @@ namespace ML.Guide.ViewModel.Menu
             }
         }
 
+        public void RegisterRecord()
+        {
+            LossRecorder.RegiserModel(GDTrainer);
+        }
 
         public void PreCheck()
         {

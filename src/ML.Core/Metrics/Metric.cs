@@ -27,15 +27,6 @@ namespace ML.Core.Metrics
         }
 
         /// <summary>
-        ///     指标名
-        /// </summary>
-        public string Name
-        {
-            protected set => Set(ref _name, value);
-            get => _name;
-        }
-
-        /// <summary>
         ///     简写名
         /// </summary>
         public string Logogram
@@ -48,6 +39,15 @@ namespace ML.Core.Metrics
         ///     描述
         /// </summary>
         public abstract string Describe { get; }
+
+        /// <summary>
+        ///     指标名
+        /// </summary>
+        public string Name
+        {
+            protected set => Set(ref _name, value);
+            get => _name;
+        }
 
 
         internal virtual void precheck(NDarray y_true, NDarray y_pred)

@@ -6,6 +6,7 @@
         xmlns:hc="https://handyorg.github.io/handycontrol"
         xmlns:metrics="clr-namespace:ML.Core.Metrics;assembly=ML.Core"
         xmlns:views="clr-namespace:ML.Guide.Views"
+        xmlns:wpf="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
         Title="ML.Guide" Height="760" Width="1366"
         DataContext="{Binding GDTrainner,Source={StaticResource Locator}}">
@@ -29,16 +30,19 @@
                 <ColumnDefinition/>
                 <ColumnDefinition Width="400"
                                   MaxWidth="500"
-                                  MinWidth="0"/>
+                                  MinWidth="20"/>
             </Grid.ColumnDefinitions>
 
             <Border Grid.Column="0" Background="{DynamicResource CloudGroundBrush}"
                     hc:Growl.GrowlParent="True">
 
                <DockPanel>
+
                    <ProgressBar Value="{Binding CurrentEpoch}"
-                               Maximum="{Binding TrainPlan.Epoch}"
-                               Minimum="0"/>
+                                Maximum="{Binding TrainPlan.Epoch}"
+                                DockPanel.Dock="Bottom"/>
+                    <views:RecordView></views:RecordView>
+
                </DockPanel>
 
             </Border>

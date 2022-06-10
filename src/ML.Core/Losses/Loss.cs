@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using AutoDiff;
@@ -9,7 +10,7 @@ using Numpy;
 
 namespace ML.Core.Losses
 {
-    public abstract class Loss : ViewModelBase
+    public abstract class Loss : ViewModelBase, IRecorder
     {
         private double _lamdba = 1E-4;
         private Regularization _regularization = Regularization.None;
@@ -22,8 +23,6 @@ namespace ML.Core.Losses
         protected Loss()
         {
         }
-
-        [Category("Tag")] public string Name => GetType().Name;
 
 
         /// <summary>
@@ -48,6 +47,10 @@ namespace ML.Core.Losses
 
         [Category("Tag")] public abstract string Describe { get; }
 
+        public Action<double> ReportToRecorder { get; set; }
+
+        [Category("Tag")] public string Name => GetType().Name;
+
         public override string ToString()
         {
             var str = new StringBuilder();
@@ -69,8 +72,8 @@ namespace ML.Core.Losses
             var y_pred_reshape = np.reshape(y_pred, y_true.shape);
 
             checkLabels(y_true);
-
             var loss = calculateLoss(y_pred_reshape, y_true);
+            ReportToRecorder?.Invoke(loss);
 
             return loss;
         }

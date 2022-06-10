@@ -15,6 +15,7 @@ namespace ML.Guide.ViewModel
             SimpleIoc.Default.Register(() => new GDTrainer());
             SimpleIoc.Default.Register(() => new MenuController());
             SimpleIoc.Default.Register(() => new MenuOption());
+            SimpleIoc.Default.Register(() => new LossRecorder());
         }
 
         public static ViewModelLocator Instance => new Lazy<ViewModelLocator>(() =>
@@ -24,5 +25,6 @@ namespace ML.Guide.ViewModel
         public GDTrainer GDTrainner => SimpleIoc.Default.GetInstance<GDTrainer>();
         public MenuOption MenuOption => SimpleIoc.Default.GetInstance<MenuOption>();
         public MenuController MenuController => SimpleIoc.Default.GetInstance<MenuController>();
+        public LossRecorder LossRecorder => SimpleIoc.Default.GetInstance<LossRecorder>();
     }
 }
