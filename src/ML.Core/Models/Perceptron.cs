@@ -6,6 +6,8 @@ namespace ML.Core.Models
 {
     public class Perceptron : ModelGD
     {
+        private int classes;
+
         /// <summary>
         ///     Y should be [Batch, One Hot]
         ///     [
@@ -16,8 +18,8 @@ namespace ML.Core.Models
         /// <param name="classes"></param>
         public Perceptron(int classes)
         {
-            Transformer = new LinearFirstorder();
             Classes = classes;
+            Transformer = new LinearFirstorder();
         }
 
         public Perceptron()
@@ -25,7 +27,12 @@ namespace ML.Core.Models
             Transformer = new LinearFirstorder();
         }
 
-        public int Classes { set; get; }
+        public int Classes
+        {
+            get => classes;
+            set => Set(ref classes, value);
+        }
+
         public override string Description => "Perceptron";
 
         /// <summary>

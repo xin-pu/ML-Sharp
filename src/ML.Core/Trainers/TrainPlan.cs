@@ -11,7 +11,7 @@ namespace ML.Core.Trainers
         public TrainPlan()
         {
             BatchSize = 0;
-            Epoch = 100;
+            Epoch = 10;
         }
 
 

@@ -19,6 +19,7 @@ namespace ML.Core.Trainers
 {
     public class GDTrainer : ViewModelBase
     {
+        private int _batch;
         private int _currentBatchIndex;
         private int _currentEpoch;
 
@@ -99,9 +100,20 @@ namespace ML.Core.Trainers
             set => Set(ref _currentBatchIndex, value);
         }
 
+        public int Batch
+        {
+            get => _batch;
+            set => Set(ref _batch, value);
+        }
+
 
         public async Task Fit(CancellationTokenSource cancellation = null)
         {
+            Batch = TrainPlan.BatchSize == 0
+                ? 1
+                : TrainDataset.Count / TrainPlan.BatchSize + TrainDataset.Count % TrainPlan.BatchSize == 0
+                    ? 0
+                    : 1;
             CurrentEpoch = 0;
 
             TrainDataset.Should().NotBeNull("dataset should not ne null");

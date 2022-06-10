@@ -25,18 +25,12 @@ namespace ML.Guide.ViewModel
         public void RegiserModel(GDTrainer gdTrainer)
         {
             var lossRecord = new Recorder(gdTrainer.Loss);
-            var vallossRecord = new Recorder(gdTrainer.Loss);
             Series = new SeriesCollection
             {
                 new StackedAreaSeries
                 {
                     Values = lossRecord.Values,
-                    Name = lossRecord.Name
-                },
-                new StackedAreaSeries
-                {
-                    Values = vallossRecord.Values,
-                    Name = vallossRecord.Name
+                    Title = lossRecord.Name
                 }
             };
         }
@@ -65,7 +59,7 @@ namespace ML.Guide.ViewModel
                 .Select(m => new StackedAreaSeries
                 {
                     Values = m.Values,
-                    Name = m.Name
+                    Title = m.Name
                 }).ToArray();
             Series = new SeriesCollection();
             Series.AddRange(series);
