@@ -46,14 +46,18 @@ namespace ML.Core.Optimizers
         [Category("State")]
         public double WorkLearningRate
         {
-            protected set => Set(ref _workLearningRate, value);
+            set => Set(ref _workLearningRate, value);
             get => _workLearningRate;
         }
 
         [Category("Configuration")]
         public double InitLearningRate
         {
-            set => Set(ref _initLearningRate, value);
+            set
+            {
+                Set(ref _initLearningRate, value);
+                WorkLearningRate = value;
+            }
             get => _initLearningRate;
         }
 
@@ -69,6 +73,7 @@ namespace ML.Core.Optimizers
             CalGradient = calGradient;
             return call(weight, epoch);
         }
+
 
         internal abstract NDarray call(NDarray weight, int epoch);
     }

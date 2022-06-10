@@ -32,9 +32,14 @@
                                   MinWidth="0"/>
             </Grid.ColumnDefinitions>
 
-            <Border Grid.Column="0" Background="{DynamicResource CloudGroundBrush}">
+            <Border Grid.Column="0" Background="{DynamicResource CloudGroundBrush}"
+                    hc:Growl.GrowlParent="True">
 
-               
+               <DockPanel>
+                   <ProgressBar Value="{Binding CurrentEpoch}"
+                               Maximum="{Binding TrainPlan.Epoch}"
+                               Minimum="0"/>
+               </DockPanel>
 
             </Border>
             <GridSplitter Grid.Column="0" 

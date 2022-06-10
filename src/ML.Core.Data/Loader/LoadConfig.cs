@@ -4,8 +4,8 @@ namespace ML.Core.Data.Loader
 {
     public class LoadConfig : ViewModelBase
     {
-        private bool _hasHead;
-        private string _splitChar = "\t";
+        private bool _hasHead = true;
+        private string _splitChar = ";:,\t";
         private double _splitRatio = 0.8;
         private bool _splitTrainAndVal = true;
 

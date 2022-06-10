@@ -3,6 +3,7 @@ using System.Threading;
 using System.Windows;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using HandyControl.Controls;
 using Microsoft.Win32;
 using ML.Core.Data.Loader;
 using ML.Core.Trainers;
@@ -31,10 +32,17 @@ namespace ML.Guide.ViewModel.Menu
             var res = openFileDialog.ShowDialog();
             if (res != true || openFileDialog.FileName == "")
                 return;
-            var alldataset = TextLoader.LoadDataSet(openFileDialog.FileName, datatype,
-                LoadConfig.SplitChar.ToCharArray(), LoadConfig.HasHead);
-            (GDTrainer.TrainDataset, GDTrainer.ValDataset) =
-                LoadConfig.SplitTrainAndVal ? alldataset.Split(LoadConfig.SplitRatio) : alldataset.Split(1);
+            try
+            {
+                var alldataset = TextLoader.LoadDataSet(openFileDialog.FileName, datatype,
+                    LoadConfig.SplitChar.ToCharArray(), LoadConfig.HasHead);
+                (GDTrainer.TrainDataset, GDTrainer.ValDataset) =
+                    LoadConfig.SplitTrainAndVal ? alldataset.Split(LoadConfig.SplitRatio) : alldataset.Split(1);
+            }
+            catch (Exception ex)
+            {
+                Growl.Error($"打开数据集异常\r\n{ex.Message}");
+            }
         }
 
         private void LoadValDatasetCommand_Execute(Type datatype)
@@ -46,8 +54,15 @@ namespace ML.Guide.ViewModel.Menu
             var res = openFileDialog.ShowDialog();
             if (res != true || openFileDialog.FileName == "")
                 return;
-            GDTrainer.ValDataset = TextLoader.LoadDataSet(openFileDialog.FileName, datatype,
-                LoadConfig.SplitChar.ToCharArray(), LoadConfig.HasHead);
+            try
+            {
+                GDTrainer.ValDataset = TextLoader.LoadDataSet(openFileDialog.FileName, datatype,
+                    LoadConfig.SplitChar.ToCharArray(), LoadConfig.HasHead);
+            }
+            catch (Exception ex)
+            {
+                Growl.Error($"打开数据集异常\r\n{ex.Message}");
+            }
         }
 
         #endregion
@@ -67,12 +82,13 @@ namespace ML.Guide.ViewModel.Menu
             try
             {
                 PreCheck();
+
                 await Application.Current.Dispatcher.InvokeAsync(async () =>
                     await GDTrainer.Fit(CancellationTokenSource));
             }
             catch (Exception ex)
             {
-                ;
+                Growl.Error($"训练\r\n{ex.Message}");
             }
         }
 

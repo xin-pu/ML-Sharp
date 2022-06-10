@@ -104,61 +104,66 @@ namespace ML.Core.Trainers
         {
             CurrentEpoch = 0;
             CurrentBatchIndex = 0;
-            await Task.Run(() =>
+            TrainDataset.Should().NotBeNull("dataset should not ne null");
+
+            ModelGd.PipelineDataSet(TrainDataset);
+
+            foreach (var e in Enumerable.Range(1, TrainPlan.Epoch))
             {
-                TrainDataset.Should().NotBeNull("dataset should not ne null");
+                CurrentEpoch = e;
+                if (cancellation?.IsCancellationRequested == true)
+                    return;
 
-                ModelGd.PipelineDataSet(TrainDataset);
+                await Task.Delay(TimeSpan.FromMilliseconds(10));
 
-                foreach (var e in Enumerable.Range(0, TrainPlan.Epoch))
+                var iEnumerator = TrainDataset.GetEnumerator(TrainPlan.BatchSize);
+
+                while (iEnumerator.MoveNext() &&
+                       iEnumerator.Current is Dataset<DataView> data)
                 {
-                    CurrentEpoch = e;
                     if (cancellation?.IsCancellationRequested == true)
                         return;
 
+                    if (data.Count == 0)
+                        continue;
 
-                    var iEnumerator = TrainDataset.GetEnumerator(TrainPlan.BatchSize);
+                    var batchdataSet = data.ToDatasetNDarray();
 
-                    while (iEnumerator.MoveNext() &&
-                           iEnumerator.Current is Dataset<DataView> data)
+                    var predTerms = ModelGd.CallGraph(batchdataSet.Feature);
+                    var lossTerm = Loss.GetLossTerm(predTerms, batchdataSet.Label, ModelGd.Variables);
+
+                    await Task.Delay(TimeSpan.FromMilliseconds(10));
+
+                    NDarray GetGradient(NDarray weight)
                     {
-                        if (cancellation?.IsCancellationRequested == true)
-                            return;
-
-                        if (data.Count == 0)
-                            continue;
-
-                        var batchdataSet = data.ToDatasetNDarray();
-
-                        var predTerms = ModelGd.CallGraph(batchdataSet.Feature);
-                        var lossTerm = Loss.GetLossTerm(predTerms, batchdataSet.Label, ModelGd.Variables);
-
-
-                        NDarray GetGradient(NDarray weight)
-                        {
-                            var gradientArray = lossTerm.Differentiate(ModelGd.Variables, weight.GetData<double>());
-                            var g = np.array(gradientArray);
-                            return np.reshape(g, weight.shape);
-                        }
-
-                        ModelGd.Weights = Optimizer.Call(ModelGd.Weights.copy(), GetGradient, e);
+                        var gradientArray = lossTerm.Differentiate(ModelGd.Variables, weight.GetData<double>());
+                        var g = np.array(gradientArray);
+                        return np.reshape(g, weight.shape);
                     }
 
-                    var trainMsg = new StringBuilder($"#{e + 1:D4}\t");
-                    var train_loss = UpdateLossMetric(TrainDataset);
-                    trainMsg.Append($"[Loss]:{train_loss:F4}\t");
-
-                    if (ValDataset != null && (ValDataset != null || ValDataset.Value != null))
-                    {
-                        var val_loss = UpdateLossMetric(ValDataset);
-                        trainMsg.Append("\tVal\t");
-                        trainMsg.Append($"[Loss]:{val_loss:F4}\t");
-                        foreach (var metric in Metrics) trainMsg.Append($"{metric}\t");
-                    }
-
-                    Print?.Invoke(trainMsg.ToString());
+                    ModelGd.Weights = Optimizer.Call(ModelGd.Weights.copy(), GetGradient, e - 1);
                 }
-            });
+
+
+                var trainMsg = new StringBuilder($"#{e:D4}\t");
+                var train_loss = UpdateLossMetric(TrainDataset);
+                trainMsg.Append($"[Loss]:{train_loss:F4}\t");
+
+                if (ValDataset == null)
+                    continue;
+                if (ValDataset.Value == null)
+                    continue;
+                if (ValDataset.Value.Length == 0)
+                    continue;
+
+                var val_loss = UpdateLossMetric(ValDataset);
+                trainMsg.Append("\tVal\t");
+                trainMsg.Append($"[Loss]:{val_loss:F4}\t");
+                foreach (var metric in Metrics) trainMsg.Append($"{metric}\t");
+
+
+                Print?.Invoke(trainMsg.ToString());
+            }
         }
 
         private double UpdateLossMetric(Dataset<DataView> dataset)
