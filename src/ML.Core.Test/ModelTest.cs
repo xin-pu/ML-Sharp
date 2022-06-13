@@ -10,7 +10,6 @@ using ML.Core.Metrics.Categorical;
 using ML.Core.Models;
 using ML.Core.Optimizers;
 using ML.Core.Trainers;
-using Numpy;
 using Xunit;
 using Xunit.Abstractions;
 using CategoricalCrossentropy = ML.Core.Losses.CategoricalCrossentropy;
@@ -210,15 +209,6 @@ namespace ML.Core.Test
 
 
             var res = knn.Call(input);
-            print(res);
-        }
-
-        [Fact]
-        public void Test()
-        {
-            var a = np.array(new double[,] {{1, 2, 3}, {2, 3, 4}});
-            var kylist = np.array(a.flatten().GetData<double>(), np.int64);
-            var res = np.argmax(np.bincount(kylist));
             print(res);
         }
     }
