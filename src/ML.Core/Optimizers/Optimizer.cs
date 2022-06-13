@@ -5,7 +5,7 @@ using Numpy;
 
 namespace ML.Core.Optimizers
 {
-    public abstract class Optimizer : ViewModelBase
+    public abstract class Optimizer : ViewModelBase, IDisposable
     {
         internal const double epsilon = 1E-7;
 
@@ -60,6 +60,8 @@ namespace ML.Core.Optimizers
             }
             get => _initLearningRate;
         }
+
+        public abstract void Dispose();
 
         /// <summary>
         ///     Core optimize function to update weights

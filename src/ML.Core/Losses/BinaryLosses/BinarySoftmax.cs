@@ -26,6 +26,10 @@ namespace ML.Core.Losses
             labels.Distinct().Should().BeEquivalentTo(new double[] {-1, 1}, "Labels should be -1 or 1");
         }
 
+        public override void Dispose()
+        {
+        }
+
         internal override double calculateLoss(NDarray y_pred, NDarray y_true)
         {
             var alllogdelta = np.log(1 + np.exp(-y_pred * y_true));

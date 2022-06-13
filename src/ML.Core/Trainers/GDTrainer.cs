@@ -177,6 +177,10 @@ namespace ML.Core.Trainers
 
                 Print?.Invoke(trainMsg.ToString());
             }
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
         }
 
         private double UpdateLossMetric(Dataset<DataView> dataset, bool isTrain)

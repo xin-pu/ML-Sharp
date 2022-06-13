@@ -15,6 +15,10 @@ namespace ML.Core.Metrics.Regression
         public override string Describe =>
             "Computes the mean absolute percentage error between y_true and y_pred.";
 
+        public override void Dispose()
+        {
+        }
+
         internal override double call(NDarray y_true, NDarray y_pred)
         {
             var delta = np.abs(y_pred - y_true) / y_true;

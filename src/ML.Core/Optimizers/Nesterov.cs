@@ -54,6 +54,11 @@ namespace ML.Core.Optimizers
             get => _deltaWeight;
         }
 
+        public override void Dispose()
+        {
+            DeltaWeight.Dispose();
+        }
+
         internal override NDarray call(NDarray weight, int epoch)
         {
             if (epoch == 0)

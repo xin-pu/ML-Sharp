@@ -6,7 +6,7 @@ using Numpy;
 
 namespace ML.Core.Metrics
 {
-    public abstract class Metric : ViewModelBase, IRecorder
+    public abstract class Metric : ViewModelBase, IRecorder, IDisposable
     {
         private string _logogram;
         private string _name;
@@ -40,6 +40,8 @@ namespace ML.Core.Metrics
         ///     描述
         /// </summary>
         public abstract string Describe { get; }
+
+        public abstract void Dispose();
 
         /// <summary>
         ///     指标名

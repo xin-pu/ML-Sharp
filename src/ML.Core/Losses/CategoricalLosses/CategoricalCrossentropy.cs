@@ -23,6 +23,10 @@ namespace ML.Core.Losses
         public override string Describe =>
             " 分类交叉熵损失（one-hot label)\r\nJ(la)= -sigma(log(e^y_t)/sigma(e^y))/P";
 
+        public override void Dispose()
+        {
+        }
+
         internal override void checkLabels(NDarray y_true)
         {
             var labels = y_true.GetData<double>();

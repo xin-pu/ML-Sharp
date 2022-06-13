@@ -27,6 +27,10 @@ namespace ML.Core.Optimizers
         {
         }
 
+        public override void Dispose()
+        {
+        }
+
         internal override NDarray call(NDarray weight, int epoch)
         {
             var grad = CalGradient(weight);

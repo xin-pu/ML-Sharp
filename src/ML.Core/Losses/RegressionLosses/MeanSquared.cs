@@ -20,6 +20,10 @@ namespace ML.Core.Losses
         public override string Describe =>
             "最小二乘损失\r\n J(la)= square(y_true - y_pred)";
 
+        public override void Dispose()
+        {
+        }
+
         internal override void checkLabels(NDarray y_true)
         {
         }

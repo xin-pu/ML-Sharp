@@ -15,6 +15,10 @@ namespace ML.Core.Metrics.Regression
         public override string Describe =>
             "Computes the mean absolute error between the labels and predictions.";
 
+        public override void Dispose()
+        {
+        }
+
         internal override double call(NDarray y_true, NDarray y_pred)
         {
             var error = np.abs(y_pred - y_true);

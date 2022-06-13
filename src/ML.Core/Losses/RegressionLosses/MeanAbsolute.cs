@@ -20,6 +20,10 @@ namespace ML.Core.Losses
         public override string Describe =>
             "最小绝对值损失(one-hot label)\r\nJ(la) = abs(y_true - y_pred)";
 
+        public override void Dispose()
+        {
+        }
+
         internal override void checkLabels(NDarray y_true)
         {
         }

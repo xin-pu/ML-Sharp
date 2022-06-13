@@ -10,7 +10,7 @@ using Numpy;
 
 namespace ML.Core.Losses
 {
-    public abstract class Loss : ViewModelBase, IRecorder
+    public abstract class Loss : ViewModelBase, IRecorder, IDisposable
     {
         private double _lamdba = 1E-4;
         private Regularization _regularization = Regularization.None;
@@ -46,6 +46,8 @@ namespace ML.Core.Losses
         }
 
         [Category("Tag")] public abstract string Describe { get; }
+
+        public abstract void Dispose();
 
         public Action<double> ReportToRecorder { get; set; }
 

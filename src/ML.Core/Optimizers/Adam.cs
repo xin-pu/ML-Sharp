@@ -71,6 +71,12 @@ namespace ML.Core.Optimizers
         }
 
 
+        public override void Dispose()
+        {
+            G.Dispose();
+            M.Dispose();
+        }
+
         internal override NDarray call(NDarray weight, int epoch)
         {
             if (epoch == 0)

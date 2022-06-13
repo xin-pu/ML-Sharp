@@ -16,6 +16,10 @@ namespace ML.Core.Metrics.Categorical
         public override string Describe =>
             "Computes the crossentropy metric between the labels and predictions.";
 
+        public override void Dispose()
+        {
+        }
+
         internal override double call(NDarray y_true, NDarray y_pred)
         {
             var y_pred_ = np.clip(y_pred, np.array(1E-7), np.array(1));

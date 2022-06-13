@@ -22,6 +22,10 @@ namespace ML.Core.Losses
 
         public override string Describe => "二分类最小二乘损失\r\nJ(la) = sigma((y_p-y_t)^2)";
 
+        public override void Dispose()
+        {
+        }
+
         internal override void checkLabels(NDarray y_true)
         {
             var labels = y_true.GetData<double>();

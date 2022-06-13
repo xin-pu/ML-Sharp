@@ -18,6 +18,10 @@ namespace ML.Core.Metrics.Regression
             "a statistical measure in a regression model " +
             "that determines the proportion of variance in the dependent";
 
+        public override void Dispose()
+        {
+        }
+
         internal override double call(NDarray y_true, NDarray y_pred)
         {
             var sse = new MeanSquaredError().Call(y_true, y_pred);

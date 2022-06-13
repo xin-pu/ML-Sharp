@@ -14,6 +14,10 @@ namespace ML.Core.Metrics.Regression
 
         public override string Describe => "Explained Variance.";
 
+        public override void Dispose()
+        {
+        }
+
         internal override double call(NDarray y_true, NDarray y_pred)
         {
             var delta = y_true - y_pred;

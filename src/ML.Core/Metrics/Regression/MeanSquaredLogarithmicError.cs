@@ -17,6 +17,9 @@ namespace ML.Core.Metrics.Regression
         public override string Describe =>
             "Computes the mean squared logarithmic error between y_true and y_pred.";
 
+        public override void Dispose()
+        {
+        }
 
         internal override void precheck(NDarray y_true, NDarray y_pred)
         {

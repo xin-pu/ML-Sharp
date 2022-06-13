@@ -20,6 +20,10 @@ namespace ML.Core.Losses
 
         public override string Describe => "二分类交叉熵损失\r\nJ(la) = -sigma (y_t*log(y_p)+(1-y_t)*log(1-y_p)";
 
+        public override void Dispose()
+        {
+        }
+
         internal override void checkLabels(NDarray y_true)
         {
             var labels = y_true.GetData<double>();
