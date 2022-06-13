@@ -8,7 +8,7 @@ namespace ML.Core.Data.DataStructs
     [Serializable]
     public class IrisData : DataView
     {
-        [LoadColumn(0)] public double Label;
+        [LoadColumn(0)] public int Label;
 
         [LoadColumn(3)] public double PetalLength;
 

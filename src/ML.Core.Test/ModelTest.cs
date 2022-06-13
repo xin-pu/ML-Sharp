@@ -10,6 +10,7 @@ using ML.Core.Metrics.Categorical;
 using ML.Core.Models;
 using ML.Core.Optimizers;
 using ML.Core.Trainers;
+using Numpy;
 using Xunit;
 using Xunit.Abstractions;
 using CategoricalCrossentropy = ML.Core.Losses.CategoricalCrossentropy;
@@ -59,8 +60,8 @@ namespace ML.Core.Test
         [Fact]
         public async Task TestPerceptron()
         {
-            var trainDataset = GetIris("iris-train.txt");
-            var valDataset = GetIris("iris-test.txt");
+            var trainDataset = GetIris<IrisDataOneHot>("iris-train.txt");
+            var valDataset = GetIris<IrisDataOneHot>("iris-test.txt");
 
             var trainer = new GDTrainer
             {
@@ -112,8 +113,8 @@ namespace ML.Core.Test
         [Fact]
         public async Task Save()
         {
-            var trainDataset = GetIris("iris-train.txt");
-            var valDataset = GetIris("iris-test.txt");
+            var trainDataset = GetIris<IrisDataOneHot>("iris-train.txt");
+            var valDataset = GetIris<IrisDataOneHot>("iris-test.txt");
 
             var trainer = new GDTrainer
             {
@@ -171,11 +172,54 @@ namespace ML.Core.Test
         }
 
 
-        private Dataset<DataView> GetIris(string path)
+        private Dataset<DataView> GetIris<T>(string path) where T : DataView
         {
             var trainpath = Path.Combine(dataFolder, path);
-            var dataset = TextLoader.LoadDataSet<IrisDataOneHot>(trainpath, new[] {'\t'});
+            var dataset = TextLoader.LoadDataSet<T>(trainpath, new[] {'\t'});
             return dataset;
+        }
+
+
+        [Fact]
+        public void TestKNN()
+        {
+            var trainDataset = GetIris<IrisData>("iris-train.txt").ToDatasetNDarray();
+            var knn = new KNN(5);
+            knn.LoadDataView(trainDataset.Feature, trainDataset.Label);
+
+            var x = trainDataset.Feature;
+            var y = trainDataset.Label;
+
+            var input = new Dataset<IrisData>(new[]
+            {
+                new IrisData
+                {
+                    SepalLength = 6.6,
+                    SepalWidth = 2.9,
+                    PetalLength = 4.6,
+                    PetalWidth = 1.3
+                },
+                new IrisData
+                {
+                    SepalLength = 7.2,
+                    SepalWidth = 3.5,
+                    PetalLength = 6.1,
+                    PetalWidth = 2.4
+                }
+            }).ToDatasetNDarray().Feature;
+
+
+            var res = knn.Call(input);
+            print(res);
+        }
+
+        [Fact]
+        public void Test()
+        {
+            var a = np.array(new double[,] {{1, 2, 3}, {2, 3, 4}});
+            var kylist = np.array(a.flatten().GetData<double>(), np.int64);
+            var res = np.argmax(np.bincount(kylist));
+            print(res);
         }
     }
 }
