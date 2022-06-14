@@ -7,6 +7,7 @@ using ML.Core.Data.DataStructs;
 using ML.Core.Data.Loader;
 using ML.Core.Metrics;
 using ML.Core.Metrics.Categorical;
+using ML.Core.Metrics.Regression;
 using ML.Core.Models;
 using ML.Core.Optimizers;
 using ML.Core.Trainers;
@@ -183,33 +184,16 @@ namespace ML.Core.Test
         public void TestKNN()
         {
             var trainDataset = GetIris<IrisData>("iris-train.txt").ToDatasetNDarray();
-            var knn = new KNN(5);
+            var knn = new KNN(2);
             knn.LoadDataView(trainDataset.Feature, trainDataset.Label);
 
-            var x = trainDataset.Feature;
-            var y = trainDataset.Label;
 
-            var input = new Dataset<IrisData>(new[]
-            {
-                new IrisData
-                {
-                    SepalLength = 6.6,
-                    SepalWidth = 2.9,
-                    PetalLength = 4.6,
-                    PetalWidth = 1.3
-                },
-                new IrisData
-                {
-                    SepalLength = 7.2,
-                    SepalWidth = 3.5,
-                    PetalLength = 6.1,
-                    PetalWidth = 2.4
-                }
-            }).ToDatasetNDarray().Feature;
-
-
-            var res = knn.Call(input);
-            print(res);
+            var testDataset = GetIris<IrisData>("iris-test.txt").ToDatasetNDarray();
+            var Y_pred = knn.Call(testDataset.Feature);
+            print(Y_pred);
+            print(testDataset.Label);
+            var categoricalAcc = new MeanSquaredError().Call(testDataset.Label, Y_pred);
+            print(categoricalAcc);
         }
     }
 }

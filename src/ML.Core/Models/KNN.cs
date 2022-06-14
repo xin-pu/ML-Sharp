@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using ML.Core.Data;
@@ -21,13 +20,13 @@ namespace ML.Core.Models
         public NDarray Features { get; set; }
 
         public NDarray Labels { get; set; }
+        public string Name => GetType().Name;
         public NDarray Weights { get; set; }
-
-        public string WeightFile { get; }
+        public string WeightFile => $"{Name}.txt";
 
         public double[] GetWeightArray()
         {
-            throw new NotImplementedException();
+            return null;
         }
 
 
