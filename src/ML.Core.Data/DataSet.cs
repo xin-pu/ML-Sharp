@@ -76,6 +76,14 @@ namespace ML.Core.Data
             };
         }
 
+        public NDarray ToFeatureNDarray()
+        {
+            var arrays = Value
+                .Select(a => np.hstack(a.GetFeatureArray(), a.GetLabelArray()))
+                .ToArray();
+            return np.vstack(arrays);
+        }
+
         #endregion
 
 

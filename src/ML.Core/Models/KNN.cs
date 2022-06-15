@@ -75,6 +75,7 @@ namespace ML.Core.Models
         {
         }
 
+
         public void LoadDataView(NDarray features, NDarray labels)
         {
             Features = features;
