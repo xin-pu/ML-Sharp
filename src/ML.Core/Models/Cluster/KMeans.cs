@@ -8,11 +8,22 @@ namespace ML.Core.Models
     public class KMeans : Cluster
     {
         private int _iterationLimit;
+        private KMeansAlgorithm _kMeansAlgorithm;
 
-        public KMeans(int k, int iterationLimit = 100)
+        public KMeans(
+            int k,
+            int iterationLimit = 100,
+            KMeansAlgorithm kMeansAlgorithm = KMeansAlgorithm.KMeans)
             : base(k)
         {
             IterationLimit = iterationLimit;
+            KMeansAlgorithm = kMeansAlgorithm;
+        }
+
+        public KMeansAlgorithm KMeansAlgorithm
+        {
+            get => _kMeansAlgorithm;
+            set => Set(ref _kMeansAlgorithm, value);
         }
 
         public int IterationLimit
@@ -25,8 +36,9 @@ namespace ML.Core.Models
         {
             var batchsize = input.shape[0];
             var centroidGroup = np.zeros(new Shape(batchsize), np.int32);
-            var kmeans = np.array(Enumerable.Range(0, K)
-                .Select(_ => input[np.random.choice(batchsize)]));
+            var kmeans = KMeansAlgorithm == KMeansAlgorithm.KMeansExt
+                ? extendCentroid(input)
+                : randomCentroid(input);
 
             var index = 0;
             while (index++ < IterationLimit)
@@ -44,6 +56,38 @@ namespace ML.Core.Models
             return centroidGroup;
         }
 
+
+        public NDarray randomCentroid(NDarray input)
+        {
+            var batchsize = input.shape[0];
+            var kmeans = np.array(Enumerable.Range(0, K)
+                .Select(_ => input[np.random.choice(batchsize)]));
+            return kmeans;
+        }
+
+        public NDarray extendCentroid(NDarray input)
+        {
+            var batch = input.shape[0];
+            var features = input.shape[1];
+            var kmeans = np.expand_dims(input[np.random.choice(batch)], 0);
+
+            foreach (var i in Enumerable.Range(1, K - 1))
+            {
+                var kmeansCount = kmeans.shape[0];
+
+                var inputTile = np.reshape(np.tile(input, np.array(kmeansCount)),
+                    new Shape(batch, kmeansCount, features));
+                var kmeanTile = np.reshape(np.tile(kmeans, np.array(batch, 1)),
+                    new Shape(batch, kmeansCount, features));
+
+                var dis = np.linalg.norm(inputTile - kmeanTile, axis: 1, ord: 2);
+                var disSum = np.sum(dis, 1, keepdims: true);
+                var max = np.argmax(disSum, 0).GetData<int>()[0];
+                kmeans = np.vstack(kmeans.copy(), input[max]);
+            }
+
+            return kmeans;
+        }
 
         /// <summary>
         ///     计算每个样本最近中心点序号
@@ -94,5 +138,11 @@ namespace ML.Core.Models
             kmeans = kmeans.OrderBy(n => n.GetData<double>()[0]).ToArray();
             return np.vstack(kmeans);
         }
+    }
+
+    public enum KMeansAlgorithm
+    {
+        KMeans,
+        KMeansExt
     }
 }
