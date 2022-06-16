@@ -1,10 +1,11 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using MathNet.Numerics.Random;
 using ML.Core.Data.DataStructs;
 using ML.Core.Data.Loader;
 using ML.Core.Models;
-using ML.Core.Transform;
 using Numpy;
-using Numpy.Models;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -59,62 +60,70 @@ namespace ML.Core.Test
         }
 
         [Fact]
-        public void TestSpectral2()
+        public void TestDe()
         {
             var path = Path.Combine(dataFolder, "data_cluster.txt");
             var data = TextLoader.LoadDataSet<LinearData>(path, new[] {','}, false);
             var input = data.ToFeatureNDarray();
 
-            var (W, D) = getAdjacentMatrix(input);
-            print(W);
-            print(D);
-            print(np.eye(4));
-            print(np.eye(input.shape[0]) - np.linalg.inv(D) * W);
-
-            var Lrw = np.dot(np.linalg.inv(D), W);
-            print(Lrw);
-
-
-            var (Lamda, V) = np.linalg.eig(Lrw);
-            print(Lamda);
-            print(V);
-        }
-
-
-        /// <summary>
-        ///     epsilon
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="esplion"></param>
-        private (NDarray, NDarray) getAdjacentEpsilon(NDarray input, double epsilon)
-        {
             var batch = input.shape[0];
-            var features = input.shape[1];
-            var inputH = np.reshape(np.tile(input, np.array(batch)), new Shape(batch, batch, features));
+            var e = 1.5;
+            var minPoints = 40;
+            var ou = new List<NDarray>();
+            var all = new List<NDarray>();
 
-            var inputV = np.reshape(np.tile(input, np.array(batch, 1)), new Shape(batch, batch, features));
+            /// 计算核心对象
+            foreach (var i in Enumerable.Range(0, batch))
+            {
+                var x = input[i];
+                all.Add(x);
+                var ner = getDirectly(x, input, e);
+                if (ner.Length > minPoints)
+                    ou.Add(x);
+            }
 
-            var dis = np.linalg.norm(inputV - inputH, axis: -1, ord: 2);
 
-            var W = np.where(dis < epsilon, np.array(epsilon), np.array(0));
-            //np.fill_diagonal(W, 0);
+            while (ou.Count > 0)
+            {
+                var allTemp = new List<NDarray>(all);
 
-            var D = np.eye(batch) * np.sum(W, 0);
+                ///随机选取一个核心对象O;
+                var o = ou[SystemRandomSource.Default.Next(0, ou.Count)];
+                all.Remove(o);
+                var Q = new Queue<NDarray>();
+                Q.Enqueue(o);
 
-            return (W, D);
+
+                while (Q.Count > 0)
+                {
+                    var q = Q.Dequeue();
+                    var n = getDirectly(q, input, e);
+                    if (n.Length > minPoints)
+                    {
+                        var delta = n.Where(arr => all.Contains(arr) && !Equals(arr, q)).ToArray();
+                        delta.ToList().ForEach(d =>
+                        {
+                            Q.Enqueue(d);
+                            all.Remove(d);
+                        });
+                    }
+                }
+
+                var a = allTemp.Where(arr => !all.Contains(arr)).ToList();
+                print(np.vstack(a.ToArray()));
+
+                ou.RemoveAll(arr => a.Contains(arr));
+            }
         }
 
-
-        /// <summary>
-        ///     全连接法计算邻接矩阵
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        internal (NDarray, NDarray) getAdjacentMatrix(NDarray input)
+        private NDarray[] getDirectly(NDarray x, NDarray input, double e)
         {
-            var W = new Gaussian().Call(input);
-            var D = np.eye(input.shape[0]) * np.sum(W, 0);
-            return (W, D);
+            var dis = np.linalg.norm(input - x, axis: -1, ord: 2).GetData<double>();
+            return dis
+                .Select((d, i) => (d, i))
+                .Where(p => p.d < e && p.d != 0)
+                .Select(p => input[p.i])
+                .ToArray();
         }
     }
 }
