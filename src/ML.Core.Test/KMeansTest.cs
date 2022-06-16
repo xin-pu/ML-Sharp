@@ -21,7 +21,20 @@ namespace ML.Core.Test
 
 
         [Fact]
-        public void TestKmeans()
+        public void TestKMeans()
+        {
+            var path = Path.Combine(dataFolder, "data_cluster.txt");
+            var data = TextLoader.LoadDataSet<LinearData>(path, new[] {','}, false);
+            var input = data.ToFeatureNDarray();
+
+            var kmeans = new KMeans(3, kMeansAlgorithm: KMeansAlgorithm.KMeans);
+            var res = kmeans.Call(input);
+            print(res);
+        }
+
+
+        [Fact]
+        public void TestKMeansExt()
         {
             var path = Path.Combine(dataFolder, "data_cluster.txt");
             var data = TextLoader.LoadDataSet<LinearData>(path, new[] {','}, false);
@@ -32,67 +45,41 @@ namespace ML.Core.Test
             print(res);
         }
 
-        [Fact]
-        public void Test()
-        {
-            NDarray a = np.array(new double[,] {{1, 2, 1}, {2, 3, 2}, {3, 4, 4}, {5, 6, 5}});
-            NDarray b = np.array(new double[,] {{2, 2, 3}});
-
-            print(np.vstack(a, b));
-
-            var kmeansCount = b.shape[0];
-            var features = b.shape[1];
-
-            var input = np.reshape(np.tile(a, np.array(kmeansCount)), new Shape(a.shape[0], kmeansCount, features));
-            print(input);
-
-            var kmeans = np.reshape(np.tile(b, np.array(a.shape[0], 1)), new Shape(a.shape[0], kmeansCount, features));
-            print(kmeans);
-
-            var dis = input - kmeans;
-            print(dis);
-
-            var dd = np.linalg.norm(input - kmeans, axis: 1, ord: 2);
-            print(dd);
-
-            var sumDis = np.sum(dd, 1, keepdims: true);
-            print(sumDis);
-
-            var max = np.argmax(sumDis, 0);
-            print(max);
-        }
-
 
         [Fact]
-        public void TestAdjacentMatrix()
-        {
-            var input = np.array(new[,] {{1, 1, 1}, {1, 2, 1}, {2, 2.5, 2}, {3.1, 3, 3}});
-            var (W, D) = getAdjacentMatrix(input);
-            print(W);
-            print(D);
-
-            var Lrw = np.eye(input.shape[0]) - np.linalg.inv(D) * W;
-            print(Lrw);
-        }
-
-
-        [Fact]
-        public void TestAdjacentMatrix2()
+        public void TestSpectral()
         {
             var path = Path.Combine(dataFolder, "data_cluster.txt");
             var data = TextLoader.LoadDataSet<LinearData>(path, new[] {','}, false);
             var input = data.ToFeatureNDarray();
+
+            var spectral = new Spectral(3);
+            var res = spectral.Call(input);
+            print(res);
+        }
+
+        [Fact]
+        public void TestSpectral2()
+        {
+            var path = Path.Combine(dataFolder, "data_cluster.txt");
+            var data = TextLoader.LoadDataSet<LinearData>(path, new[] {','}, false);
+            var input = data.ToFeatureNDarray();
+
             var (W, D) = getAdjacentMatrix(input);
             print(W);
             print(D);
+            print(np.eye(4));
+            print(np.eye(input.shape[0]) - np.linalg.inv(D) * W);
 
-            var Lrw = np.eye(input.shape[0]) - np.linalg.inv(D) * W;
+            var Lrw = np.dot(np.linalg.inv(D), W);
             print(Lrw);
 
-            var (l, v) = np.linalg.eig(Lrw);
-            print(l);
-            print(v);
+
+            var (Lamda, V) = np.linalg.eig(Lrw);
+            print(Lamda);
+            print(V);
         }
+
 
         /// <summary>
         ///     epsilon
@@ -117,12 +104,13 @@ namespace ML.Core.Test
             return (W, D);
         }
 
+
         /// <summary>
-        ///     epsilon
+        ///     全连接法计算邻接矩阵
         /// </summary>
         /// <param name="input"></param>
-        /// <param name="esplion"></param>
-        private (NDarray, NDarray) getAdjacentMatrix(NDarray input)
+        /// <returns></returns>
+        internal (NDarray, NDarray) getAdjacentMatrix(NDarray input)
         {
             var W = new Gaussian().Call(input);
             var D = np.eye(input.shape[0]) * np.sum(W, 0);
