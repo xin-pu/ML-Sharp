@@ -23,5 +23,10 @@ namespace ML.Core.Models
         }
 
         public abstract NDarray Call(NDarray input);
+
+        public static NDarray GetAdjacentMatrixEpsilon(double epsilon)
+        {
+            return null;
+        }
     }
 }

@@ -183,6 +183,7 @@
     <Compile Include="Metrics\Regression\RSquared.cs" />
     <Compile Include="Models\Cluster\Cluster.cs" />
     <Compile Include="Models\Cluster\KMeans.cs" />
+    <Compile Include="Models\Cluster\Spectral.cs" />
     <Compile Include="Models\Supervised\BinaryLogicClassify.cs" />
     <Compile Include="Models\Interface\IModel.cs" />
     <Compile Include="Models\Interface\IModelGD.cs" />

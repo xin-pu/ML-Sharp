@@ -10,6 +10,12 @@ namespace ML.Core.Models
         private int _iterationLimit;
         private KMeansAlgorithm _kMeansAlgorithm;
 
+        /// <summary>
+        ///     KMeans 聚类算法
+        /// </summary>
+        /// <param name="k"></param>
+        /// <param name="iterationLimit">limit for iteration</param>
+        /// <param name="kMeansAlgorithm">KMeans and KMeans++ </param>
         public KMeans(
             int k,
             int iterationLimit = 100,
