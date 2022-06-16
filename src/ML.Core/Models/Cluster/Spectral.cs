@@ -74,11 +74,18 @@ namespace ML.Core.Models
             var L = D - W;
             switch (LaprasMatrixType)
             {
+                /// Lsym 标准化 的拉普拉斯矩阵
+                /// Lsym = D^-0.5*L*D^-0.5 = I- D^-0.5*W*D^-0.5
                 case LaprasMatrixType.Lsym:
                     var ds = np.linalg.inv(np.power(D, np.array(0.5)));
                     return np.dot(np.dot(ds, L), ds);
+
+                /// Lrw 标准化 的拉普拉斯矩阵
+                /// Lrw = D^-1*L = I- D^-1*W
                 case LaprasMatrixType.Lrw:
                     return np.dot(np.linalg.inv(D), L);
+
+                /// 非标准化的拉普拉斯矩阵
                 default:
                     return L;
             }
