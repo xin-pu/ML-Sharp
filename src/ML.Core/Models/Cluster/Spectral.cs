@@ -13,6 +13,7 @@ namespace ML.Core.Models
 
     public class Spectral : Cluster
     {
+        private int _k;
         private LaprasMatrixType _laprasMatrixType;
 
         /// <summary>
@@ -20,9 +21,16 @@ namespace ML.Core.Models
         /// </summary>
         /// <param name="k"></param>
         public Spectral(int k, LaprasMatrixType laprasMatrixType = LaprasMatrixType.Lsym)
-            : base(k)
+
         {
+            K = k;
             LaprasMatrixType = laprasMatrixType;
+        }
+
+        public int K
+        {
+            get => _k;
+            set => Set(ref _k, value);
         }
 
         public LaprasMatrixType LaprasMatrixType

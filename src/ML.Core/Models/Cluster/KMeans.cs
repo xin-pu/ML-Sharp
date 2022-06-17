@@ -8,6 +8,8 @@ namespace ML.Core.Models
     public class KMeans : Cluster
     {
         private int _iterationLimit;
+
+        private int _k;
         private KMeansAlgorithm _kMeansAlgorithm;
 
         /// <summary>
@@ -20,10 +22,16 @@ namespace ML.Core.Models
             int k,
             int iterationLimit = 100,
             KMeansAlgorithm kMeansAlgorithm = KMeansAlgorithm.KMeans)
-            : base(k)
         {
+            K = k;
             IterationLimit = iterationLimit;
             KMeansAlgorithm = kMeansAlgorithm;
+        }
+
+        public int K
+        {
+            get => _k;
+            set => Set(ref _k, value);
         }
 
         public KMeansAlgorithm KMeansAlgorithm

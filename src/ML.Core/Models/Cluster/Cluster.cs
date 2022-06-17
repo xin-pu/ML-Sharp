@@ -14,16 +14,10 @@ namespace ML.Core.Models
         ///     聚类算法抽象类
         /// </summary>
         /// <param name="k"></param>
-        protected Cluster(int k)
+        protected Cluster()
         {
-            K = k;
         }
 
-        public int K
-        {
-            get => _k;
-            set => Set(ref _k, value);
-        }
 
         /// <summary>
         ///     返回Input数据的分类数组
