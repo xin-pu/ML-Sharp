@@ -38,24 +38,24 @@ namespace ML.Core.Models
             set => Set(ref _iterationLimit, value);
         }
 
-        public override NDarray Call(NDarray input)
+        public override NDarray Call(NDarray inputNDArray)
         {
-            var batchsize = input.shape[0];
+            var batchsize = inputNDArray.shape[0];
             var centroidGroup = np.zeros(new Shape(batchsize), np.int32);
             var kmeans = KMeansAlgorithm == KMeansAlgorithm.KMeansExt
-                ? extendCentroid(input)
-                : randomCentroid(input);
+                ? extendCentroid(inputNDArray)
+                : randomCentroid(inputNDArray);
 
             var index = 0;
             while (index++ < IterationLimit)
             {
-                var tempCentroidGroup = getCentroid(input, kmeans);
+                var tempCentroidGroup = getCentroid(inputNDArray, kmeans);
 
                 var delta = tempCentroidGroup - centroidGroup;
 
                 if (delta.GetData<int>().All(a => a == 0)) break;
                 /// Update Kmeans
-                kmeans = getKMeans(input, tempCentroidGroup);
+                kmeans = getKMeans(inputNDArray, tempCentroidGroup);
                 centroidGroup = tempCentroidGroup;
             }
 
@@ -77,7 +77,7 @@ namespace ML.Core.Models
             var features = input.shape[1];
             var kmeans = np.expand_dims(input[np.random.choice(batch)], 0);
 
-            foreach (var i in Enumerable.Range(1, K - 1))
+            foreach (var _ in Enumerable.Range(1, K - 1))
             {
                 var kmeansCount = kmeans.shape[0];
 

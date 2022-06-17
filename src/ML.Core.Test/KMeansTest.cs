@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using MathNet.Numerics.Random;
+using ML.Core.Data;
 using ML.Core.Data.DataStructs;
 using ML.Core.Data.Loader;
 using ML.Core.Models;
@@ -26,11 +27,15 @@ namespace ML.Core.Test
         {
             var path = Path.Combine(dataFolder, "data_cluster.txt");
             var data = TextLoader.LoadDataSet<LinearData>(path, new[] {','}, false);
-            var input = data.ToFeatureNDarray();
 
-            var kmeans = new KMeans(3, kMeansAlgorithm: KMeansAlgorithm.KMeans);
-            var res = kmeans.Call(input);
-            print(res);
+            var kmeans = new KMeans(4, kMeansAlgorithm: KMeansAlgorithm.KMeans);
+            var res = kmeans.Call(data.Value);
+
+            foreach (var p in res)
+            {
+                var array = new Dataset<DataView>(p.Value).ToFeatureNDarray();
+                print($"{p.Key}:\t{p.Value.Length}\r\n{array}\r\n{new string('-', 30)}");
+            }
         }
 
 
@@ -39,11 +44,14 @@ namespace ML.Core.Test
         {
             var path = Path.Combine(dataFolder, "data_cluster.txt");
             var data = TextLoader.LoadDataSet<LinearData>(path, new[] {','}, false);
-            var input = data.ToFeatureNDarray();
 
-            var kmeans = new KMeans(3, kMeansAlgorithm: KMeansAlgorithm.KMeansExt);
-            var res = kmeans.Call(input);
-            print(res);
+            var kmeans = new KMeans(4, kMeansAlgorithm: KMeansAlgorithm.KMeansExt);
+            var res = kmeans.Call(data.Value);
+            foreach (var p in res)
+            {
+                var array = new Dataset<DataView>(p.Value).ToFeatureNDarray();
+                print($"{p.Key}:\t{p.Value.Length}\r\n{array}\r\n{new string('-', 30)}");
+            }
         }
 
 
@@ -52,11 +60,15 @@ namespace ML.Core.Test
         {
             var path = Path.Combine(dataFolder, "data_cluster.txt");
             var data = TextLoader.LoadDataSet<LinearData>(path, new[] {','}, false);
-            var input = data.ToFeatureNDarray();
 
-            var spectral = new Spectral(3);
-            var res = spectral.Call(input);
-            print(res);
+
+            var spectral = new Spectral(4);
+            var res = spectral.Call(data.Value);
+            foreach (var p in res)
+            {
+                var array = new Dataset<DataView>(p.Value).ToFeatureNDarray();
+                print($"{p.Key}:\t{p.Value.Length}\r\n{array}\r\n{new string('-', 30)}");
+            }
         }
 
         [Fact]
@@ -65,54 +77,60 @@ namespace ML.Core.Test
             var path = Path.Combine(dataFolder, "data_cluster.txt");
             var data = TextLoader.LoadDataSet<LinearData>(path, new[] {','}, false);
             var input = data.ToFeatureNDarray();
-
             var batch = input.shape[0];
-            var e = 1.5;
-            var minPoints = 40;
-            var ou = new List<NDarray>();
-            var all = new List<NDarray>();
+
+
+            var epsilon = 1;
+            var minPoints = 20;
+            var coreObjects = new List<NDarray>();
+            var allObjects = new List<NDarray>();
 
             /// 计算核心对象
             foreach (var i in Enumerable.Range(0, batch))
             {
                 var x = input[i];
-                all.Add(x);
-                var ner = getDirectly(x, input, e);
+                allObjects.Add(x);
+                /// 获取领域样本
+                var ner = getDirectly(x, input, epsilon);
                 if (ner.Length > minPoints)
-                    ou.Add(x);
+                    coreObjects.Add(x);
             }
 
+            var cluster = new List<NDarray[]>();
 
-            while (ou.Count > 0)
+            while (coreObjects.Count > 0)
             {
-                var allTemp = new List<NDarray>(all);
+                var allTemp = new List<NDarray>(allObjects);
 
-                ///随机选取一个核心对象O;
-                var o = ou[SystemRandomSource.Default.Next(0, ou.Count)];
-                all.Remove(o);
+                /// 随机选取一个核心对象O;
+                var coreObject = coreObjects[SystemRandomSource.Default.Next(0, coreObjects.Count)];
+                allObjects.Remove(coreObject);
                 var Q = new Queue<NDarray>();
-                Q.Enqueue(o);
+                Q.Enqueue(coreObject);
 
 
                 while (Q.Count > 0)
                 {
                     var q = Q.Dequeue();
-                    var n = getDirectly(q, input, e);
-                    if (n.Length > minPoints)
+                    var neighbors = getDirectly(q, input, epsilon);
+                    if (neighbors.Length > minPoints)
                     {
-                        var delta = n.Where(arr => all.Contains(arr) && !Equals(arr, q)).ToArray();
+                        var delta = neighbors
+                            .Where(arr => allObjects.Contains(arr) && !Equals(arr, q))
+                            .ToArray();
                         delta.ToList().ForEach(d =>
                         {
                             Q.Enqueue(d);
-                            all.Remove(d);
+                            allObjects.Remove(d);
                         });
                     }
                 }
 
-                var a = allTemp.Where(arr => !all.Contains(arr)).ToList();
-                print(np.vstack(a.ToArray()));
+                var a = allTemp.Where(arr => !allObjects.Contains(arr)).ToList();
 
-                ou.RemoveAll(arr => a.Contains(arr));
+                cluster.Add(a.ToArray());
+
+                coreObjects.RemoveAll(arr => a.Contains(arr));
             }
         }
 

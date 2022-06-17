@@ -21,5 +21,10 @@ namespace ML.Core.Data
                 Label = GetLabelArray()
             };
         }
+
+        public NDarray ToFeatureNDarray()
+        {
+            return np.hstack(GetFeatureArray(), GetLabelArray());
+        }
     }
 }

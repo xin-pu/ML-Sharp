@@ -31,6 +31,7 @@ namespace ML.Core.Models
             set => Set(ref _laprasMatrixType, value);
         }
 
+
         public override NDarray Call(NDarray input)
         {
             ///计算邻接矩阵W和度举证D
