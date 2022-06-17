@@ -8,8 +8,6 @@ namespace ML.Core.Models
 {
     public abstract class Cluster : ViewModelBase
     {
-        private int _k;
-
         /// <summary>
         ///     聚类算法抽象类
         /// </summary>

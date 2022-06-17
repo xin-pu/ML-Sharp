@@ -192,6 +192,7 @@
     <Compile Include="Models\Cluster\DBSCAN.cs" />
     <Compile Include="Models\Cluster\KMeans.cs" />
     <Compile Include="Models\Cluster\Spectral.cs" />
+    <Compile Include="Models\DimensionReduction\PCA.cs" />
     <Compile Include="Models\Supervised\BinaryLogicClassify.cs" />
     <Compile Include="Models\Interface\IModel.cs" />
     <Compile Include="Models\Interface\IModelGD.cs" />
