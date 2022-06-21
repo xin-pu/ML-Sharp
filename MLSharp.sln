@@ -18,6 +18,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Document", "Document", "{5B
 		.gitignore = .gitignore
 		document\demo_log.png = document\demo_log.png
 		README.md = README.md
+		document\一阶优化算法.png = document\一阶优化算法.png
+		document\优化算法.png = document\优化算法.png
+		document\其他.png = document\其他.png
+		document\数学知识.png = document\数学知识.png
+		document\无监督学习.png = document\无监督学习.png
+		document\机器学习.png = document\机器学习.png
+		document\特征选择策略.png = document\特征选择策略.png
+		document\监督学习.png = document\监督学习.png
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ML.Core", "src\ML.Core\ML.Core.csproj", "{24D5D4A9-BBD2-48E0-BFE0-84C743B4A60B}"

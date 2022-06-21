@@ -63,3 +63,23 @@ print(pred);
  ```
 
  ![Demo](document/demo_log.png)
+
+
+ ## MindMaster
+
+ ![Demo](document/机器学习.png)
+ 
+ ![Demo](document/数学知识.png)
+
+ ![Demo](document/优化算法.png)
+
+ ![Demo](document/一阶优化算法.png)
+
+ ![Demo](document/监督学习.png)
+
+ ![Demo](document/无监督学习.png)
+
+ ![Demo](document/特征选择策略.png)
+
+ ![Demo](document/其他.png)
+
