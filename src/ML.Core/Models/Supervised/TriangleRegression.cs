@@ -2,11 +2,15 @@
 
 namespace ML.Core.Models
 {
-    public class PolynomialRegression : MultipleLinearRegression
+    public class TriangleRegression : MultipleLinearRegression
     {
         private int _degree;
 
-        public PolynomialRegression()
+        /// <summary>
+        ///     一元多项式回归
+        ///     y=α + β1*x + β2*x^2 + ... + βn*x^n
+        /// </summary>
+        public TriangleRegression()
         {
             Degree = 1;
         }
@@ -15,7 +19,7 @@ namespace ML.Core.Models
         ///     一元多项式回归
         ///     y=α + β1*x + β2*x^2 + ... + βn*x^n
         /// </summary>
-        public PolynomialRegression(int degree = 1)
+        public TriangleRegression(int degree)
         {
             Degree = degree;
         }
@@ -35,7 +39,7 @@ namespace ML.Core.Models
 
         private void UpdateTransform()
         {
-            Transformer = new Polynomial(Degree);
+            Transformer = new TrianglePoly(Degree);
         }
     }
 }
