@@ -14,6 +14,7 @@ namespace ML.Core.Models
 
         /// <summary>
         ///     KMeans 聚类算法
+        ///     采用了贪心策略，通过迭代优化来近似去接
         /// </summary>
         /// <param name="k"></param>
         /// <param name="iterationLimit">limit for iteration</param>
