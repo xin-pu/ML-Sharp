@@ -22,7 +22,7 @@ namespace ML.Core.Metrics.Categorical
 
         internal override double call(NDarray y_true, NDarray y_pred)
         {
-            var res = np.equal(np.argmax(y_true, -1), np.argmax(y_pred, -1));
+            var res = y_true.argmax(-1).equal(y_pred.argmax(-1));
             var resArray = res.GetData<bool>();
             return 1.0 * resArray.Count(a => a) / resArray.Length;
         }

@@ -89,13 +89,13 @@ namespace ML.Core.Optimizers
             var grad = CalGradient(weight);
 
             M = Beta1 * M + (1 - Beta1) * grad;
-            G = Beta2 * G + (1 - Beta2) * np.square(grad);
+            G = Beta2 * G + (1 - Beta2) * grad.square();
 
             var m = M / (1 - Beta1);
             var g = G / (1 - Beta2);
 
             ///参数更新差值
-            var delta_weight = -WorkLearningRate * m / np.sqrt(g + epsilon);
+            var delta_weight = -WorkLearningRate * m / (g + epsilon).sqrt();
 
             return weight + delta_weight;
         }

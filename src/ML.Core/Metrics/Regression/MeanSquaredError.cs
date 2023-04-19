@@ -21,8 +21,8 @@ namespace ML.Core.Metrics.Regression
 
         internal override double call(NDarray y_true, NDarray y_pred)
         {
-            var error = np.power(y_true - y_pred, np.array(2));
-            return np.average(error);
+            var error = (y_true - y_pred).power(np.array(2));
+            return error.average();
         }
     }
 }

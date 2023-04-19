@@ -57,8 +57,8 @@ namespace ML.Core.Optimizers
                 G = np.zeros_like(weight);
 
             var grad = CalGradient(weight);
-            G = Beta * G + (1 - Beta) * np.square(grad);
-            var delta = -np.multiply(WorkLearningRate / np.sqrt(G + epsilon), grad);
+            G = Beta * G + (1 - Beta) * grad.square();
+            var delta = -(WorkLearningRate / (G + epsilon).sqrt()).multiply(grad);
             return weight + delta;
         }
     }

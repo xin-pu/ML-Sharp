@@ -50,8 +50,8 @@ namespace ML.Core.Transform
                 .ToList()
                 .ForEach(i =>
                 {
-                    var res = np.dot(input, input[i]);
-                    output[i] = np.tanh(Beta * res + Theta);
+                    var res = input.dot(input[i]);
+                    output[i] = (Beta * res + Theta).tanh();
                 });
 
             return output;

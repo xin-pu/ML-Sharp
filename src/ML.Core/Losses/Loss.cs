@@ -71,7 +71,7 @@ namespace ML.Core.Losses
         public virtual double GetLoss(NDarray y_pred, NDarray y_true)
         {
             y_pred.size.Should().Be(y_true.size, "size of pred and ture should be same.");
-            var y_pred_reshape = np.reshape(y_pred, y_true.shape);
+            var y_pred_reshape = y_pred.reshape(y_true.shape);
 
             checkLabels(y_true);
             var loss = calculateLoss(y_pred_reshape, y_true);

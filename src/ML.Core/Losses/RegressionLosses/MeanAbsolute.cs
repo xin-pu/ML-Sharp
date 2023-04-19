@@ -31,7 +31,7 @@ namespace ML.Core.Losses
         internal override double calculateLoss(NDarray y_pred, NDarray y_true)
         {
             var allAbdDetta = np.abs(y_pred - y_true);
-            return np.average(allAbdDetta);
+            return allAbdDetta.average();
         }
 
         internal override Term getModelLoss(TermMatrix y_pred, NDarray y_true)

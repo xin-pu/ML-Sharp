@@ -33,7 +33,7 @@ namespace ML.Core.Transform
             var batchSize = input.shape[0];
 
             var all = Enumerable.Range(0, batchSize)
-                .Select(i => np.power(1 + np.dot(input, input[i]), np.array(Degree)) - 1)
+                .Select(i => (1 + input.dot(input[i])).power(np.array(Degree)) - 1)
                 .ToArray();
             return np.vstack(all);
         }

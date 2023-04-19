@@ -48,14 +48,14 @@ namespace ML.Core.Models
         public override NDarray Call(NDarray features)
         {
             var feature = Transformer.Call(features);
-            var y_pred = np.matmul(feature, Weights.T);
+            var y_pred = feature.matmul(Weights.T);
             return sign(y_pred);
         }
 
         private NDarray sign(NDarray inputDarray)
         {
-            var exp = np.exp(inputDarray);
-            var rowsum = np.sum(exp, -1, keepdims: true);
+            var exp = inputDarray.exp();
+            var rowsum = exp.sum(-1, keepdims: true);
             return exp / rowsum;
         }
     }

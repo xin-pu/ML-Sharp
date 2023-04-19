@@ -22,9 +22,9 @@ namespace ML.Core.Metrics.Categorical
 
         internal override double call(NDarray y_true, NDarray y_pred)
         {
-            var y_pred_ = np.clip(y_pred, np.array(1E-7), np.array(1));
-            var xent = -np.sum(y_true * np.log(y_pred_), -1);
-            var reducedXent = np.average(xent);
+            var y_pred_ = y_pred.clip(np.array(1E-7), np.array(1));
+            var xent = -(y_true * y_pred_.log()).sum(-1);
+            var reducedXent = xent.average();
             return reducedXent;
         }
     }

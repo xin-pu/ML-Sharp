@@ -44,15 +44,15 @@ namespace ML.Core.Losses
         internal override double calculateLoss(NDarray y_pred, NDarray y_true)
         {
             var batchsize = y_pred.shape[0];
-            var y_true_index = np.expand_dims(np.argmax(y_true, -1), -1);
+            var y_true_index = y_true.argmax(-1).expand_dims(-1);
 
-            var exp = np.exp(y_pred);
-            var div = exp / np.sum(exp, -1, keepdims: true);
+            var exp = y_pred.exp();
+            var div = exp / exp.sum(-1, keepdims: true);
 
             var loss = Enumerable.Range(0, batchsize).Select(b =>
             {
                 var label_true = y_true_index[b].GetData<int>()[0];
-                return np.log(div[b]).GetData<double>()[label_true];
+                return div[b].log().GetData<double>()[label_true];
             }).ToList();
 
             return -loss.Average();
@@ -66,7 +66,7 @@ namespace ML.Core.Losses
         internal override Term getModelLoss(TermMatrix y_pred, NDarray y_true)
         {
             var batchsize = y_pred.Height;
-            var y_true_index = np.expand_dims(np.argmax(y_true, -1), -1);
+            var y_true_index = y_true.argmax(-1).expand_dims(-1);
 
 
             var exp = y_pred.Exp();

@@ -22,7 +22,7 @@ namespace ML.Core.Metrics.Regression
         internal override double call(NDarray y_true, NDarray y_pred)
         {
             var error = np.abs(y_pred - y_true);
-            return np.average(error);
+            return error.average();
         }
     }
 }

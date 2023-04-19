@@ -70,12 +70,12 @@ namespace ML.Core.Optimizers
             }
 
             var grad = CalGradient(weight);
-            G = Beta * G + (1 - Beta) * np.square(grad);
+            G = Beta * G + (1 - Beta) * grad.square();
 
-            var deltaGrad = np.multiply(np.sqrt((X + epsilon) / (G + epsilon)), grad);
+            var deltaGrad = ((X + epsilon) / (G + epsilon)).sqrt().multiply(grad);
 
-            X = Beta * X + (1 - Beta) * np.square(deltaGrad);
-            LearningRate = np.sqrt(X);
+            X = Beta * X + (1 - Beta) * deltaGrad.square();
+            LearningRate = X.sqrt();
             return weight - deltaGrad;
         }
     }

@@ -89,14 +89,14 @@ namespace ML.Core.Optimizers
             }
 
 
-            var theda = weight - WorkLearningRate * m / np.sqrt(g + epsilon);
+            var theda = weight - WorkLearningRate * m / (g + epsilon).sqrt();
             var grad = CalGradient(theda);
 
             M = Beta1 * M + (1 - Beta1) * grad;
-            G = Beta2 * G + (1 - Beta2) * np.square(grad);
+            G = Beta2 * G + (1 - Beta2) * grad.square();
 
             ///参数更新差值
-            var delta_weight = -WorkLearningRate * m / np.sqrt(g + epsilon);
+            var delta_weight = -WorkLearningRate * m / (g + epsilon).sqrt();
 
             return weight + delta_weight;
         }

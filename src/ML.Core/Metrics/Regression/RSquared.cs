@@ -25,7 +25,7 @@ namespace ML.Core.Metrics.Regression
         internal override double call(NDarray y_true, NDarray y_pred)
         {
             var sse = new MeanSquaredError().Call(y_true, y_pred);
-            var sst = np.var(y_true);
+            var sst = y_true.var();
             return 1 - sse / sst;
         }
     }

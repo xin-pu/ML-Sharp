@@ -34,7 +34,7 @@ namespace ML.Core.Transform
             input.shape[1].Should().Be(1, "input should contain only 1 feature");
 
             var all = Enumerable.Range(0, Degree + 1)
-                .Select(d => np.power(input, np.array(1.0 * d)))
+                .Select(d => input.power(np.array(1.0 * d)))
                 .ToArray();
             return np.hstack(all);
         }

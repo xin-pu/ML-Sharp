@@ -21,8 +21,8 @@ namespace ML.Core.Metrics.Regression
         internal override double call(NDarray y_true, NDarray y_pred)
         {
             var error = y_pred - y_true;
-            var logcosh = np.log((np.exp(error) + np.exp(-error)) / 2);
-            return np.average(logcosh);
+            var logcosh = ((error.exp() + (-error).exp()) / 2).log();
+            return logcosh.average();
         }
     }
 }

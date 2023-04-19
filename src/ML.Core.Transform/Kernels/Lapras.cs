@@ -39,7 +39,7 @@ namespace ML.Core.Transform
                 {
                     var delta = input[i] - input;
                     var res = np.linalg.norm(delta, 1, -1);
-                    output[i] = np.exp(-Beta * res);
+                    output[i] = (-Beta * res).exp();
                 });
 
             return output;

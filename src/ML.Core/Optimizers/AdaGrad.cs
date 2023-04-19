@@ -53,8 +53,8 @@ namespace ML.Core.Optimizers
             if (epoch == 0)
                 G = np.zeros_like(weight);
 
-            G += np.square(grad);
-            var delta = -np.multiply(WorkLearningRate / np.sqrt(G + epsilon), grad);
+            G += grad.square();
+            var delta = -(WorkLearningRate / (G + epsilon).sqrt()).multiply(grad);
             return weight + delta;
         }
     }

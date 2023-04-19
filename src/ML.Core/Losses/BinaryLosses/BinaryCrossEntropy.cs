@@ -33,8 +33,8 @@ namespace ML.Core.Losses
 
         internal override double calculateLoss(NDarray y_pred, NDarray y_true)
         {
-            var alllogdelta = y_true * np.log(y_pred) + (1 - y_true) * np.log(1 - y_pred);
-            return -np.average(alllogdelta);
+            var alllogdelta = y_true * y_pred.log() + (1 - y_true) * (1 - y_pred).log();
+            return -alllogdelta.average();
         }
 
         internal override Term getModelLoss(TermMatrix y_pred, NDarray y_true)

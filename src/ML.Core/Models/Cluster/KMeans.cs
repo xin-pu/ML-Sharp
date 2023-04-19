@@ -84,20 +84,18 @@ namespace ML.Core.Models
         {
             var batch = input.shape[0];
             var features = input.shape[1];
-            var kmeans = np.expand_dims(input[np.random.choice(batch)], 0);
+            var kmeans = input[np.random.choice(batch)].expand_dims(0);
 
             foreach (var _ in Enumerable.Range(1, K - 1))
             {
                 var kmeansCount = kmeans.shape[0];
 
-                var inputTile = np.reshape(np.tile(input, np.array(kmeansCount)),
-                    new Shape(batch, kmeansCount, features));
-                var kmeanTile = np.reshape(np.tile(kmeans, np.array(batch, 1)),
-                    new Shape(batch, kmeansCount, features));
+                var inputTile = input.tile(np.array(kmeansCount)).reshape(new Shape(batch, kmeansCount, features));
+                var kmeanTile = kmeans.tile(np.array(batch, 1)).reshape(new Shape(batch, kmeansCount, features));
 
                 var dis = np.linalg.norm(inputTile - kmeanTile, axis: 1, ord: 2);
-                var disSum = np.sum(dis, 1, keepdims: true);
-                var max = np.argmax(disSum, 0).GetData<int>()[0];
+                var disSum = dis.sum(1, keepdims: true);
+                var max = disSum.argmax(0).GetData<int>()[0];
                 kmeans = np.vstack(kmeans.copy(), input[max]);
             }
 
@@ -115,11 +113,10 @@ namespace ML.Core.Models
             var num_pts = input.shape[0];
             var num_feats = input.shape[1];
 
-            var centroid_matrix = np.reshape(np.tile(kmeans, np.array(num_pts, 1)),
-                new Shape(num_pts, K, num_feats));
-            var point_matrix = np.reshape(np.tile(input, np.array(1, K)), new Shape(num_pts, K, num_feats));
+            var centroid_matrix = kmeans.tile(np.array(num_pts, 1)).reshape(new Shape(num_pts, K, num_feats));
+            var point_matrix = input.tile(np.array(1, K)).reshape(new Shape(num_pts, K, num_feats));
             var dis = np.linalg.norm(point_matrix - centroid_matrix, axis: -1, ord: 2);
-            var centroid_group = np.argmin(dis, -1).astype(np.int32);
+            var centroid_group = dis.argmin(-1).astype(np.int32);
             return centroid_group;
         }
 
@@ -148,7 +145,7 @@ namespace ML.Core.Models
                 .Select(a =>
                 {
                     var arr = np.vstack(a.Value.ToArray());
-                    return np.average(arr, 0).astype(np.@double);
+                    return arr.average(0).astype(np.@double);
                 }).ToArray();
             kmeans = kmeans.OrderBy(n => n.GetData<double>()[0]).ToArray();
             return np.vstack(kmeans);

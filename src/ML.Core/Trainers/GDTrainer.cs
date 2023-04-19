@@ -152,7 +152,7 @@ namespace ML.Core.Trainers
                     {
                         var gradientArray = lossTerm.Differentiate(ModelGd.Variables, weight.GetData<double>());
                         var g = np.array(gradientArray);
-                        return np.reshape(g, weight.shape);
+                        return g.reshape(weight.shape);
                     }
 
                     ModelGd.Weights = Optimizer.Call(ModelGd.Weights.copy(), GetGradient, e - 1);

@@ -32,8 +32,8 @@ namespace ML.Core.Transform
             var all = Enumerable.Range(1, 2 * Degree)
                 .Select(d =>
                     d % 2 == 0
-                        ? np.sin(d / 4.0 * input)
-                        : np.cos(d / 4.0 * input))
+                        ? (d / 4.0 * input).sin()
+                        : (d / 4.0 * input).cos())
                 .ToList();
             all.Insert(0, np.ones_like(input));
             return np.hstack(all.ToArray());

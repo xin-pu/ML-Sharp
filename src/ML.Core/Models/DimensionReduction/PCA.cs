@@ -27,14 +27,14 @@ namespace ML.Core.Models
 
         public NDarray Call(NDarray sample)
         {
-            var ave = np.average(sample, 0);
+            var ave = sample.average(0);
 
             var X = sample - ave;
 
-            var (Lamda, V) = np.linalg.eig(np.dot(X.T, X));
+            var (Lamda, V) = np.linalg.eig(X.T.dot(X));
 
 
-            var v = np.argsort(Lamda).GetData<long>()
+            var v = Lamda.argsort().GetData<long>()
                 .Select((index, dim) => (index, dim))
                 .OrderByDescending(p => p.index)
                 .Take(Dims)
@@ -53,7 +53,7 @@ namespace ML.Core.Models
         /// <returns></returns>
         public NDarray Transform(NDarray input)
         {
-            return np.dot(input, Weights);
+            return input.dot(Weights);
         }
     }
 }

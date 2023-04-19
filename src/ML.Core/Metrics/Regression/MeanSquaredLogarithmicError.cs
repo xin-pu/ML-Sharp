@@ -30,9 +30,9 @@ namespace ML.Core.Metrics.Regression
 
         internal override double call(NDarray y_true, NDarray y_pred)
         {
-            var logTrue = np.log(y_true + 1);
-            var error = np.square(np.log(y_true + 1) - np.log(y_pred + 1));
-            return np.average(error);
+            var logTrue = (y_true + 1).log();
+            var error = ((y_true + 1).log() - (y_pred + 1).log()).square();
+            return error.average();
         }
     }
 }

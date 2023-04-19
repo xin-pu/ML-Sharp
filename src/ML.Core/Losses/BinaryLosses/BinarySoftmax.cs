@@ -32,8 +32,8 @@ namespace ML.Core.Losses
 
         internal override double calculateLoss(NDarray y_pred, NDarray y_true)
         {
-            var alllogdelta = np.log(1 + np.exp(-y_pred * y_true));
-            return np.average(alllogdelta);
+            var alllogdelta = (1 + (-y_pred * y_true).exp()).log();
+            return alllogdelta.average();
         }
 
         /// <summary>

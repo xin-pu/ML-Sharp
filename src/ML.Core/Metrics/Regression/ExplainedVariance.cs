@@ -21,9 +21,9 @@ namespace ML.Core.Metrics.Regression
         internal override double call(NDarray y_true, NDarray y_pred)
         {
             var delta = y_true - y_pred;
-            var varuance_with_pred = np.var(delta);
+            var varuance_with_pred = delta.var();
 
-            var variance_y_true = np.var(y_true);
+            var variance_y_true = y_true.var();
             return 1 - varuance_with_pred / variance_y_true;
         }
     }
