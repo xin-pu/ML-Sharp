@@ -6,9 +6,9 @@ namespace ML.Core.Optimizers
     public class AdaDelta : Optimizer
     {
         private double _beta = 0.9;
-        private NDarray _g;
-        private NDarray _learningRate;
-        private NDarray _x;
+        private NDarray _g = np.empty();
+        private NDarray _x = np.empty();
+        private NDarray _learningRate = np.empty();
 
         /// <summary>
         ///     Ada Delta

@@ -5,7 +5,7 @@ namespace ML.Core.Optimizers
 {
     public class Momentum : Optimizer
     {
-        private NDarray? _deltaTheda;
+        private NDarray _deltaTheda = np.empty();
         private double _rho = 0.9;
 
         /// <summary>

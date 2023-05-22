@@ -5,7 +5,7 @@ namespace ML.Core.Optimizers
 {
     public class Nesterov : Optimizer
     {
-        private NDarray? _deltaWeight;
+        private NDarray _deltaWeight = np.empty();
         private double _rho = 0.9;
 
 

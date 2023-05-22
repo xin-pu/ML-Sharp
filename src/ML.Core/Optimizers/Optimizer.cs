@@ -9,12 +9,11 @@ namespace ML.Core.Optimizers
         internal const double epsilon = 1E-7;
 
         private double _initLearningRate;
-        private string _name;
+        private string _name = string.Empty;
         private double _workLearningRate;
 
-        public Action<string> AppendRecord;
-
-        internal Func<NDarray, NDarray> CalGradient;
+        public Action<string>? AppendRecord;
+        internal Func<NDarray, NDarray>? CalGradient;
 
 
         /// <summary>

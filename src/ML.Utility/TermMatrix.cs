@@ -16,6 +16,7 @@ namespace ML.Utility
             Height = height;
         }
 
+
         public TermMatrix(Term[,] array)
         {
             Value = array;

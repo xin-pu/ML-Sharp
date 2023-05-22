@@ -7,7 +7,7 @@ namespace ML.Core.Optimizers
     /// </summary>
     public class AdaGrad : Optimizer
     {
-        private NDarray _g;
+        private NDarray _g = np.empty();
 
         /// <summary>
         ///     自适应学习率

@@ -8,8 +8,8 @@ namespace ML.Core.Optimizers
         private double _beta1 = 0.9;
         private double _beta2 = 0.99;
 
-        private NDarray _g;
-        private NDarray _m;
+        private NDarray _g = np.empty();
+        private NDarray _m = np.empty();
 
         /// <summary>
         ///     Adaptive Moment Estimation Algorithm

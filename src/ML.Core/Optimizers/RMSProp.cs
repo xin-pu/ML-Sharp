@@ -6,7 +6,7 @@ namespace ML.Core.Optimizers
     public class RMSProp : Optimizer
     {
         private double _beta = 0.9;
-        private NDarray _g;
+        private NDarray _g = np.empty();
 
         /// <summary>
         ///     自适应学习率
