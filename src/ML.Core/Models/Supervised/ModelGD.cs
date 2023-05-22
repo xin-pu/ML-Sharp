@@ -20,11 +20,11 @@ namespace ML.Core.Models
     /// <typeparam name="T"></typeparam>
     public abstract class ModelGD : ObservableObject, IModelGD
     {
-        private InitialWeigts _initialWeights = InitialWeigts.False;
         private Transformer _transformer;
         private Variable[] _variables;
 
         private WeightInitial _weightInitial;
+        private bool _weightInitialWeights;
         private NDarray _weights;
 
         /// <summary>
@@ -43,10 +43,10 @@ namespace ML.Core.Models
             protected set => SetProperty(ref _transformer, value);
         }
 
-        public InitialWeigts InitialWeights
+        public bool WeightInitialWeights
         {
-            get => _initialWeights;
-            protected set => SetProperty(ref _initialWeights, value);
+            get => _weightInitialWeights;
+            protected set => SetProperty(ref _weightInitialWeights, value);
         }
 
         public WeightInitial WeightInitial
@@ -107,7 +107,7 @@ namespace ML.Core.Models
                     break;
             }
 
-            InitialWeights = InitialWeigts.True;
+            WeightInitialWeights = true;
         }
 
         public double[] GetWeightArray()
@@ -167,7 +167,7 @@ namespace ML.Core.Models
             str.AppendLine(Name);
             str.AppendLine(Description);
             str.AppendLine($"{Transformer}");
-            if (InitialWeights == InitialWeigts.True)
+            if (WeightInitialWeights)
             {
                 str.AppendLine($"ParaCount:\t{Variables.Length}");
                 str.AppendLine($"Weight:\r{Weights}");
@@ -177,16 +177,11 @@ namespace ML.Core.Models
         }
     }
 
+
     public enum WeightInitial
     {
         Rand,
         One,
         Zero
-    }
-
-    public enum InitialWeigts
-    {
-        True,
-        False
     }
 }

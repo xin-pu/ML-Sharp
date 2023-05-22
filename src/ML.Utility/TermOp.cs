@@ -11,7 +11,7 @@ namespace ML.Utility
         /// <param name="v"></param>
         /// <param name="xrow"></param>
         /// <returns></returns>
-        private static Term MatmulRow(Variable[] v, NDarray xrow)
+        public static Term MatmulRow(Variable[] v, NDarray xrow)
         {
             xrow.shape[0].Should().Be(v.Length);
             var row = xrow.GetData<double>();
