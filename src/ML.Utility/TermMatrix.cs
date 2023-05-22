@@ -90,7 +90,7 @@ namespace ML.Utility
             var clone = Clone();
             foreach (var r in Enumerable.Range(0, Height))
             foreach (var c in Enumerable.Range(0, Width))
-                clone[r, c] = term.sigmoid(this[r, c]);
+                clone[r, c] = TermOp.Sigmoid(this[r, c]);
             return clone;
         }
 
@@ -99,7 +99,7 @@ namespace ML.Utility
             var clone = Clone();
             foreach (var r in Enumerable.Range(0, Height))
             foreach (var c in Enumerable.Range(0, Width))
-                clone[r, c] = term.tanh(this[r, c]);
+                clone[r, c] = TermOp.Tanh(this[r, c]);
             return clone;
         }
 

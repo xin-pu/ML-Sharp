@@ -45,7 +45,7 @@ namespace ML.Core.Losses
 
         internal override Term convertProbabilityTerm(Term labels_logits)
         {
-            return term.sigmoid(labels_logits);
+            return TermOp.sigmoid(labels_logits);
         }
 
         internal override NDarray convertProbabilityNDarray(NDarray labels_logits)

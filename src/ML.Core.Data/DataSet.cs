@@ -91,10 +91,10 @@ namespace ML.Core.Data
         /// <returns></returns>
         public object Clone()
         {
-            var serializer = new YAXSerializer(Type);
-            var obj = serializer.Serialize(this);
-            var final = (Dataset<T>) serializer.Deserialize(obj)!;
-            return final;
+            var yaxSerializer = new YAXSerializer<T[]>();
+            var mem = yaxSerializer.Serialize(Value);
+            var result = yaxSerializer.Deserialize(mem);
+            return new Dataset<T>(result);
         }
 
         /// <summary>

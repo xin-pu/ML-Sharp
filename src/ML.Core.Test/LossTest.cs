@@ -20,7 +20,7 @@ namespace ML.Core.Test
 
         public TermMatrix Call(Variable[] weight)
         {
-            return term.multiply(x, weight);
+            return TermOp.Multiply(x, weight);
         }
 
 
