@@ -3,7 +3,6 @@ using Numpy;
 
 namespace ML.Core.Data.DataStructs
 {
-    [Serializable]
     public class OptdigitData : DataView
     {
         [LoadColumn(64)] public double Label;

@@ -73,7 +73,7 @@ namespace ML.Core.Data.Loader
                 .ToList();
             var dict = fieldInfo.ToDictionary(
                 f => f,
-                f => f.GetCustomAttribute<LoadColumnAttribute>().Range);
+                f => f.GetCustomAttribute<LoadColumnAttribute>()?.Range);
             return dict;
         }
 

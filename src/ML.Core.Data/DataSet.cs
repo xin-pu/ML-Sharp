@@ -11,7 +11,6 @@ namespace ML.Core.Data
     ///     数据集
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    [Serializable]
     public sealed class Dataset<T> : ObservableObject, ICloneable
         where T : DataView
     {
@@ -65,11 +64,7 @@ namespace ML.Core.Data
             var arrays = Value.Select(a => a.ToDatasetNDarray()).ToList();
             var feature = arrays.Select(a => a.Feature).ToArray();
             var labels = arrays.Select(a => a.Label).ToArray();
-            return new DatasetNDarray
-            {
-                Feature = np.vstack(feature),
-                Label = np.vstack(labels)
-            };
+            return new DatasetNDarray(np.vstack(feature), np.vstack(labels));
         }
 
         public NDarray ToFeatureNDarray()
@@ -94,7 +89,10 @@ namespace ML.Core.Data
             var yaxSerializer = new YAXSerializer<T[]>();
             var mem = yaxSerializer.Serialize(Value);
             var result = yaxSerializer.Deserialize(mem);
-            return new Dataset<T>(result);
+            var final = result == null
+                ? new Dataset<T>(Array.Empty<T>())
+                : new Dataset<T>(result);
+            return final;
         }
 
         /// <summary>
@@ -168,7 +166,7 @@ namespace ML.Core.Data
         public Dataset<T> Repeat(int repeat)
         {
             var all = Enumerable.Range(0, repeat)
-                .SelectMany(d => ((Dataset<T>) Clone()).Value)
+                .SelectMany(_ => ((Dataset<T>) Clone()).Value)
                 .ToArray();
             return new Dataset<T>(all);
         }
