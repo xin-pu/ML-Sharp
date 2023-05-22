@@ -48,12 +48,12 @@ namespace ML.Core.Losses
 
         internal override Term convertProbabilityTerm(Term labels_logits)
         {
-            return TermOp.tanh(labels_logits);
+            return TermOp.Tanh(labels_logits);
         }
 
         internal override NDarray convertProbabilityNDarray(NDarray labels_logits)
         {
-            return nn.tanh(labels_logits);
+            return NNOp.Tanh(labels_logits);
         }
     }
 }

@@ -22,7 +22,7 @@ namespace ML.Core.Models
         public override TermMatrix CallGraph(NDarray features)
         {
             var feature = Transformer.Call(features);
-            return TermOp.multiply(feature, Variables);
+            return TermOp.Multiply(feature, Variables);
         }
 
         public override NDarray Call(NDarray features)

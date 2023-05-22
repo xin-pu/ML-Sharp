@@ -22,13 +22,13 @@ namespace ML.Core.Models
         public override TermMatrix CallGraph(NDarray features)
         {
             var feature = Transformer.Call(features);
-            return TermOp.multiply(feature, Variables).Sigmoid();
+            return TermOp.Multiply(feature, Variables).Sigmoid();
         }
 
         public override NDarray Call(NDarray features)
         {
             var feature = Transformer.Call(features);
-            var y_pred = nn.sigmoid(feature.matmul(Weights.T));
+            var y_pred = NNOp.Sigmoid(feature.matmul(Weights.T));
             return sign(y_pred);
         }
 
