@@ -32,7 +32,7 @@ namespace ML.Core.Optimizers
         [Category("Configuration")]
         public double Beta
         {
-            set => Set(ref _beta, value);
+            set => SetProperty(ref _beta, value);
             get => _beta;
         }
 
@@ -42,7 +42,7 @@ namespace ML.Core.Optimizers
         [Category("State")]
         public NDarray G
         {
-            protected set => Set(ref _g, value);
+            protected set => SetProperty(ref _g, value);
             get => _g;
         }
 

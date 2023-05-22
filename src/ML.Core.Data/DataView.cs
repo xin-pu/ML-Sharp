@@ -1,10 +1,10 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Numpy;
 
 namespace ML.Core.Data
 {
     [Serializable]
-    public abstract class DataView
+    public abstract class DataView : ObservableObject
     {
         public int GetFeatures => GetFeatureArray().size;
 

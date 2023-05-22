@@ -1,5 +1,3 @@
-using System;
-using MathNet.Numerics.Random;
 using ML.Core.Data.Loader;
 using Numpy;
 
@@ -51,7 +49,7 @@ namespace ML.Core.Data.DataStructs
         /// <returns></returns>
         public static IrisData RandomIris()
         {
-            var randomSource = SystemRandomSource.Default;
+            var randomSource = new Random();
             return new IrisData
             {
                 Label = randomSource.Next(0, 3),

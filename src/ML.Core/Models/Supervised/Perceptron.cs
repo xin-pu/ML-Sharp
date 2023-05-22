@@ -30,7 +30,7 @@ namespace ML.Core.Models
         public int Classes
         {
             get => classes;
-            set => Set(ref classes, value);
+            set => SetProperty(ref classes, value);
         }
 
         public override string Description => "Perceptron";

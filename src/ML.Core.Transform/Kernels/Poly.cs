@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Numpy;
 
 namespace ML.Core.Transform
@@ -24,7 +22,7 @@ namespace ML.Core.Transform
         public int Degree
         {
             get => _degree;
-            set => Set(ref _degree, value);
+            set => SetProperty(ref _degree, value);
         }
 
         public override NDarray Call(NDarray input)

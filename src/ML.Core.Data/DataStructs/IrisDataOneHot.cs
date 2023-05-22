@@ -1,4 +1,3 @@
-using System;
 using Numpy;
 
 namespace ML.Core.Data.DataStructs
@@ -16,7 +15,7 @@ namespace ML.Core.Data.DataStructs
         public override NDarray GetLabelArray()
         {
             var array = new double[3];
-            array[(int) Label] = 1;
+            array[Label] = 1;
             return np.array(array);
         }
 

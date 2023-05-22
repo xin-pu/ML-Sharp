@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
+﻿using System.Collections;
 using System.Text;
+using CommunityToolkit.Mvvm.ComponentModel;
 using FluentAssertions;
-using MathNet.Numerics.Random;
 using Numpy;
+using YAXLib;
 
 namespace ML.Core.Data
 {
@@ -16,7 +12,7 @@ namespace ML.Core.Data
     /// </summary>
     /// <typeparam name="T"></typeparam>
     [Serializable]
-    public sealed class Dataset<T> : ICloneable
+    public sealed class Dataset<T> : ObservableObject, ICloneable
         where T : DataView
     {
         public Dataset(T[] value)
@@ -95,12 +91,10 @@ namespace ML.Core.Data
         /// <returns></returns>
         public object Clone()
         {
-            var BF = new BinaryFormatter();
-            var memStream = new MemoryStream();
-            BF.Serialize(memStream, this);
-            memStream.Flush();
-            memStream.Position = 0;
-            return BF.Deserialize(memStream);
+            var serializer = new YAXSerializer(Type);
+            var obj = serializer.Serialize(this);
+            var final = (Dataset<T>) serializer.Deserialize(obj)!;
+            return final;
         }
 
         /// <summary>
@@ -109,7 +103,7 @@ namespace ML.Core.Data
         /// <returns></returns>
         public Dataset<T> Shuffle()
         {
-            var randomSource = SystemRandomSource.Default;
+            var randomSource = new Random();
             var cache = new T[Count];
             Value.CopyTo(cache, 0);
             var list = cache.ToList();

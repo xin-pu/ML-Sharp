@@ -37,7 +37,7 @@ namespace ML.Core.Optimizers
         [Category("State")]
         public NDarray G
         {
-            protected set => Set(ref _g, value);
+            protected set => SetProperty(ref _g, value);
             get => _g;
         }
 

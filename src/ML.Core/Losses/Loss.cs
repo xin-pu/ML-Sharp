@@ -1,16 +1,14 @@
-﻿using System;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Text;
 using AutoDiff;
+using CommunityToolkit.Mvvm.ComponentModel;
 using FluentAssertions;
-using GalaSoft.MvvmLight;
 using ML.Utility;
 using Numpy;
 
 namespace ML.Core.Losses
 {
-    public abstract class Loss : ViewModelBase, IRecorder, IDisposable
+    public abstract class Loss : ObservableObject, IRecorder, IDisposable
     {
         private double _lamdba = 1E-4;
         private Regularization _regularization = Regularization.None;
@@ -32,7 +30,7 @@ namespace ML.Core.Losses
         public double Lamdba
         {
             get => _lamdba;
-            set => Set(ref _lamdba, value);
+            set => SetProperty(ref _lamdba, value);
         }
 
         /// <summary>
@@ -42,7 +40,7 @@ namespace ML.Core.Losses
         public Regularization Regularization
         {
             get => _regularization;
-            set => Set(ref _regularization, value);
+            set => SetProperty(ref _regularization, value);
         }
 
         [Category("Tag")] public abstract string Describe { get; }

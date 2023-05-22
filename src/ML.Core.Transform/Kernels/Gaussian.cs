@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Numpy;
 
 namespace ML.Core.Transform
@@ -24,7 +22,7 @@ namespace ML.Core.Transform
         public double Beta
         {
             get => _beta;
-            set => Set(ref _beta, value);
+            set => SetProperty(ref _beta, value);
         }
 
 

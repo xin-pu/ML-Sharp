@@ -24,7 +24,7 @@ namespace ML.Core.Optimizers
         [Category("Configuration")]
         public double Beta
         {
-            set => Set(ref _beta, value);
+            set => SetProperty(ref _beta, value);
             get => _beta;
         }
 
@@ -34,7 +34,7 @@ namespace ML.Core.Optimizers
         [Category("State")]
         public NDarray G
         {
-            protected set => Set(ref _g, value);
+            protected set => SetProperty(ref _g, value);
             get => _g;
         }
 
@@ -44,14 +44,14 @@ namespace ML.Core.Optimizers
         [Category("State")]
         public NDarray X
         {
-            protected set => Set(ref _x, value);
+            protected set => SetProperty(ref _x, value);
             get => _x;
         }
 
         [Category("State")]
         public NDarray LearningRate
         {
-            protected set => Set(ref _learningRate, value);
+            protected set => SetProperty(ref _learningRate, value);
             get => _learningRate;
         }
 

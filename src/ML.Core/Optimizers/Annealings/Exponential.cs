@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ML.Core.Optimizers
+﻿namespace ML.Core.Optimizers
 {
     public class Exponential : Annealing
     {
@@ -26,7 +24,7 @@ namespace ML.Core.Optimizers
 
         public double Beta
         {
-            set => Set(ref _beta, value);
+            set => SetProperty(ref _beta, value);
             get => _beta;
         }
 

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ML.Core.Optimizers
+﻿namespace ML.Core.Optimizers
 {
     public class Cosine : Annealing
     {
@@ -27,7 +25,7 @@ namespace ML.Core.Optimizers
         /// </summary>
         public int TotalEpoch
         {
-            set => Set(ref totalEpoch, value);
+            set => SetProperty(ref totalEpoch, value);
             get => totalEpoch;
         }
 

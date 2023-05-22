@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Numpy;
+﻿using Numpy;
 using Numpy.Models;
 
 namespace ML.Core.Models
@@ -32,19 +30,19 @@ namespace ML.Core.Models
         public int K
         {
             get => _k;
-            set => Set(ref _k, value);
+            set => SetProperty(ref _k, value);
         }
 
         public KMeansAlgorithm KMeansAlgorithm
         {
             get => _kMeansAlgorithm;
-            set => Set(ref _kMeansAlgorithm, value);
+            set => SetProperty(ref _kMeansAlgorithm, value);
         }
 
         public int IterationLimit
         {
             get => _iterationLimit;
-            set => Set(ref _iterationLimit, value);
+            set => SetProperty(ref _iterationLimit, value);
         }
 
         public override NDarray Call(NDarray inputNDArray)

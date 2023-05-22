@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using ML.Core.Data;
 using Numpy;
 
 namespace ML.Core.Models
 {
-    public abstract class Cluster : ViewModelBase
+    public abstract class Cluster : ObservableObject
     {
         /// <summary>
         ///     聚类算法抽象类

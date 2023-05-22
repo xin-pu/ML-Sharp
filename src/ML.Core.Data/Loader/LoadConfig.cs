@@ -1,8 +1,8 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ML.Core.Data.Loader
 {
-    public class LoadConfig : ViewModelBase
+    public class LoadConfig : ObservableObject
     {
         private bool _hasHead = true;
         private string _splitChar = ";:,\t";
@@ -12,25 +12,25 @@ namespace ML.Core.Data.Loader
         public bool SplitTrainAndVal
         {
             get => _splitTrainAndVal;
-            set => Set(ref _splitTrainAndVal, value);
+            set => SetProperty(ref _splitTrainAndVal, value);
         }
 
         public double SplitRatio
         {
             get => _splitRatio;
-            set => Set(ref _splitRatio, value);
+            set => SetProperty(ref _splitRatio, value);
         }
 
         public string SplitChar
         {
             get => _splitChar;
-            set => Set(ref _splitChar, value);
+            set => SetProperty(ref _splitChar, value);
         }
 
         public bool HasHead
         {
             get => _hasHead;
-            set => Set(ref _hasHead, value);
+            set => SetProperty(ref _hasHead, value);
         }
     }
 }

@@ -1,10 +1,9 @@
-﻿using System.Linq;
-using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Numpy;
 
 namespace ML.Core.Models
 {
-    public class PCA : ViewModelBase
+    public class PCA : ObservableObject
     {
         private int _dims;
 
@@ -20,7 +19,7 @@ namespace ML.Core.Models
         public int Dims
         {
             get => _dims;
-            set => Set(ref _dims, value);
+            set => SetProperty(ref _dims, value);
         }
 
         public NDarray Weights { set; get; }

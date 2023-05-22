@@ -24,7 +24,7 @@ namespace ML.Core.Models
         {
             set
             {
-                Set(ref _degree, value);
+                SetProperty(ref _degree, value);
                 UpdateTransform();
             }
             get => _degree;

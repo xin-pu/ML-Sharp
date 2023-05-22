@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ML.Core
+﻿namespace ML.Core
 {
     public interface IRecorder
     {

@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Linq;
+﻿using System.Collections.ObjectModel;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using AutoDiff;
+using CommunityToolkit.Mvvm.ComponentModel;
 using FluentAssertions;
-using GalaSoft.MvvmLight;
 using ML.Core.Data;
 using ML.Core.Losses;
 using ML.Core.Metrics;
@@ -17,7 +13,7 @@ using Numpy;
 
 namespace ML.Core.Trainers
 {
-    public class GDTrainer : ViewModelBase
+    public class GDTrainer : ObservableObject
     {
         private int _batch;
         private int _currentBatchIndex;
@@ -49,61 +45,61 @@ namespace ML.Core.Trainers
         public IModelGD ModelGd
         {
             get => _modelGd;
-            set => Set(ref _modelGd, value);
+            set => SetProperty(ref _modelGd, value);
         }
 
         public Dataset<DataView> TrainDataset
         {
             get => _trainDataset;
-            set => Set(ref _trainDataset, value);
+            set => SetProperty(ref _trainDataset, value);
         }
 
         public Dataset<DataView> ValDataset
         {
             get => _valDataset;
-            set => Set(ref _valDataset, value);
+            set => SetProperty(ref _valDataset, value);
         }
 
         public Optimizer Optimizer
         {
             get => _optimizer;
-            set => Set(ref _optimizer, value);
+            set => SetProperty(ref _optimizer, value);
         }
 
         public Loss Loss
         {
             get => _loss;
-            set => Set(ref _loss, value);
+            set => SetProperty(ref _loss, value);
         }
 
         public ObservableCollection<Metric> Metrics
         {
             get => _metrics;
-            set => Set(ref _metrics, value);
+            set => SetProperty(ref _metrics, value);
         }
 
         public TrainPlan TrainPlan
         {
             get => _trainPlan;
-            set => Set(ref _trainPlan, value);
+            set => SetProperty(ref _trainPlan, value);
         }
 
         public int CurrentEpoch
         {
             get => _currentEpoch;
-            set => Set(ref _currentEpoch, value);
+            set => SetProperty(ref _currentEpoch, value);
         }
 
         public int CurrentBatchIndex
         {
             get => _currentBatchIndex;
-            set => Set(ref _currentBatchIndex, value);
+            set => SetProperty(ref _currentBatchIndex, value);
         }
 
         public int Batch
         {
             get => _batch;
-            set => Set(ref _batch, value);
+            set => SetProperty(ref _batch, value);
         }
 
 

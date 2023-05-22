@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ML.Core.Data.Loader
+﻿namespace ML.Core.Data.Loader
 {
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
     public sealed class LoadColumnAttribute : Attribute

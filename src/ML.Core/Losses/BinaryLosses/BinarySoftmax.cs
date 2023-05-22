@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using AutoDiff;
+﻿using AutoDiff;
 using FluentAssertions;
 using ML.Utility;
 using Numpy;

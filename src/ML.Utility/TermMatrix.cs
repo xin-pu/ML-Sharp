@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using AutoDiff;
+﻿using AutoDiff;
 using FluentAssertions;
 using Numpy;
 

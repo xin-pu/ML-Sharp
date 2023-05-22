@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net4.7.2</TargetFramework>
+    <TargetFramework>net7</TargetFramework>
 
     <IsPackable>false</IsPackable>
 
@@ -13,7 +13,6 @@
     <PackageReference Include="FluentAssertions" Version="6.10.0" />
     <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
-    <PackageReference Include="MvvmLightLibs" Version="5.4.1.1" />
     <PackageReference Include="Numpy" Version="3.11.1.33" />
     <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
     <PackageReference Include="xunit" Version="2.4.2" />
@@ -29,9 +28,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ML.Core.Data\ML.Core.Data.csproj" />
-    <ProjectReference Include="..\ML.Core.Transform\ML.Core.Transform.csproj" />
     <ProjectReference Include="..\ML.Core\ML.Core.csproj" />
-    <ProjectReference Include="..\ML.Guide\ML.Guide.csproj" />
+    <ProjectReference Include="..\ML.ReinforceTest\ML.ReinforceTest.csproj" />
+    <ProjectReference Include="..\ML.Utility\ML.Utility.csproj" />
   </ItemGroup>
 
 </Project>

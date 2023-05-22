@@ -22,7 +22,7 @@ namespace ML.Core.Losses
         public LabelType LabelType
         {
             get => _labelType;
-            set => Set(ref _labelType, value);
+            set => SetProperty(ref _labelType, value);
         }
 
 

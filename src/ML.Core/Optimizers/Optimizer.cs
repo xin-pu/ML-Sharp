@@ -1,11 +1,10 @@
-﻿using System;
-using System.ComponentModel;
-using GalaSoft.MvvmLight;
+﻿using System.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Numpy;
 
 namespace ML.Core.Optimizers
 {
-    public abstract class Optimizer : ViewModelBase, IDisposable
+    public abstract class Optimizer : ObservableObject, IDisposable
     {
         internal const double epsilon = 1E-7;
 
@@ -38,7 +37,7 @@ namespace ML.Core.Optimizers
         [Category("Tag")]
         public string Name
         {
-            protected set => Set(ref _name, value);
+            protected set => SetProperty(ref _name, value);
             get => _name;
         }
 
@@ -46,7 +45,7 @@ namespace ML.Core.Optimizers
         [Category("State")]
         public double WorkLearningRate
         {
-            set => Set(ref _workLearningRate, value);
+            set => SetProperty(ref _workLearningRate, value);
             get => _workLearningRate;
         }
 
@@ -55,7 +54,7 @@ namespace ML.Core.Optimizers
         {
             set
             {
-                Set(ref _initLearningRate, value);
+                SetProperty(ref _initLearningRate, value);
                 WorkLearningRate = value;
             }
             get => _initLearningRate;

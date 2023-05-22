@@ -5,7 +5,7 @@ namespace ML.Core.Optimizers
 {
     public class Nesterov : Optimizer
     {
-        private NDarray _deltaWeight;
+        private NDarray? _deltaWeight;
         private double _rho = 0.9;
 
 
@@ -35,7 +35,7 @@ namespace ML.Core.Optimizers
         [Category("Configuration")]
         public double Rho
         {
-            set => Set(ref _rho, value);
+            set => SetProperty(ref _rho, value);
             get => _rho;
         }
 
@@ -48,15 +48,15 @@ namespace ML.Core.Optimizers
         /// </summary>
 
         [Category("State")]
-        public NDarray DeltaWeight
+        public NDarray? DeltaWeight
         {
-            protected set => Set(ref _deltaWeight, value);
+            protected set => SetProperty(ref _deltaWeight, value);
             get => _deltaWeight;
         }
 
         public override void Dispose()
         {
-            DeltaWeight.Dispose();
+            DeltaWeight?.Dispose();
         }
 
         internal override NDarray call(NDarray weight, int epoch)

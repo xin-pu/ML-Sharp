@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using ML.Core.Transform;
+﻿using ML.Core.Transform;
 using Numpy;
 
 namespace ML.Core.Models
@@ -30,13 +29,13 @@ namespace ML.Core.Models
         public int K
         {
             get => _k;
-            set => Set(ref _k, value);
+            set => SetProperty(ref _k, value);
         }
 
         public LaprasMatrixType LaprasMatrixType
         {
             get => _laprasMatrixType;
-            set => Set(ref _laprasMatrixType, value);
+            set => SetProperty(ref _laprasMatrixType, value);
         }
 
 

@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using MathNet.Numerics.Random;
-using Numpy;
+﻿using Numpy;
 
 namespace ML.Core.Models
 {
@@ -23,13 +20,13 @@ namespace ML.Core.Models
         public double Epsilon
         {
             get => _epsilon;
-            set => Set(ref _epsilon, value);
+            set => SetProperty(ref _epsilon, value);
         }
 
         public int MinPoints
         {
             get => _minPoints;
-            set => Set(ref _minPoints, value);
+            set => SetProperty(ref _minPoints, value);
         }
 
         public override NDarray Call(NDarray input)
@@ -55,7 +52,7 @@ namespace ML.Core.Models
                 var allTemp = new List<int>(allObjects);
 
                 /// 随机选取一个核心对象O;
-                var coreObject = coreObjects[SystemRandomSource.Default.Next(0, coreObjects.Count)];
+                var coreObject = coreObjects[new Random().Next(0, coreObjects.Count)];
                 var Q = new Queue<int>();
                 Q.Enqueue(coreObject);
 

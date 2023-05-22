@@ -348,3 +348,14 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+/upgrade-assistant.clef
+/src/ML.ReinforceTest/Bandits.cs
+/src/ML.ReinforceTest
+/src/ML.Reinforce/Properties/AssemblyInfo.cs
+/src/ML.Reinforce/Properties
+/src/ML.Reinforce/ML.Reinforce.csproj
+/src/ML.Reinforce/IntelligentAgent.cs
+/src/ML.Reinforce/Ebvironment.cs
+/src/ML.Reinforce
+/src
+/AnalysisReport.sarif

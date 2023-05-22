@@ -1,9 +1,7 @@
-﻿using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 using AutoDiff;
+using CommunityToolkit.Mvvm.ComponentModel;
 using FluentAssertions;
-using GalaSoft.MvvmLight;
 using ML.Core.Data;
 using ML.Core.Transform;
 using ML.Utility;
@@ -20,7 +18,7 @@ namespace ML.Core.Models
     ///     需要定义转换器
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class ModelGD : ViewModelBase, IModelGD
+    public abstract class ModelGD : ObservableObject, IModelGD
     {
         private InitialWeigts _initialWeights = InitialWeigts.False;
         private Transformer _transformer;
@@ -42,19 +40,19 @@ namespace ML.Core.Models
         public Transformer Transformer
         {
             get => _transformer;
-            protected set => Set(ref _transformer, value);
+            protected set => SetProperty(ref _transformer, value);
         }
 
         public InitialWeigts InitialWeights
         {
             get => _initialWeights;
-            protected set => Set(ref _initialWeights, value);
+            protected set => SetProperty(ref _initialWeights, value);
         }
 
         public WeightInitial WeightInitial
         {
             get => _weightInitial;
-            set => Set(ref _weightInitial, value);
+            set => SetProperty(ref _weightInitial, value);
         }
 
         public string WeightFile => $"{Name}.txt";
@@ -64,7 +62,7 @@ namespace ML.Core.Models
         public Variable[] Variables
         {
             get => _variables;
-            set => Set(ref _variables, value);
+            set => SetProperty(ref _variables, value);
         }
 
         /// <summary>
@@ -74,7 +72,7 @@ namespace ML.Core.Models
         public NDarray Weights
         {
             get => _weights;
-            set => Set(ref _weights, value);
+            set => SetProperty(ref _weights, value);
         }
 
 

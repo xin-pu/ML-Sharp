@@ -5,7 +5,7 @@ namespace ML.Core.Optimizers
 {
     public class Momentum : Optimizer
     {
-        private NDarray _deltaTheda;
+        private NDarray? _deltaTheda;
         private double _rho = 0.9;
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace ML.Core.Optimizers
         [Category("Configuration")]
         public double Rho
         {
-            set => Set(ref _rho, value);
+            set => SetProperty(ref _rho, value);
             get => _rho;
         }
 
@@ -45,15 +45,15 @@ namespace ML.Core.Optimizers
         ///     《神经网络与深度学习》 P167
         /// </summary>
         [Category("State")]
-        public NDarray DeltaTheda
+        public NDarray? DeltaTheda
         {
-            protected set => Set(ref _deltaTheda, value);
+            protected set => SetProperty(ref _deltaTheda, value);
             get => _deltaTheda;
         }
 
         public override void Dispose()
         {
-            DeltaTheda.Dispose();
+            DeltaTheda?.Dispose();
         }
 
         internal override NDarray call(NDarray weight, int epoch)

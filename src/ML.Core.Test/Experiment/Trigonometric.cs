@@ -104,7 +104,7 @@ namespace ML.Core.Test.Experiment
             var Y = c.Label;
 
 
-            var weight = np.dot(np.dot(np.linalg.inv(np.dot(X.T, X)), X.T), Y);
+            var weight = np.linalg.inv(np.dot(X.T, X)).dot(X.T).dot(Y);
 
             print(string.Join(",", weight.GetData<double>()));
             var res = np.linalg.lstsq(X, Y);
@@ -120,7 +120,7 @@ namespace ML.Core.Test.Experiment
 
             var d = np.fft.fftfreq(1000, 0.01f);
             var dd = np.fft.fft_(c.Label);
-            var ddd = d[np.argmax(dd["1:"]) + 1];
+            var ddd = d[dd["1:"].argmax() + 1];
         }
     }
 }

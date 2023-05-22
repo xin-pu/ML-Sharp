@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using FluentAssertions;
+﻿using FluentAssertions;
 using ML.Core.Data;
 using Numpy;
 using Numpy.Models;
@@ -51,17 +49,17 @@ namespace ML.Core.Models
 
                 if (Regression)
                 {
-                    res.Add(np.average(y_knn, new Axis(0)));
+                    res.Add(y_knn.average(new Axis(0)));
                 }
                 else
                 {
                     var y_knn_int = np.array(y_knn.GetData<int>(), np.int64);
-                    res.Add(np.argmax(np.bincount(y_knn_int)));
+                    res.Add(y_knn_int.bincount().argmax());
                 }
             }
 
             var newshape = new Shape(features.shape[0], Labels.shape[1]);
-            return np.reshape(np.hstack(res.ToArray()), newshape);
+            return np.hstack(res.ToArray()).reshape(newshape);
         }
 
 

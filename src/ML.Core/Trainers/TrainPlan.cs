@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ML.Core.Trainers
 {
-    public class TrainPlan : ViewModelBase
+    public class TrainPlan : ObservableObject
     {
         private int _batchSize;
         private int _epoch;
@@ -19,14 +19,14 @@ namespace ML.Core.Trainers
         public int Epoch
         {
             get => _epoch;
-            set => Set(ref _epoch, value);
+            set => SetProperty(ref _epoch, value);
         }
 
         [Category("Configuration")]
         public int BatchSize
         {
             get => _batchSize;
-            set => Set(ref _batchSize, value);
+            set => SetProperty(ref _batchSize, value);
         }
     }
 }

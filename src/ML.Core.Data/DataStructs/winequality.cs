@@ -1,5 +1,4 @@
-﻿using System;
-using ML.Core.Data.Loader;
+﻿using ML.Core.Data.Loader;
 using Numpy;
 
 namespace ML.Core.Data.DataStructs
