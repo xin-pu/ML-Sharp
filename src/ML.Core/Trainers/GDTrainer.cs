@@ -151,6 +151,7 @@ namespace ML.Core.Trainers
                         return g.reshape(weight.shape);
                     }
 
+                    /// Todo
                     ModelGd.Weights = Optimizer.Call(ModelGd.Weights.copy(), GetGradient, e - 1);
                 }
 

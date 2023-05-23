@@ -1,77 +1,61 @@
-﻿using ML.Utility;
-using Numpy;
+﻿using Numpy;
 
 namespace ML.Core.Models.NeuralNets
 {
-    public class Linear : Module
+    /// <summary>
+    ///     Activation Output=Input*Weights.T+Bias
+    /// </summary>
+    public class Linear : Layer
     {
-        public override string Description { get; } = "y=xA \r\nT\r\n +b";
-
-        private int _inFeatures;
-        private int _outFeatures;
-        private bool _withBias;
-
-        public Linear(int inFeatures, int outFeatures, Dtype dtype, bool bias = true) : base(dtype)
+        public Linear(
+            int inFeatures,
+            int outFeatures,
+            bool withBias = true)
         {
             InFeatures = inFeatures;
             OutFeatures = outFeatures;
-            WithBias = bias;
+            WithBias = withBias;
+
+            var bound = (float) Math.Sqrt(1f / InFeatures);
+            Weights = np.random.uniform(np.array(-bound), np.array(bound), new[] {OutFeatures, InFeatures});
+            Bias = WithBias
+                ? np.random.uniform(np.array(-bound), np.array(bound), new[] {OutFeatures})
+                : np.zeros(OutFeatures);
         }
 
-        public int InFeatures
+        public NDarray Weights { set; get; }
+        public NDarray Bias { set; get; }
+
+        public NDarray Errs { set; get; }
+
+
+        public NDarray NetActivation { set; get; } = np.empty();
+
+        public int InFeatures { protected set; get; }
+        public int OutFeatures { protected set; get; }
+        public bool WithBias { protected set; get; }
+
+        public void ResetParameters()
         {
-            protected set => SetProperty(ref _inFeatures, value);
-            get => _inFeatures;
+            var bound = (float) Math.Sqrt(1f / InFeatures);
+            Weights = np.random.uniform(np.array(-bound), np.array(bound), new[] {OutFeatures, InFeatures});
+            Bias = WithBias
+                ? np.random.uniform(np.array(-bound), np.array(bound), new[] {OutFeatures})
+                : np.zeros(OutFeatures);
         }
 
-        public int OutFeatures
+        public override NDarray Forward(NDarray input)
         {
-            protected set => SetProperty(ref _outFeatures, value);
-            get => _outFeatures;
-        }
-
-        public bool WithBias
-        {
-            protected set => SetProperty(ref _withBias, value);
-            get => _withBias;
-        }
-
-        public VariableMatrix? VariableWeights { set; get; }
-        public VariableMatrix? VariableBias { set; get; }
-        public NDarray? Weights { set; get; }
-        public NDarray? Bias { set; get; }
-
-
-        public override void PipeLineForWeights(NDarray input)
-        {
-            var k = (float) Math.Sqrt(InFeatures);
-
-            VariableWeights = new VariableMatrix(OutFeatures, InFeatures);
-            Weights = np.random.uniform(np.array(-k), np.array(k), new[] {OutFeatures, InFeatures});
-
             if (WithBias)
-            {
-                VariableBias = new VariableMatrix(OutFeatures, 1);
-                Bias = np.random.uniform(np.array(-k), np.array(k), new[] {OutFeatures, 1});
-            }
+                NetActivation = input.matmul(Weights.T) + Bias;
+            else
+                NetActivation = input.matmul(Weights.T);
+            return NetActivation;
         }
 
-        public override TermMatrix CallGraph(NDarray features)
+        public override NDarray Backward(NDarray error)
         {
-            var outTerm = new TermMatrix(1, OutFeatures);
-            foreach (var c in Enumerable.Range(0, VariableWeights.Width))
-            {
-                var col = VariableWeights.GetColumn(c);
-                outTerm[0, c] = TermOp.MatmulRow(col, features[$"...,{c}"]);
-            }
-
-            return outTerm;
-        }
-
-        public override NDarray Call(NDarray features)
-        {
-            var res = features * Weights;
-            return WithBias ? res + Bias : res;
+            throw new NotImplementedException();
         }
     }
 }
