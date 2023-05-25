@@ -61,7 +61,7 @@ namespace ML.Core.Optimizers
             X.Dispose();
         }
 
-        internal override NDarray call(NDarray weight, int epoch)
+        public override NDarray Call(NDarray weight, NDarray gradient, int epoch)
         {
             if (epoch == 0)
             {
@@ -69,10 +69,10 @@ namespace ML.Core.Optimizers
                 X = np.zeros_like(weight);
             }
 
-            var grad = CalGradient(weight);
-            G = Beta * G + (1 - Beta) * grad.square();
 
-            var deltaGrad = ((X + epsilon) / (G + epsilon)).sqrt().multiply(grad);
+            G = Beta * G + (1 - Beta) * gradient.square();
+
+            var deltaGrad = ((X + epsilon) / (G + epsilon)).sqrt().multiply(gradient);
 
             X = Beta * X + (1 - Beta) * deltaGrad.square();
             LearningRate = X.sqrt();

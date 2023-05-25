@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using AutoDiff;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Numpy;
 
@@ -61,6 +62,7 @@ namespace ML.Core.Optimizers
 
         public abstract void Dispose();
 
+
         /// <summary>
         ///     Core optimize function to update weights
         /// </summary>
@@ -68,13 +70,21 @@ namespace ML.Core.Optimizers
         /// <param name="calGradient">Function to calculation gradient</param>
         /// <param name="epoch"></param>
         /// <returns></returns>
-        public NDarray Call(NDarray weight, Func<NDarray, NDarray> calGradient, int epoch)
+        public abstract NDarray Call(NDarray weight, NDarray gradient, int epoch);
+
+
+        /// <summary>
+        ///     Core optimize function to update weights
+        /// </summary>
+        /// <param name="weight">Current Weights</param>
+        /// <param name="calGradient">Function to calculation gradient</param>
+        /// <param name="epoch"></param>
+        /// <returns></returns>
+        public virtual NDarray Call(NDarray weight, Variable[] variables, Term lossTerm, int epoch)
         {
-            CalGradient = calGradient;
-            return call(weight, epoch);
+            var gradientArray = lossTerm.Differentiate(variables, weight.GetData<double>());
+            var g = np.array(gradientArray);
+            return Call(weight, g, epoch);
         }
-
-
-        internal abstract NDarray call(NDarray weight, int epoch);
     }
 }

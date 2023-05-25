@@ -46,15 +46,13 @@ namespace ML.Core.Optimizers
             G.Dispose();
         }
 
-        internal override NDarray call(NDarray weight, int epoch)
+        public override NDarray Call(NDarray weight, NDarray gradient, int epoch)
         {
-            var grad = CalGradient(weight);
-
             if (epoch == 0)
                 G = np.zeros_like(weight);
 
-            G += grad.square();
-            var delta = -(WorkLearningRate / (G + epsilon).sqrt()).multiply(grad);
+            G += gradient.square();
+            var delta = -(WorkLearningRate / (G + epsilon).sqrt()).multiply(gradient);
             return weight + delta;
         }
     }

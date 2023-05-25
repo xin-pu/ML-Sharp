@@ -77,7 +77,7 @@ namespace ML.Core.Optimizers
             M.Dispose();
         }
 
-        internal override NDarray call(NDarray weight, int epoch)
+        public override NDarray Call(NDarray weight, NDarray gradient, int epoch)
         {
             if (epoch == 0)
             {
@@ -86,10 +86,8 @@ namespace ML.Core.Optimizers
             }
 
 
-            var grad = CalGradient(weight);
-
-            M = Beta1 * M + (1 - Beta1) * grad;
-            G = Beta2 * G + (1 - Beta2) * grad.square();
+            M = Beta1 * M + (1 - Beta1) * gradient;
+            G = Beta2 * G + (1 - Beta2) * gradient.square();
 
             var m = M / (1 - Beta1);
             var g = G / (1 - Beta2);

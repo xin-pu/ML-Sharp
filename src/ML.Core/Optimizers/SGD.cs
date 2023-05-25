@@ -31,10 +31,9 @@ namespace ML.Core.Optimizers
         {
         }
 
-        internal override NDarray call(NDarray weight, int epoch)
+        public override NDarray Call(NDarray weight, NDarray gradient, int epoch)
         {
-            var grad = CalGradient(weight);
-            var delta = -grad * WorkLearningRate;
+            var delta = -gradient * WorkLearningRate;
             return weight + delta;
         }
     }

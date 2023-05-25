@@ -28,7 +28,7 @@ namespace ML.Core.Test
 
             Enumerable.Range(0, 2).ToList().ForEach(_ =>
             {
-                weight = momentummo.Call(weight, Grad, 0);
+                weight = momentummo.Call(weight, np.zeros_like(weight), 0);
                 print(weight);
             });
         }
@@ -41,7 +41,7 @@ namespace ML.Core.Test
 
             Enumerable.Range(0, 2).ToList().ForEach(_ =>
             {
-                weight = nesterov.Call(weight, Grad, 0);
+                weight = nesterov.Call(weight, np.zeros_like(weight), 0);
                 print(weight);
             });
         }
@@ -53,7 +53,7 @@ namespace ML.Core.Test
             var weight = Weight.copy();
             Enumerable.Range(0, 2).ToList().ForEach(_ =>
             {
-                weight = sgd.Call(weight, Grad, 0);
+                weight = sgd.Call(weight, np.zeros_like(weight), 0);
                 print(weight);
             });
         }
@@ -66,7 +66,7 @@ namespace ML.Core.Test
 
             Enumerable.Range(0, 2).ToList().ForEach(_ =>
             {
-                weight = adam.Call(weight, Grad, 0);
+                weight = adam.Call(weight, np.zeros_like(weight), 0);
                 print(weight);
             });
         }
@@ -79,7 +79,7 @@ namespace ML.Core.Test
 
             Enumerable.Range(0, 2).ToList().ForEach(_ =>
             {
-                weight = adaDelta.Call(weight, Grad, 0);
+                weight = adaDelta.Call(weight, np.zeros_like(weight), 0);
                 print(weight);
             });
         }
@@ -92,7 +92,7 @@ namespace ML.Core.Test
 
             Enumerable.Range(0, 2).ToList().ForEach(_ =>
             {
-                weight = rmsProp.Call(weight, Grad, 0);
+                weight = rmsProp.Call(weight, np.zeros_like(weight), 0);
                 print(weight);
             });
         }

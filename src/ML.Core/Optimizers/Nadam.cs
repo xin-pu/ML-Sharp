@@ -80,7 +80,7 @@ namespace ML.Core.Optimizers
             G.Dispose();
         }
 
-        internal override NDarray call(NDarray weight, int epoch)
+        public override NDarray Call(NDarray weight, NDarray gradient, int epoch)
         {
             if (epoch == 0)
             {

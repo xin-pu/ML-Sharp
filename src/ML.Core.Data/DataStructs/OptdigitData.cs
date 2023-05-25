@@ -12,8 +12,7 @@ namespace ML.Core.Data.DataStructs
 
         public override string ToString()
         {
-            return
-                $"Label:{Label}\tPixel:{string.Join(",", Pixel)}";
+            return $"Label:{Label}\tPixel:{string.Join(",", Pixel)}";
         }
 
 

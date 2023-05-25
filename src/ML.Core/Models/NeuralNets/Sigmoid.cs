@@ -1,20 +1,23 @@
-﻿using Numpy;
+﻿using ML.Core.Optimizers;
+using Numpy;
 
 namespace ML.Core.Models.NeuralNets
 {
     /// <summary>
-    ///     ReLU 没有权重，反向传播时
+    ///     Sigmoid 激活层
     /// </summary>
     public class Sigmoid : Layer
     {
         public override NDarray Forward(NDarray input)
         {
-            return 1 / (1 + (-input).exp());
+            var res = Output = 1 / (1 + (-input).exp());
+            return res;
         }
 
-        public override NDarray Backward(NDarray error)
+        public override NDarray Backward(NDarray gradient, Optimizer optimizer, int epoch = 0)
         {
-            throw new NotImplementedException();
+            var res = Output * (1 - Output) * gradient;
+            return res;
         }
     }
 }

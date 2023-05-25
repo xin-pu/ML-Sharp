@@ -1,4 +1,5 @@
-﻿using Numpy;
+﻿using ML.Core.Optimizers;
+using Numpy;
 
 namespace ML.Core.Models.NeuralNets
 {
@@ -22,7 +23,7 @@ namespace ML.Core.Models.NeuralNets
             return NetActivation;
         }
 
-        public override NDarray Backward(NDarray error)
+        public override NDarray Backward(NDarray gradient, Optimizer optimizer, int epoch = 0)
         {
             throw new NotImplementedException();
         }

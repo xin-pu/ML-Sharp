@@ -1,4 +1,5 @@
-﻿using Numpy;
+﻿using ML.Core.Optimizers;
+using Numpy;
 
 namespace ML.Core.Models.NeuralNets
 {
@@ -9,10 +10,11 @@ namespace ML.Core.Models.NeuralNets
     {
         public override NDarray Forward(NDarray input)
         {
-            return np.array(0).maximum(input);
+            var res = Output = np.array(0).maximum(input);
+            return res;
         }
 
-        public override NDarray Backward(NDarray error)
+        public override NDarray Backward(NDarray gradient, Optimizer optimizer, int epoch = 0)
         {
             throw new NotImplementedException();
         }

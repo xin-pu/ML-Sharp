@@ -142,17 +142,12 @@ namespace ML.Core.Trainers
                     var predTerms = ModelGd.CallGraph(batchdataSet.Feature);
                     var lossTerm = Loss.GetLossTerm(predTerms, batchdataSet.Label, ModelGd.Variables);
 
-                    await Task.Delay(TimeSpan.FromMilliseconds(10));
-
-                    NDarray GetGradient(NDarray weight)
-                    {
-                        var gradientArray = lossTerm.Differentiate(ModelGd.Variables, weight.GetData<double>());
-                        var g = np.array(gradientArray);
-                        return g.reshape(weight.shape);
-                    }
-
+                    var weight = ModelGd.Weights.copy();
+                    var gradientArray = lossTerm.Differentiate(ModelGd.Variables, weight.GetData<double>());
+                    var g = np.array(gradientArray);
+                    var grad = g.reshape(weight.shape);
                     /// Todo
-                    ModelGd.Weights = Optimizer.Call(ModelGd.Weights.copy(), GetGradient, e - 1);
+                    ModelGd.Weights = Optimizer.Call(weight, grad, e - 1);
                 }
 
 

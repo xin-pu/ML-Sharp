@@ -1,4 +1,5 @@
 ﻿using ML.Core.Models.NeuralNets;
+using ML.Core.Optimizers;
 using Numpy;
 using Xunit;
 using Xunit.Abstractions;
@@ -42,14 +43,21 @@ namespace ML.Core.Test.NNTest
         [Fact]
         public void SequentialTest()
         {
-            var linear1 = new Linear(4, 30);
-            var relu = new Sigmoid();
-            var linear2 = new Linear(30, 4);
+            var optimizer = new SGD();
+
+            var linear1 = new Linear(4, 2);
+            var sigmoid = new Sigmoid();
 
             var input = np.array(new float[,] {{1, 2, 3, 4}, {1, 2, 3, 5}});
-            var sequential = new Sequential(linear1, relu, linear2);
+            var sequential = new Sequential(linear1, sigmoid);
             var res = sequential.Forward(input);
             print(res);
+            var pred = np.ones_like(res);
+            var error = pred - res;
+
+            var delta = sigmoid.Backward(error, optimizer);
+            var delta2 = linear1.Backward(delta, optimizer);
+            print(delta2);
         }
     }
 }

@@ -56,13 +56,12 @@ namespace ML.Core.Optimizers
             DeltaTheda?.Dispose();
         }
 
-        internal override NDarray call(NDarray weight, int epoch)
+        public override NDarray Call(NDarray weight, NDarray gradient, int epoch)
         {
             if (epoch == 0)
                 DeltaTheda = np.zeros_like(weight);
 
-            var grad = CalGradient(weight);
-            DeltaTheda = Rho * DeltaTheda - WorkLearningRate * grad;
+            DeltaTheda = Rho * DeltaTheda - WorkLearningRate * gradient;
 
             return weight + DeltaTheda;
         }

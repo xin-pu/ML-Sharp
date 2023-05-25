@@ -1,4 +1,5 @@
-﻿using Numpy;
+﻿using ML.Core.Optimizers;
+using Numpy;
 
 namespace ML.Core.Models.NeuralNets
 {
@@ -18,6 +19,7 @@ namespace ML.Core.Models.NeuralNets
 
             var bound = (float) Math.Sqrt(1f / InFeatures);
             Weights = np.random.uniform(np.array(-bound), np.array(bound), new[] {OutFeatures, InFeatures});
+
             Bias = WithBias
                 ? np.random.uniform(np.array(-bound), np.array(bound), new[] {OutFeatures})
                 : np.zeros(OutFeatures);
@@ -26,10 +28,12 @@ namespace ML.Core.Models.NeuralNets
         public NDarray Weights { set; get; }
         public NDarray Bias { set; get; }
 
-        public NDarray Errs { set; get; }
 
+        /// <summary>
+        ///     误差项
+        /// </summary>
+        public NDarray Errs { set; get; } = np.empty();
 
-        public NDarray NetActivation { set; get; } = np.empty();
 
         public int InFeatures { protected set; get; }
         public int OutFeatures { protected set; get; }
@@ -46,16 +50,16 @@ namespace ML.Core.Models.NeuralNets
 
         public override NDarray Forward(NDarray input)
         {
-            if (WithBias)
-                NetActivation = input.matmul(Weights.T) + Bias;
-            else
-                NetActivation = input.matmul(Weights.T);
-            return NetActivation;
+            var y = input.matmul(Weights.T);
+            var res = Output = y + (WithBias ? Bias : np.zeros_like(y));
+            return res;
         }
 
-        public override NDarray Backward(NDarray error)
+        public override NDarray Backward(NDarray gradient, Optimizer optimizer, int epoch = 0)
         {
-            throw new NotImplementedException();
+            var perError = gradient.sum(0);
+            Weights = optimizer.Call(Weights, gradient, epoch);
+            return perError;
         }
     }
 }
